@@ -25,7 +25,7 @@
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/anyleaderboard.git
+   git clone https://github.com/ThienDuc3112/AnyLeaderboard.git
 
 ## Note
 This is not a serious project, just a repo to help me getting started with golang
