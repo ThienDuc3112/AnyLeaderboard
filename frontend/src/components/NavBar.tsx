@@ -24,10 +24,10 @@ const NavBar: React.FC = () => {
             </li>
             <li>
               <Link
-                to={"/login"}
+                to={"/signin"}
                 className="text-gray-600 hover:text-indigo-600"
               >
-                Log in
+                Sign in
               </Link>
             </li>
             <li>

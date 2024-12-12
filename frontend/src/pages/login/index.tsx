@@ -2,7 +2,7 @@ import Button from "@/components/ui/button";
 import Input from "@/components/ui/textInput";
 import React from "react";
 
-const Login: React.FC = () => {
+const SignIn: React.FC = () => {
   return (
     <div className="w-full mt-32 flex justify-center items-center">
       <div className="border border-indigo-200 rounded-xl bg-indigo-50">
@@ -14,11 +14,11 @@ const Login: React.FC = () => {
           <label htmlFor="password">Password</label>
           <Input type="password" id="password" />
 
-          <Button type="submit">Log in</Button>
+          <Button type="submit">Sign in</Button>
         </form>
       </div>
     </div>
   );
 };
 
-export default Login;
+export default SignIn;
