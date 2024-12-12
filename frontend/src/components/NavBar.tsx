@@ -4,7 +4,7 @@ import { Link } from "react-router";
 
 const NavBar: React.FC = () => {
   return (
-    <header className="bg-white shadow-sm">
+    <nav className="bg-white shadow-sm">
       <div className="container mx-auto px-4 py-4 flex justify-between items-center">
         <div className="flex items-center space-x-2">
           <Trophy className="h-8 w-8 text-indigo-600" />
@@ -41,7 +41,7 @@ const NavBar: React.FC = () => {
           </ul>
         </nav>
       </div>
-    </header>
+    </nav>
   );
 };
 
