@@ -1,9 +1,9 @@
-import React from 'react'
-import ExternalLink from './ExternalLink'
-import { LeaderboardFull } from '@/types/leaderboard'
+import React from "react";
+import ExternalLink from "./ExternalLink";
+import { LeaderboardFull } from "@/types/leaderboard";
 
 interface PropType {
-  data: LeaderboardFull
+  data: LeaderboardFull;
 }
 
 const LeaderboardHeader: React.FC<PropType> = ({ data }) => {
@@ -31,7 +31,7 @@ const LeaderboardHeader: React.FC<PropType> = ({ data }) => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default LeaderboardHeader
+export default LeaderboardHeader;

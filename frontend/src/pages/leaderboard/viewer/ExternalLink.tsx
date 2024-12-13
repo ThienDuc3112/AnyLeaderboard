@@ -1,9 +1,9 @@
-import React from 'react'
-import { ExternalLink as ExternalLinkIcon } from 'lucide-react'
-import { ExternalLinkType } from '@/types/leaderboard'
+import React from "react";
+import { ExternalLink as ExternalLinkIcon } from "lucide-react";
+import { ExternalLinkType } from "@/types/leaderboard";
 
 interface PropType {
-  link: ExternalLinkType
+  link: ExternalLinkType;
 }
 
 const ExternalLink: React.FC<PropType> = ({ link }: PropType) => {
@@ -18,7 +18,7 @@ const ExternalLink: React.FC<PropType> = ({ link }: PropType) => {
       <ExternalLinkIcon className="h-3 w-3 mr-1" />
       {link.displayValue}
     </a>
-  )
-}
+  );
+};
 
-export default ExternalLink
+export default ExternalLink;
