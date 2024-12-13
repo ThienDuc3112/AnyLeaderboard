@@ -3,6 +3,7 @@ import LandingPage from "@/pages/landingPage";
 import SignIn from "@/pages/login";
 import Layout from "@/Layout";
 import Signup from "@/pages/signup";
+import LeaderboardViewer from "./pages/leaderboard/viewer";
 
 function App() {
   return (
@@ -26,7 +27,7 @@ function App() {
             <Route path="/browse/favourite" />
             <Route path="/browse/popular" />
 
-            <Route path="/leaderboard/:id" />
+            <Route path="/leaderboard/:lid" element={<LeaderboardViewer />} />
             <Route path="/leaderboard/new" />
             <Route path="/leaderboard/:id/update" />
             <Route path="/leaderboard/:id/entry/:eid" />
