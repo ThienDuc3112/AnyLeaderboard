@@ -1,8 +1,8 @@
 import { Field, LeaderboardFull } from '@/types/leaderboard'
 import { fieldToDisplayValue } from '@/utils/fieldToDisplayValue'
-import { formatDuration } from '@/utils/formatDuration'
 import { isDigitField } from '@/utils/isDigitField'
 import React from 'react'
+import { Link } from 'react-router'
 
 interface PropType {
   data: LeaderboardFull
@@ -11,7 +11,7 @@ interface PropType {
 const LeaderBoardContent: React.FC<PropType> = ({ data }) => {
   return (
     <div className="px-6 pb-6">
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto rounded-lg">
         <table className="w-full text-sm text-left">
           <TableHeader fields={data.fields} />
           <tbody>
@@ -32,7 +32,7 @@ interface TableHeaderPropType {
 
 const TableHeader: React.FC<TableHeaderPropType> = ({ fields }) => {
   return (
-    <thead className="text-xs text-gray-700 uppercase bg-white">
+    <thead className="text-xs text-gray-200 uppercase bg-indigo-600">
       <tr>
         <th scope="col" className="px-6 py-3 text-center w-12">#</th>
         {fields.map((field) => (
@@ -60,22 +60,51 @@ const TableRow: React.FC<TableRowPropType> = ({ index, row, fields }) => {
       </td>
       {
         fields.map(field => (
-          <td className={`px-6 py-4${isDigitField(field) ? " font-mono" : ""}`}>
-            {field.type === "OPTION" ?
-              <span className="px-2 py-1 text-xs font-medium text-gray-600 bg-transparent border border-gray-300 rounded-full">
-                {fieldToDisplayValue(row, field)}
-              </span>
-              : fieldToDisplayValue(row, field)}
-            {field.type === "USER" && !row[field.fieldName].value.userId && (
-              <span className="ml-2 px-2 py-1 text-xs font-medium text-gray-600 bg-gray-100 rounded-full">
-                Anonymous
-              </span>
-            )}
-          </td>
+          <FieldToCol field={field} row={row} />
         ))
       }
     </tr>
 
+  )
+}
+
+const FieldToCol = ({ field, row }: { field: Field, row: any }) => {
+  const value = row[field.fieldName]?.value
+  if (!value)
+    return <td className="px-6 py-4" />
+
+  if (isDigitField(field))
+    return <td className="px-6 py-4 font-mono">
+      {fieldToDisplayValue(row, field)}
+    </td>
+
+  if (field.type === "USER") {
+    if (!row[field.fieldName].value.userId) {
+      return <td className="px-6 py-4">
+        {fieldToDisplayValue(row, field)}
+        <span className="ml-2 px-2 py-1 text-xs font-medium text-gray-600 bg-gray-100 rounded-full">
+          Anonymous
+        </span>
+      </td>
+    } else {
+      return <td className="px-6 py-4">
+        <Link to={`/profile/${value.userId}`}>
+          {fieldToDisplayValue(row, field)}
+        </Link>
+      </td>
+
+    }
+  }
+
+  return (
+    <td className={"px-6 py-4"}>
+      {field.type === "OPTION" ?
+        <span className="px-2 py-1 text-xs font-medium text-gray-600 bg-transparent border border-gray-300 rounded-full">
+          {fieldToDisplayValue(row, field)}
+        </span>
+        :
+        fieldToDisplayValue(row, field)}
+    </td>
   )
 }
 
