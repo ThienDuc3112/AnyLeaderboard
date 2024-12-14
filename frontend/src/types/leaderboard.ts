@@ -1,8 +1,13 @@
-export interface LeaderboardFull {
+export interface LeaderboardPreview {
+  id: string;
   name: string;
   description?: string;
   coverImageUrl?: string;
   externalLinks?: ExternalLinkType[];
+  entryCount: number;
+}
+
+export interface LeaderboardFull extends LeaderboardPreview {
   fields: Field[];
   data: Record<string, { value: any }>[];
 }
@@ -20,6 +25,7 @@ interface PrimitiveField {
   fieldName: string;
   type: "TEXT" | "SHORT_TEXT" | "INTEGER" | "REAL" | "DURATION" | "TIMESTAMP";
   defaultSort?: boolean;
+  required?: boolean;
 }
 
 interface OptionField {
@@ -27,6 +33,7 @@ interface OptionField {
   fieldName: string;
   type: "OPTION";
   options: string[];
+  required?: boolean;
 }
 
 interface UserField {
@@ -34,4 +41,5 @@ interface UserField {
   fieldName: string;
   type: "USER";
   allowAnonymous: boolean;
+  required?: boolean;
 }

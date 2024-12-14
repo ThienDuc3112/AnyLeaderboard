@@ -1,5 +1,5 @@
 import React from "react";
-import ExternalLink from "./ExternalLink";
+import ExternalLink from "@/pages/leaderboard/viewer/ExternalLink";
 import { LeaderboardFull } from "@/types/leaderboard";
 
 interface PropType {
@@ -23,9 +23,12 @@ const LeaderboardHeader: React.FC<PropType> = ({ data }) => {
           {data.description && (
             <p className="text-sm text-gray-600 mt-1">{data.description}</p>
           )}
+          <div className="mt-2 text-xs text-gray-600">
+            <span className="font-mono">{data.entryCount}</span> entries
+          </div>
           <div className="flex flex-wrap gap-2 mt-2">
-            {data.externalLinks?.map((link) => (
-              <ExternalLink link={link} />
+            {data.externalLinks?.map((link, i) => (
+              <ExternalLink key={i} link={link} />
             ))}
           </div>
         </div>

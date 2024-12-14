@@ -16,7 +16,7 @@ const NavBar: React.FC = () => {
           <ul className="flex space-x-4">
             <li>
               <Link
-                to={"/browse"}
+                to={"/leaderboard"}
                 className="text-gray-600 hover:text-indigo-600"
               >
                 Browse leaderboard

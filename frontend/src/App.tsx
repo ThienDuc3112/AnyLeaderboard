@@ -3,7 +3,8 @@ import LandingPage from "@/pages/landingPage";
 import SignIn from "@/pages/login";
 import Layout from "@/Layout";
 import Signup from "@/pages/signup";
-import LeaderboardViewer from "./pages/leaderboard/viewer";
+import LeaderboardViewer from "@/pages/leaderboard/viewer";
+import BrowseLeaderboard from "@/pages/leaderboard";
 
 function App() {
   return (
@@ -14,22 +15,21 @@ function App() {
           <Route path="/" element={<Layout />}>
             <Route index element={<LandingPage />} />
 
+            {/** Auth routes */}
             <Route path="/signin" element={<SignIn />} />
             <Route path="/signup" element={<Signup />} />
 
+            {/** Profile page */}
             <Route path="/profile/me" />
             <Route path="/profile/:id" />
 
-            <Route path="dashboard" />
-
-            <Route path="/browse" />
-            <Route path="/browse/recent" />
-            <Route path="/browse/favourite" />
-            <Route path="/browse/popular" />
-
+            {/** Leaderboard routes */}
+            <Route path="/leaderboard" element={<BrowseLeaderboard />} />
             <Route path="/leaderboard/:lid" element={<LeaderboardViewer />} />
             <Route path="/leaderboard/new" />
             <Route path="/leaderboard/:id/update" />
+
+            {/** Entry routes */}
             <Route path="/leaderboard/:id/entry/:eid" />
             <Route path="/leaderboard/:id/entry/new" />
           </Route>

@@ -8,7 +8,7 @@ interface PropType {
   data: LeaderboardFull;
 }
 
-const LeaderBoardContent: React.FC<PropType> = ({ data }) => {
+const LeaderboardContent: React.FC<PropType> = ({ data }) => {
   return (
     <div className="px-6 pb-6">
       <div className="overflow-x-auto rounded-lg">
@@ -16,7 +16,12 @@ const LeaderBoardContent: React.FC<PropType> = ({ data }) => {
           <TableHeader fields={data.fields} />
           <tbody>
             {data.data.map((row, index) => (
-              <TableRow row={row} index={index} fields={data.fields} />
+              <TableRow
+                key={index}
+                row={row}
+                index={index}
+                fields={data.fields}
+              />
             ))}
           </tbody>
         </table>
@@ -58,8 +63,8 @@ const TableRow: React.FC<TableRowPropType> = ({ index, row, fields }) => {
       <td className="px-6 py-4 text-center font-medium text-gray-900">
         {index + 1}
       </td>
-      {fields.map((field) => (
-        <FieldToCol field={field} row={row} />
+      {fields.map((field, i) => (
+        <FieldToCol key={i} field={field} row={row} />
       ))}
     </tr>
   );
@@ -108,4 +113,4 @@ const FieldToCol = ({ field, row }: { field: Field; row: any }) => {
   );
 };
 
-export default LeaderBoardContent;
+export default LeaderboardContent;

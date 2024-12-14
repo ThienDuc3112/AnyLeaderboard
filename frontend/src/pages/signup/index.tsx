@@ -11,16 +11,24 @@ const Signup: React.FC = () => {
           <label htmlFor="username">Username</label>
           <TextInput id="username" />
 
-          <label htmlFor="username">Email</label>
+          <label htmlFor="username" className="mt-6">
+            Email
+          </label>
           <TextInput id="email" />
 
-          <label htmlFor="password">Password</label>
+          <label htmlFor="password" className="mt-6">
+            Password
+          </label>
           <TextInput type="password" id="password" />
 
-          <label htmlFor="passwordVerify">Verify password</label>
+          <label htmlFor="passwordVerify" className="mt-6">
+            Verify password
+          </label>
           <TextInput type="password" id="passwordVerify" />
 
-          <Button type="submit">Sign up</Button>
+          <Button type="submit" className="mt-6">
+            Sign up
+          </Button>
         </form>
       </div>
     </div>

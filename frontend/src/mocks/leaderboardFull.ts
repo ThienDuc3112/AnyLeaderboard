@@ -1,33 +1,39 @@
 import { LeaderboardFull } from "@/types/leaderboard";
 
-export const MockApiResponse: LeaderboardFull = {
+export const MockLeaderboardFull: LeaderboardFull = {
+  id: "dasflkjjlkadfs",
   name: "Bloon something the game",
   description: "Something something test game leaderboard",
-  coverImageUrl: "https://tinfoil.media/i/0100E680149DC000/0/0/749e353633f36e5e567be03698795085b13e72340949847780fefbd8450fa8bb",
+  coverImageUrl:
+    "https://tinfoil.media/i/0100E680149DC000/0/0/749e353633f36e5e567be03698795085b13e72340949847780fefbd8450fa8bb",
   externalLinks: [
     {
       displayValue: "Community Discord",
       url: "discord.gg/lmaoBTD",
-      icon: "discord"
-    }
+      icon: "discord",
+    },
   ],
+  entryCount: 3,
   fields: [
     {
       name: "Player",
       fieldName: "player",
       type: "USER",
-      allowAnonymous: true
+      allowAnonymous: true,
+      required: true,
     },
     {
       name: "Score",
       fieldName: "score",
       type: "INTEGER",
-      defaultSort: true
+      defaultSort: true,
+      required: true,
     },
     {
       name: "IGT",
       fieldName: "igt",
       type: "DURATION",
+      required: false,
     },
     {
       name: "Version",
@@ -46,7 +52,7 @@ export const MockApiResponse: LeaderboardFull = {
         "1.2.1",
         "2.0.0",
         "2.0.1",
-      ]
+      ],
     },
   ],
   data: [
@@ -54,51 +60,51 @@ export const MockApiResponse: LeaderboardFull = {
       player: {
         value: {
           username: "Huyen",
-          userId: "978241308792143"
-        }
+          userId: "978241308792143",
+        },
       },
       score: {
-        value: 100_000_000
+        value: 100_000_000,
       },
       igt: {
-        value: 131_634_934
+        value: 131_634_934,
       },
       version: {
-        value: "1.1.2"
-      }
+        value: "1.1.2",
+      },
     },
     {
       player: {
         value: {
           username: "Isab",
-          userId: "835685283932598"
-        }
+          userId: "835685283932598",
+        },
       },
       score: {
-        value: 99_098_124
+        value: 99_098_124,
       },
       igt: {
-        value: 234_721_796
+        value: 234_721_796,
       },
       version: {
-        value: "2.0.0"
-      }
+        value: "2.0.0",
+      },
     },
     {
       player: {
         value: {
           username: "RandomAnon",
-        }
+        },
       },
       score: {
-        value: 20_828_227
+        value: 20_828_227,
       },
       igt: {
-        value: 357_816_126
+        value: 357_816_126,
       },
       version: {
-        value: "1.2.1"
-      }
+        value: "1.2.1",
+      },
     },
-  ]
-}
+  ],
+};

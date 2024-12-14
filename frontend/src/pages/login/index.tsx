@@ -11,10 +11,14 @@ const SignIn: React.FC = () => {
           <label htmlFor="username">Username or email address</label>
           <Input id="username" />
 
-          <label htmlFor="password">Password</label>
+          <label htmlFor="password" className="mt-6">
+            Password
+          </label>
           <Input type="password" id="password" />
 
-          <Button type="submit">Sign in</Button>
+          <Button type="submit" className="mt-6">
+            Sign in
+          </Button>
         </form>
       </div>
     </div>

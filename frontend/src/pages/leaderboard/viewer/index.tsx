@@ -1,17 +1,19 @@
 import React from "react";
-import { MockApiResponse } from "@/mocks/apiResponse";
+import { MockLeaderboardFull } from "@/mocks/leaderboardFull";
 import { useParams } from "react-router";
 import LeaderboardHeader from "./LeaderboardHeader";
-import LeaderBoardContent from "./LeaderBoardContent";
+import LeaderboardContent from "./LeaderboardContent";
 
 const LeaderboardViewer: React.FC = () => {
   const { lid } = useParams();
   console.log(lid);
-  const data = MockApiResponse;
+  const data = MockLeaderboardFull;
   return (
-    <div className="w-full max-w-4xl mx-auto bg-indigo-50 rounded-lg shadow-md overflow-hidden">
-      <LeaderboardHeader data={data} />
-      <LeaderBoardContent data={data} />
+    <div className="w-full mt-12">
+      <div className="max-w-5xl mx-auto bg-indigo-50 rounded-lg shadow-md overflow-hidden">
+        <LeaderboardHeader data={data} />
+        <LeaderboardContent data={data} />
+      </div>
     </div>
   );
 };
