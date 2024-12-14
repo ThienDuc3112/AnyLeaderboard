@@ -53,7 +53,7 @@ const BrowseLeaderboard: React.FC = () => {
             />
             <Button className="w-fit px-4">Search</Button>
           </div>
-          <div className="flex flex-wrap items-center gap-4 ">
+          <div className="flex flex-wrap items-center gap-4">
             {filterOptions.map((option, i) => (
               <Button key={i}>
                 <span className="flex mx-4 flex-row align-middle items-center gap-2">

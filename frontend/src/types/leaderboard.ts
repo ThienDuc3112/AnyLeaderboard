@@ -10,6 +10,8 @@ export interface LeaderboardPreview {
 export interface LeaderboardFull extends LeaderboardPreview {
   fields: Field[];
   data: Record<string, { value: any }>[];
+  allowAnonymous?: boolean;
+  requiredVerification?: boolean;
 }
 
 export interface ExternalLinkType {

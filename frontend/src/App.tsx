@@ -27,7 +27,7 @@ function App() {
             <Route path="/leaderboard" element={<BrowseLeaderboard />} />
             <Route path="/leaderboard/:lid" element={<LeaderboardViewer />} />
             <Route path="/leaderboard/new" />
-            <Route path="/leaderboard/:id/update" />
+            <Route path="/leaderboard/:lid/update" />
 
             {/** Entry routes */}
             <Route path="/leaderboard/:id/entry/:eid" />

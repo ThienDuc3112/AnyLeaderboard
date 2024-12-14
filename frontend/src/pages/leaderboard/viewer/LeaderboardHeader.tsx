@@ -1,6 +1,8 @@
 import React from "react";
 import ExternalLink from "@/pages/leaderboard/viewer/ExternalLink";
 import { LeaderboardFull } from "@/types/leaderboard";
+import Button from "@/components/ui/button";
+import { Plus } from "lucide-react";
 
 interface PropType {
   data: LeaderboardFull;
@@ -19,7 +21,15 @@ const LeaderboardHeader: React.FC<PropType> = ({ data }) => {
         </div>
 
         <div className="flex-grow">
-          <h2 className="text-2xl font-bold">{data.name}</h2>
+          <div className="flex justify-between items-start">
+            <h2 className="text-2xl font-bold">{data.name}</h2>
+            <Button variant="outline">
+              <span className="flex mx-4 flex-row align-middle items-center gap-2">
+                <Plus className="h-4 w-4" />
+                <span>New Entry</span>
+              </span>
+            </Button>
+          </div>
           {data.description && (
             <p className="text-sm text-gray-600 mt-1">{data.description}</p>
           )}

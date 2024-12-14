@@ -13,6 +13,8 @@ export const MockLeaderboardFull: LeaderboardFull = {
       icon: "discord",
     },
   ],
+  allowAnonymous: true,
+  requiredVerification: false,
   entryCount: 3,
   fields: [
     {
