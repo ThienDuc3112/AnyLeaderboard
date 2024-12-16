@@ -1,5 +1,5 @@
-import Button from "@/components/ui/button";
-import TextInput from "@/components/ui/input";
+import Button from "@/components/ui/Button";
+import TextInput from "@/components/ui/Input";
 import React from "react";
 
 const SignupPage: React.FC = () => {

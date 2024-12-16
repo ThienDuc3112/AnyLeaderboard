@@ -1,6 +1,8 @@
 import React from "react";
 import { Plus, Trash2 } from "lucide-react";
-import Button from "@/components/ui/button";
+import Button from "@/components/ui/Button";
+import Input from "@/components/ui/Input";
+import Switch from "@/components/ui/Switch";
 
 const NewLeaderboardPage: React.FC = () => {
   return (
@@ -15,8 +17,12 @@ const NewLeaderboardPage: React.FC = () => {
           <div className="p-6">
             <div className="mb-6">
               <div className="flex space-x-2 mb-4">
-                <Button variant="filled">Basic Info</Button>
-                <Button variant="outline">Fields</Button>
+                <Button variant="filled" size="medium">
+                  Basic Info
+                </Button>
+                <Button variant="outline" size="medium">
+                  Fields
+                </Button>
               </div>
               <div className="space-y-4">
                 <div>
@@ -26,12 +32,7 @@ const NewLeaderboardPage: React.FC = () => {
                   >
                     Name
                   </label>
-                  <input
-                    type="text"
-                    id="name"
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-                    placeholder="My Awesome Leaderboard"
-                  />
+                  <Input id="name" placeholder="My Awesome Leaderboard" />
                 </div>
                 <div>
                   <label
@@ -43,7 +44,7 @@ const NewLeaderboardPage: React.FC = () => {
                   <textarea
                     id="description"
                     rows={3}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                     placeholder="Describe your leaderboard..."
                   ></textarea>
                 </div>
@@ -54,12 +55,7 @@ const NewLeaderboardPage: React.FC = () => {
                   >
                     Cover Image URL
                   </label>
-                  <input
-                    type="text"
-                    id="coverImageUrl"
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-                    placeholder="https://..."
-                  />
+                  <Input id="coverImageUrl" placeholder="https://..." />
                 </div>
                 <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
                   <div>
@@ -70,13 +66,7 @@ const NewLeaderboardPage: React.FC = () => {
                       Let users submit entries without an account
                     </p>
                   </div>
-                  <label className="flex items-center cursor-pointer">
-                    <div className="relative">
-                      <input type="checkbox" className="sr-only" />
-                      <div className="w-10 h-4 bg-gray-400 rounded-full shadow-inner"></div>
-                      <div className="dot absolute w-6 h-6 bg-white rounded-full shadow -left-1 -top-1 transition"></div>
-                    </div>
-                  </label>
+                  <Switch />
                 </div>
                 <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
                   <div>
@@ -87,13 +77,7 @@ const NewLeaderboardPage: React.FC = () => {
                       Entries must be verified by a moderator
                     </p>
                   </div>
-                  <label className="flex items-center cursor-pointer">
-                    <div className="relative">
-                      <input type="checkbox" className="sr-only" />
-                      <div className="w-10 h-4 bg-gray-400 rounded-full shadow-inner"></div>
-                      <div className="dot absolute w-6 h-6 bg-white rounded-full shadow -left-1 -top-1 transition"></div>
-                    </div>
-                  </label>
+                  <Switch />
                 </div>
                 <div>
                   <div className="flex items-center justify-between mb-2">
@@ -105,21 +89,15 @@ const NewLeaderboardPage: React.FC = () => {
                       size="small"
                       className="inline-flex items-center"
                     >
-                      <Plus className="h-4 w-4 mr-1" />
-                      Add Link
+                      <span className="flex flex-row align-middle items-center gap-2">
+                        <Plus className="h-4 w-4" />
+                        Add Link
+                      </span>
                     </Button>
                   </div>
                   <div className="grid grid-cols-2 gap-4">
-                    <input
-                      type="text"
-                      className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-                      placeholder="Display Text"
-                    />
-                    <input
-                      type="text"
-                      className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-                      placeholder="URL"
-                    />
+                    <Input placeholder="Display Text" />
+                    <Input placeholder="URL" />
                   </div>
                 </div>
               </div>
@@ -142,28 +120,18 @@ const NewLeaderboardPage: React.FC = () => {
                     <div className="px-4 py-4 sm:px-6">
                       <div className="flex items-center justify-between">
                         <div className="flex-1 grid grid-cols-2 gap-4">
-                          <input
-                            type="text"
-                            className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-                            placeholder="Display Name"
-                            value="Score"
-                          />
-                          <input
-                            type="text"
-                            className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-                            placeholder="Technical Name"
-                            value="score"
-                          />
+                          <Input placeholder="Display Name" value="Score" />
+                          <Input placeholder="Technical Name" value="score" />
                         </div>
                         <div className="ml-2 flex-shrink-0">
-                          <Button size="small">
+                          <Button variant="ghost" size="small">
                             <Trash2 className="h-5 w-5" />
                           </Button>
                         </div>
                       </div>
                       <div className="mt-2 sm:flex sm:justify-between">
                         <div className="flex-1 mt-2 flex">
-                          <select className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                          <select className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
                             <option>Text</option>
                             <option>Short Text</option>
                             <option>Integer</option>
@@ -175,20 +143,8 @@ const NewLeaderboardPage: React.FC = () => {
                           </select>
                         </div>
                         <div className="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
-                          <label className="flex items-center">
-                            <input
-                              type="checkbox"
-                              className="form-checkbox h-4 w-4 text-blue-600 transition duration-150 ease-in-out"
-                            />
-                            <span className="ml-2">Required</span>
-                          </label>
-                          <label className="flex items-center ml-4">
-                            <input
-                              type="checkbox"
-                              className="form-checkbox h-4 w-4 text-blue-600 transition duration-150 ease-in-out"
-                            />
-                            <span className="ml-2">Default Sort</span>
-                          </label>
+                          <Switch label="Required" />
+                          <Switch label="Default Sort" className="ml-4" />
                         </div>
                       </div>
                     </div>

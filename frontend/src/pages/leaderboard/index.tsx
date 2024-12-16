@@ -1,5 +1,5 @@
-import Button from "@/components/ui/button";
-import Input from "@/components/ui/input";
+import Button from "@/components/ui/Button";
+import Input from "@/components/ui/Input";
 import { MockLeaderboardPreview } from "@/mocks/leaderboardPreviews";
 import { Clock, Search, TrendingUp, User } from "lucide-react";
 import React, { useMemo } from "react";

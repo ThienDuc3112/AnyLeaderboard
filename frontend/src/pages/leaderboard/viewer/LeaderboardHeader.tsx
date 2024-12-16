@@ -1,7 +1,7 @@
 import React from "react";
 import ExternalLink from "@/pages/leaderboard/viewer/ExternalLink";
 import { LeaderboardFull } from "@/types/leaderboard";
-import Button from "@/components/ui/button";
+import Button from "@/components/ui/Button";
 import { Plus } from "lucide-react";
 
 interface PropType {
