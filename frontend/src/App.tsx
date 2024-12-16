@@ -1,10 +1,11 @@
 import { BrowserRouter, Route, Routes } from "react-router";
 import LandingPage from "@/pages/landingPage";
-import SignIn from "@/pages/login";
+import SignInPage from "@/pages/login";
 import Layout from "@/Layout";
-import Signup from "@/pages/signup";
-import LeaderboardViewer from "@/pages/leaderboard/viewer";
-import BrowseLeaderboard from "@/pages/leaderboard";
+import SignupPage from "@/pages/signup";
+import LeaderboardViewerPage from "@/pages/leaderboard/viewer";
+import BrowseLeaderboardPage from "@/pages/leaderboard";
+import NewLeaderboardPage from "./pages/leaderboard/new";
 
 function App() {
   return (
@@ -16,17 +17,20 @@ function App() {
             <Route index element={<LandingPage />} />
 
             {/** Auth routes */}
-            <Route path="/signin" element={<SignIn />} />
-            <Route path="/signup" element={<Signup />} />
+            <Route path="/signin" element={<SignInPage />} />
+            <Route path="/signup" element={<SignupPage />} />
 
             {/** Profile page */}
             <Route path="/profile/me" />
             <Route path="/profile/:id" />
 
             {/** Leaderboard routes */}
-            <Route path="/leaderboard" element={<BrowseLeaderboard />} />
-            <Route path="/leaderboard/:lid" element={<LeaderboardViewer />} />
-            <Route path="/leaderboard/new" />
+            <Route path="/leaderboard" element={<BrowseLeaderboardPage />} />
+            <Route
+              path="/leaderboard/:lid"
+              element={<LeaderboardViewerPage />}
+            />
+            <Route path="/leaderboard/new" element={<NewLeaderboardPage />} />
             <Route path="/leaderboard/:lid/update" />
 
             {/** Entry routes */}

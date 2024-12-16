@@ -24,7 +24,7 @@ const LeaderboardHeader: React.FC<PropType> = ({ data }) => {
           <div className="flex justify-between items-start">
             <h2 className="text-2xl font-bold">{data.name}</h2>
             <Button variant="outline">
-              <span className="flex mx-4 flex-row align-middle items-center gap-2">
+              <span className="flex flex-row align-middle items-center gap-2">
                 <Plus className="h-4 w-4" />
                 <span>New Entry</span>
               </span>

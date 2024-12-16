@@ -1,11 +1,11 @@
 import Button from "@/components/ui/button";
-import Input from "@/components/ui/textInput";
+import Input from "@/components/ui/input";
 import { userAtom } from "@/context/user";
 import { useAtom } from "jotai";
 import React from "react";
 import { useNavigate } from "react-router";
 
-const SignIn: React.FC = () => {
+const SignInPage: React.FC = () => {
   const navigate = useNavigate();
   const [, setUser] = useAtom(userAtom);
   return (
@@ -26,12 +26,12 @@ const SignIn: React.FC = () => {
           }}
         >
           <label htmlFor="username">Username or email address</label>
-          <Input id="username" />
+          <Input className="w-72" id="username" />
 
           <label htmlFor="password" className="mt-6">
             Password
           </label>
-          <Input type="password" id="password" />
+          <Input className="w-72" type="password" id="password" />
 
           <Button type="submit" className="mt-6">
             Sign in
@@ -42,4 +42,4 @@ const SignIn: React.FC = () => {
   );
 };
 
-export default SignIn;
+export default SignInPage;

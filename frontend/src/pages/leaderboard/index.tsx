@@ -1,5 +1,5 @@
 import Button from "@/components/ui/button";
-import Input from "@/components/ui/textInput";
+import Input from "@/components/ui/input";
 import { MockLeaderboardPreview } from "@/mocks/leaderboardPreviews";
 import { Clock, Search, TrendingUp, User } from "lucide-react";
 import React, { useMemo } from "react";
@@ -11,7 +11,7 @@ interface FilterOption {
   onClick: () => void;
 }
 
-const BrowseLeaderboard: React.FC = () => {
+const BrowseLeaderboardPage: React.FC = () => {
   const filterOptions = useMemo<FilterOption[]>(
     () => [
       {
@@ -51,12 +51,12 @@ const BrowseLeaderboard: React.FC = () => {
               placeholder="Search leaderboards..."
               className="flex-1 my-0"
             />
-            <Button className="w-fit px-4">Search</Button>
+            <Button className="w-fit">Search</Button>
           </div>
           <div className="flex flex-wrap items-center gap-4">
             {filterOptions.map((option, i) => (
               <Button key={i}>
-                <span className="flex mx-4 flex-row align-middle items-center gap-2">
+                <span className="flex flex-row align-middle items-center gap-2">
                   <option.icon className="h-4 w-4" />
                   <span>{option.text}</span>
                 </span>
@@ -76,4 +76,4 @@ const BrowseLeaderboard: React.FC = () => {
   );
 };
 
-export default BrowseLeaderboard;
+export default BrowseLeaderboardPage;
