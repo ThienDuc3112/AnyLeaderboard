@@ -3,7 +3,7 @@ import LandingPage from "@/pages/landingPage";
 import SignInPage from "@/pages/login";
 import Layout from "@/Layout";
 import SignupPage from "@/pages/signup";
-import LeaderboardViewerPage from "@/pages/leaderboard/viewer";
+import LeaderboardViewerPage from "@/pages/leaderboard/[lid]";
 import BrowseLeaderboardPage from "@/pages/leaderboard";
 import NewLeaderboardPage from "./pages/leaderboard/new";
 
