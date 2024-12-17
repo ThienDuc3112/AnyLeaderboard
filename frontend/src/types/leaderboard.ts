@@ -22,26 +22,29 @@ export interface ExternalLinkType {
 
 export type Field = PrimitiveField | OptionField | UserField;
 
-interface PrimitiveField {
+export interface PrimitiveField {
   name: string;
   fieldName: string;
   type: "TEXT" | "SHORT_TEXT" | "INTEGER" | "REAL" | "DURATION" | "TIMESTAMP";
   defaultSort?: boolean;
   required?: boolean;
+  hidden?: boolean;
 }
 
-interface OptionField {
+export interface OptionField {
   name: string;
   fieldName: string;
   type: "OPTION";
   options: string[];
   required?: boolean;
+  hidden?: boolean;
 }
 
-interface UserField {
+export interface UserField {
   name: string;
   fieldName: string;
   type: "USER";
   allowAnonymous: boolean;
   required?: boolean;
+  hidden?: boolean;
 }

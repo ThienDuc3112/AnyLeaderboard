@@ -9,8 +9,6 @@ const getVariantClasses = (variant: PropType["variant"] = "default") => {
   switch (variant) {
     case "outline":
       return "border-2 border-indigo-600";
-    case "filled":
-      return "bg-indigo-100 border-transparent";
     default:
       return "border border-indigo-400";
   }

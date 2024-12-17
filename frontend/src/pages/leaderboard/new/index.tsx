@@ -110,10 +110,10 @@ const NewLeaderboardPage: React.FC = () => {
               <div className="bg-white shadow overflow-hidden rounded-2xl border border-indigo-400">
                 <ul role="list" className="divide-y divide-indigo-400">
                   <li>
-                    <Field />
+                    <Field index={0} />
                   </li>
                   <li>
-                    <Field />
+                    <Field index={1} />
                   </li>
                 </ul>
               </div>

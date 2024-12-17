@@ -6,6 +6,7 @@ import SignupPage from "@/pages/signup";
 import LeaderboardViewerPage from "@/pages/leaderboard/[lid]";
 import BrowseLeaderboardPage from "@/pages/leaderboard";
 import NewLeaderboardPage from "./pages/leaderboard/new";
+import NewEntryPage from "./pages/leaderboard/[lid]/entry/new";
 
 function App() {
   return (
@@ -35,7 +36,10 @@ function App() {
 
             {/** Entry routes */}
             <Route path="/leaderboard/:id/entry/:eid" />
-            <Route path="/leaderboard/:id/entry/new" />
+            <Route
+              path="/leaderboard/:id/entry/new"
+              element={<NewEntryPage />}
+            />
           </Route>
 
           {/** Page without navbar */}
