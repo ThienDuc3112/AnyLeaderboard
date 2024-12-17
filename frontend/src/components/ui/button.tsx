@@ -22,7 +22,7 @@ const getVariantClasses = (variant: string) => {
 const getSizeClasses = (size: string) => {
   switch (size) {
     case "small":
-      return "px-3 py-1 text-sm";
+      return "px-2 py-1 text-sm";
     case "large":
       return "px-6 py-3 text-lg";
     case "medium":

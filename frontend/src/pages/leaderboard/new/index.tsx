@@ -1,29 +1,22 @@
 import React from "react";
-import { Plus, Trash2 } from "lucide-react";
+import { Plus } from "lucide-react";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import Switch from "@/components/ui/Switch";
+import Field from "./Field";
 
 const NewLeaderboardPage: React.FC = () => {
   return (
     <div className="w-full">
-      <div className="container max-w-3xl py-10 mx-auto">
-        <div className="bg-white shadow-md rounded-lg overflow-hidden">
-          <div className="p-6 border-b border-gray-200">
+      <div className="container max-w-3xl sm:py-10 mx-auto">
+        <div className="shadow-md bg-indigo-50 rounded-lg overflow-hidden">
+          <div className="p-6 border-b border-indigo-400">
             <h1 className="text-2xl font-bold text-gray-900">
               Create New Leaderboard
             </h1>
           </div>
           <div className="p-6">
             <div className="mb-6">
-              <div className="flex space-x-2 mb-4">
-                <Button variant="filled" size="medium">
-                  Basic Info
-                </Button>
-                <Button variant="outline" size="medium">
-                  Fields
-                </Button>
-              </div>
               <div className="space-y-4">
                 <div>
                   <label
@@ -44,9 +37,9 @@ const NewLeaderboardPage: React.FC = () => {
                   <textarea
                     id="description"
                     rows={3}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                    className="mt-1 block w-full rounded-2xl px-3 py-2 border border-indigo-400 shadow-sm focus-within:ring-indigo-600 focus-within:outline-none focus-within:ring-1"
                     placeholder="Describe your leaderboard..."
-                  ></textarea>
+                  />
                 </div>
                 <div>
                   <label
@@ -57,7 +50,7 @@ const NewLeaderboardPage: React.FC = () => {
                   </label>
                   <Input id="coverImageUrl" placeholder="https://..." />
                 </div>
-                <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                <div className="flex items-center justify-between p-4 bg-gray-50 rounded-2xl border border-indigo-400">
                   <div>
                     <h3 className="text-sm font-medium text-gray-900">
                       Allow Anonymous Entries
@@ -68,7 +61,7 @@ const NewLeaderboardPage: React.FC = () => {
                   </div>
                   <Switch />
                 </div>
-                <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                <div className="flex items-center justify-between p-4 bg-gray-50 rounded-2xl border border-indigo-400">
                   <div>
                     <h3 className="text-sm font-medium text-gray-900">
                       Require Verification
@@ -95,9 +88,9 @@ const NewLeaderboardPage: React.FC = () => {
                       </span>
                     </Button>
                   </div>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-3 gap-4">
                     <Input placeholder="Display Text" />
-                    <Input placeholder="URL" />
+                    <Input placeholder="URL" className="col-span-2" />
                   </div>
                 </div>
               </div>
@@ -108,46 +101,19 @@ const NewLeaderboardPage: React.FC = () => {
                   Leaderboard Fields
                 </h3>
                 <Button variant="filled" size="small">
-                  <span className="flex flex-row align-middle items-center gap-2">
+                  <span className="flex flex-row align-middle items-center gap-1">
                     <Plus className="h-5 w-5" />
                     Add Field
                   </span>
                 </Button>
               </div>
-              <div className="bg-white shadow overflow-hidden sm:rounded-md">
-                <ul role="list" className="divide-y divide-gray-200">
+              <div className="bg-white shadow overflow-hidden rounded-2xl border border-indigo-400">
+                <ul role="list" className="divide-y divide-indigo-400">
                   <li>
-                    <div className="px-4 py-4 sm:px-6">
-                      <div className="flex items-center justify-between">
-                        <div className="flex-1 grid grid-cols-2 gap-4">
-                          <Input placeholder="Display Name" value="Score" />
-                          <Input placeholder="Technical Name" value="score" />
-                        </div>
-                        <div className="ml-2 flex-shrink-0">
-                          <Button variant="ghost" size="small">
-                            <Trash2 className="h-5 w-5" />
-                          </Button>
-                        </div>
-                      </div>
-                      <div className="mt-2 sm:flex sm:justify-between">
-                        <div className="flex-1 mt-2 flex">
-                          <select className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-                            <option>Text</option>
-                            <option>Short Text</option>
-                            <option>Integer</option>
-                            <option>Real Number</option>
-                            <option>Duration</option>
-                            <option>Timestamp</option>
-                            <option>Option</option>
-                            <option>User</option>
-                          </select>
-                        </div>
-                        <div className="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
-                          <Switch label="Required" />
-                          <Switch label="Default Sort" className="ml-4" />
-                        </div>
-                      </div>
-                    </div>
+                    <Field />
+                  </li>
+                  <li>
+                    <Field />
                   </li>
                 </ul>
               </div>
