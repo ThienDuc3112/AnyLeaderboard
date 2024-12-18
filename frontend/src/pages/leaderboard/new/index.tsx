@@ -8,12 +8,10 @@ import Field from "./Field";
 const NewLeaderboardPage: React.FC = () => {
   return (
     <div className="w-full">
-      <div className="container max-w-3xl sm:py-10 mx-auto">
+      <div className="container max-w-3xl mx-auto my-12">
         <div className="shadow-md bg-indigo-50 rounded-lg overflow-hidden">
-          <div className="p-6 border-b border-indigo-400">
-            <h1 className="text-2xl font-bold text-gray-900">
-              Create New Leaderboard
-            </h1>
+          <div className="bg-indigo-600 text-white px-6 py-4">
+            <h2 className="text-2xl font-bold">Create New Leaderboard</h2>
           </div>
           <div className="p-6">
             <div className="mb-6">
@@ -50,7 +48,7 @@ const NewLeaderboardPage: React.FC = () => {
                   </label>
                   <Input id="coverImageUrl" placeholder="https://..." />
                 </div>
-                <div className="flex items-center justify-between p-4 bg-gray-50 rounded-2xl border border-indigo-400">
+                <div className="flex items-center justify-between p-4 bg-white rounded-2xl border border-indigo-400">
                   <div>
                     <h3 className="text-sm font-medium text-gray-900">
                       Allow Anonymous Entries
@@ -61,7 +59,7 @@ const NewLeaderboardPage: React.FC = () => {
                   </div>
                   <Switch />
                 </div>
-                <div className="flex items-center justify-between p-4 bg-gray-50 rounded-2xl border border-indigo-400">
+                <div className="flex items-center justify-between p-4 bg-white rounded-2xl border border-indigo-400">
                   <div>
                     <h3 className="text-sm font-medium text-gray-900">
                       Require Verification
