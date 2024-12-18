@@ -28,7 +28,7 @@ const LeaderboardHeader: React.FC<PropType> = ({ data }) => {
             <Button
               variant="outline"
               onClick={() => {
-                navigate("entry/new");
+                navigate(`/leaderboard/${data.id}/entry/new`);
               }}
             >
               <span className="flex flex-row align-middle items-center gap-2">
