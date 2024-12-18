@@ -100,7 +100,12 @@ const FieldToCol = ({ field, row }: { field: Field; row: Entry }) => {
     } else {
       return (
         <td className="px-6 py-4">
-          <Link to={`/profile/${value.userId}`}>
+          <Link
+            to={`/profile/${value.userId}`}
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
+          >
             {fieldToDisplayValue(row, field)}
           </Link>
         </td>

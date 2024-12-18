@@ -23,6 +23,7 @@ export const MockLeaderboardFull: LeaderboardFull = {
       type: "USER",
       allowAnonymous: true,
       required: true,
+      fieldOrder: 1,
     },
     {
       name: "Score",
@@ -30,17 +31,20 @@ export const MockLeaderboardFull: LeaderboardFull = {
       type: "INTEGER",
       defaultSort: true,
       required: true,
+      fieldOrder: 2,
     },
     {
       name: "IGT",
       fieldName: "igt",
       type: "DURATION",
       required: false,
+      fieldOrder: 3,
     },
     {
       name: "Version",
       fieldName: "version",
       type: "OPTION",
+      fieldOrder: 4,
       options: [
         "1.0.0",
         "1.0.1",

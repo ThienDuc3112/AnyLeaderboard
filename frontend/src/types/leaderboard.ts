@@ -36,6 +36,7 @@ export interface PrimitiveField {
   defaultSort?: boolean;
   required?: boolean;
   hidden?: boolean;
+  fieldOrder: number;
 }
 
 export interface OptionField {
@@ -45,6 +46,7 @@ export interface OptionField {
   options: string[];
   required?: boolean;
   hidden?: boolean;
+  fieldOrder: number;
 }
 
 export interface UserField {
@@ -54,4 +56,5 @@ export interface UserField {
   allowAnonymous: boolean;
   required?: boolean;
   hidden?: boolean;
+  fieldOrder: number;
 }
