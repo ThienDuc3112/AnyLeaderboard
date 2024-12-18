@@ -1,0 +1,12 @@
+{
+    "exec": "go run ./cmd/api/main.go",
+    "ext": "go",
+    "ignore": [
+        "assets/*",
+        "logs/*"
+    ],
+    "watch": [
+        "*.go"
+    ],
+    "signal": "SIGTERM"
+}
