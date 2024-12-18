@@ -1,9 +1,9 @@
-import { Field } from "@/types/leaderboard";
+import { Entry, Field } from "@/types/leaderboard";
 import { formatDuration } from "./formatDuration";
 
-export const fieldToDisplayValue = (row: any, field: Field): string => {
-  if (!row[field.fieldName]) return "";
-  const value = row[field.fieldName].value;
+export const fieldToDisplayValue = (row: Entry, field: Field): string => {
+  if (!row.fields[field.fieldName]) return "";
+  const value = row.fields[field.fieldName].value;
   switch (field.type) {
     case "TEXT":
     case "SHORT_TEXT":

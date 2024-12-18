@@ -3,10 +3,11 @@ import LandingPage from "@/pages/landingPage";
 import SignInPage from "@/pages/login";
 import Layout from "@/Layout";
 import SignupPage from "@/pages/signup";
-import LeaderboardViewerPage from "@/pages/leaderboard/[lid]";
+import LeaderboardViewPage from "@/pages/leaderboard/[lid]";
 import BrowseLeaderboardPage from "@/pages/leaderboard";
 import NewLeaderboardPage from "./pages/leaderboard/new";
 import NewEntryPage from "./pages/leaderboard/[lid]/entry/new";
+import EntryViewPage from "./pages/leaderboard/[lid]/entry/[eid]";
 
 function App() {
   return (
@@ -27,15 +28,15 @@ function App() {
 
             {/** Leaderboard routes */}
             <Route path="/leaderboard" element={<BrowseLeaderboardPage />} />
-            <Route
-              path="/leaderboard/:lid"
-              element={<LeaderboardViewerPage />}
-            />
+            <Route path="/leaderboard/:lid" element={<LeaderboardViewPage />} />
             <Route path="/leaderboard/new" element={<NewLeaderboardPage />} />
             <Route path="/leaderboard/:lid/update" />
 
             {/** Entry routes */}
-            <Route path="/leaderboard/:id/entry/:eid" />
+            <Route
+              path="/leaderboard/:id/entry/:eid"
+              element={<EntryViewPage />}
+            />
             <Route
               path="/leaderboard/:id/entry/new"
               element={<NewEntryPage />}
@@ -43,6 +44,7 @@ function App() {
           </Route>
 
           {/** Page without navbar */}
+          <Route />
         </Routes>
       </div>
     </BrowserRouter>

@@ -4,7 +4,7 @@ import { useParams } from "react-router";
 import LeaderboardHeader from "./LeaderboardHeader";
 import LeaderboardContent from "./LeaderboardContent";
 
-const LeaderboardViewerPage: React.FC = () => {
+const LeaderboardViewPage: React.FC = () => {
   const { lid } = useParams();
   console.log(lid);
   const data = MockLeaderboardFull;
@@ -18,4 +18,4 @@ const LeaderboardViewerPage: React.FC = () => {
   );
 };
 
-export default LeaderboardViewerPage;
+export default LeaderboardViewPage;

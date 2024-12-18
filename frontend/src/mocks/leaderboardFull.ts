@@ -59,53 +59,68 @@ export const MockLeaderboardFull: LeaderboardFull = {
   ],
   data: [
     {
-      player: {
-        value: {
-          username: "Huyen",
-          userId: "978241308792143",
+      id: "afdosiioafsdj",
+      updatedAt: "11-02-2023",
+      createdAt: "11-02-2024",
+      fields: {
+        player: {
+          value: {
+            username: "Huyen",
+            userId: "978241308792143",
+          },
         },
-      },
-      score: {
-        value: 100_000_000,
-      },
-      igt: {
-        value: 131_634_934,
-      },
-      version: {
-        value: "1.1.2",
+        score: {
+          value: 100_000_000,
+        },
+        igt: {
+          value: 131_634_934,
+        },
+        version: {
+          value: "1.1.2",
+        },
       },
     },
     {
-      player: {
-        value: {
-          username: "Isab",
-          userId: "835685283932598",
+      id: "fdoiioasj",
+      updatedAt: "11-02-2023",
+      createdAt: "11-02-2024",
+      fields: {
+        player: {
+          value: {
+            username: "Isab",
+            userId: "835685283932598",
+          },
         },
-      },
-      score: {
-        value: 99_098_124,
-      },
-      igt: {
-        value: 234_721_796,
-      },
-      version: {
-        value: "2.0.0",
+        score: {
+          value: 99_098_124,
+        },
+        igt: {
+          value: 234_721_796,
+        },
+        version: {
+          value: "2.0.0",
+        },
       },
     },
     {
-      player: {
-        value: {
-          username: "RandomAnon",
+      id: "oiis",
+      updatedAt: "11-02-2023",
+      createdAt: "11-02-2024",
+      fields: {
+        player: {
+          value: {
+            username: "RandomAnon",
+          },
         },
-      },
-      score: {
-        value: 20_828_227,
-      },
-      igt: {
-        value: 357_816_126,
-      },
-      version: {
-        value: "1.2.1",
+        score: {
+          value: 20_828_227,
+        },
+        igt: {
+          value: 357_816_126,
+        },
+        version: {
+          value: "1.2.1",
+        },
       },
     },
   ],

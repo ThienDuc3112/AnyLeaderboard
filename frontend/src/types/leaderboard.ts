@@ -9,9 +9,16 @@ export interface LeaderboardPreview {
 
 export interface LeaderboardFull extends LeaderboardPreview {
   fields: Field[];
-  data: Record<string, { value: any }>[];
+  data: Entry[];
   allowAnonymous?: boolean;
   requiredVerification?: boolean;
+}
+
+export interface Entry {
+  id: string;
+  updatedAt: string | Date;
+  createdAt: string | Date;
+  fields: Record<string, { value: any }>;
 }
 
 export interface ExternalLinkType {

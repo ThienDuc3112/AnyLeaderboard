@@ -1,8 +1,8 @@
-import { Field, LeaderboardFull } from "@/types/leaderboard";
+import { Entry, Field, LeaderboardFull } from "@/types/leaderboard";
 import { fieldToDisplayValue } from "@/utils/fieldToDisplayValue";
 import { isDigitField } from "@/utils/isDigitField";
 import React from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 interface PropType {
   data: LeaderboardFull;
@@ -52,26 +52,34 @@ const TableHeader: React.FC<TableHeaderPropType> = ({ fields }) => {
 };
 
 interface TableRowPropType {
-  row: any;
+  row: Entry;
   index: number;
   fields: Field[];
 }
 
 const TableRow: React.FC<TableRowPropType> = ({ index, row, fields }) => {
+  const navigate = useNavigate();
   return (
-    <tr className="bg-white border-b last:border-b-0 hover:bg-indigo-50 transition">
+    <tr
+      onClick={() => {
+        navigate(`entry/${row.id}`);
+      }}
+      className="bg-white border-b last:border-b-0 hover:bg-indigo-50 transition"
+    >
       <td className="px-6 py-4 text-center font-medium text-gray-900">
         {index + 1}
       </td>
-      {fields.map((field, i) => (
-        <FieldToCol key={i} field={field} row={row} />
-      ))}
+      {fields
+        .filter((field) => !field.hidden)
+        .map((field, i) => (
+          <FieldToCol key={i} field={field} row={row} />
+        ))}
     </tr>
   );
 };
 
-const FieldToCol = ({ field, row }: { field: Field; row: any }) => {
-  const value = row[field.fieldName]?.value;
+const FieldToCol = ({ field, row }: { field: Field; row: Entry }) => {
+  const value = row.fields[field.fieldName]?.value;
   if (!value) return <td className="px-6 py-4" />;
 
   if (isDigitField(field))
@@ -80,7 +88,7 @@ const FieldToCol = ({ field, row }: { field: Field; row: any }) => {
     );
 
   if (field.type === "USER") {
-    if (!row[field.fieldName].value.userId) {
+    if (!value.userId) {
       return (
         <td className="px-6 py-4">
           {fieldToDisplayValue(row, field)}
