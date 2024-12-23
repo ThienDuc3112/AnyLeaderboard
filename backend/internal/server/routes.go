@@ -1,7 +1,8 @@
 package server
 
 import (
-	"anylbapi/internal/service/user"
+	"anylbapi/internal/service/auth"
+	"anylbapi/internal/service/cors"
 	"net/http"
 )
 
@@ -9,7 +10,7 @@ func (s Server) RegisterRoutes() http.Handler {
 	mux := http.NewServeMux()
 
 	// Service routes
-	mux.Handle("/user/", http.StripPrefix("/user", user.UserRouter(s.db)))
+	mux.Handle("/auth/", http.StripPrefix("/auth", auth.AuthRouter(s.db)))
 
-	return corsMiddleware(mux)
+	return cors.CorsMiddleware(mux)
 }

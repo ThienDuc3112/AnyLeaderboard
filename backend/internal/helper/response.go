@@ -22,3 +22,8 @@ func RespondWithJSON(w http.ResponseWriter, code int, payload any) {
 	}
 	w.Write(data)
 }
+
+func RespondEmtpy(w http.ResponseWriter) {
+	w.WriteHeader(204)
+	w.Write([]byte{})
+}

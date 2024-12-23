@@ -50,6 +50,28 @@ func (q *Queries) DeleteUserByUsername(ctx context.Context, username string) err
 	return err
 }
 
+const getUserByEmail = `-- name: GetUserByEmail :one
+SELECT id, created_at, updated_at, username, display_name, email, password, description
+FROM users
+WHERE email = $1
+`
+
+func (q *Queries) GetUserByEmail(ctx context.Context, email string) (User, error) {
+	row := q.db.QueryRowContext(ctx, getUserByEmail, email)
+	var i User
+	err := row.Scan(
+		&i.ID,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.Username,
+		&i.DisplayName,
+		&i.Email,
+		&i.Password,
+		&i.Description,
+	)
+	return i, err
+}
+
 const getUserByUsername = `-- name: GetUserByUsername :one
 SELECT id, created_at, updated_at, username, display_name, email, password, description
 FROM users

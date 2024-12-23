@@ -2,6 +2,10 @@
 SELECT *
 FROM users
 WHERE username = $1;
+-- name: GetUserByEmail :one
+SELECT *
+FROM users
+WHERE email = $1;
 -- name: CreateUser :exec
 INSERT INTO users (
         username,
