@@ -1,4 +1,4 @@
-package mock
+package test
 
 import (
 	"anylbapi/internal/database"
