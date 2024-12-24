@@ -2,11 +2,10 @@ package auth
 
 import (
 	"anylbapi/internal/database"
-	"anylbapi/internal/helper"
+	"anylbapi/internal/utils"
 	"database/sql"
 	"net/http"
 
-	"github.com/go-playground/validator/v10"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -19,51 +18,47 @@ type signUpReqBody struct {
 
 func (s authService) signUpHandler(w http.ResponseWriter, r *http.Request) {
 	var err error
-	defer func() { helper.LogError("signupHandler", err) }()
-	body, err := helper.ExtractBody[signUpReqBody](r.Body)
+	defer func() { utils.LogError("signupHandler", err) }()
+	body, err := utils.ExtractBody[signUpReqBody](r.Body)
 	if err != nil {
-		helper.RespondWithError(w, 400, "Unable to decode body")
+		utils.RespondWithError(w, 400, "Unable to decode body")
 		return
 	}
 
 	if err = validate.Struct(body); err != nil {
-		resp := map[string]any{}
-		for _, fieldErr := range err.(validator.ValidationErrors) {
-			resp[fieldErr.Field()] = fieldErr.Translate(trans)
-		}
-		helper.RespondWithJSON(w, 400, resp)
+		utils.RespondToInvalidBody(w, err, trans)
 		return
 	}
 
 	// Check duplicate Username
 	_, err = s.repo.GetUserByUsername(r.Context(), body.Username)
 	if err == nil {
-		helper.RespondWithJSON(w, 400, map[string]any{
+		utils.RespondWithJSON(w, 400, map[string]any{
 			"username": "Username is taken",
 		})
 		return
 	}
 	if err != sql.ErrNoRows {
-		helper.RespondWithError(w, 500, "Cannot connect to database")
+		utils.RespondWithError(w, 500, "Cannot connect to database")
 		return
 	}
 
 	// Check duplicate Email
 	_, err = s.repo.GetUserByEmail(r.Context(), body.Email)
 	if err == nil {
-		helper.RespondWithJSON(w, 400, map[string]any{
+		utils.RespondWithJSON(w, 400, map[string]any{
 			"email": "Email is already used",
 		})
 		return
 	}
 	if err != sql.ErrNoRows {
-		helper.RespondWithError(w, 500, "Cannot connect to database")
+		utils.RespondWithError(w, 500, "Cannot connect to database")
 		return
 	}
 
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(body.Password), bcrypt.DefaultCost)
 	if err != nil {
-		helper.RespondWithError(w, 500, "Cannot hash password")
+		utils.RespondWithError(w, 500, "Cannot hash password")
 		return
 	}
 
@@ -75,7 +70,7 @@ func (s authService) signUpHandler(w http.ResponseWriter, r *http.Request) {
 	})
 
 	if err != nil {
-		helper.RespondWithError(w, 500, "Cannot create user")
+		utils.RespondWithError(w, 500, "Cannot create user")
 		return
 	}
 

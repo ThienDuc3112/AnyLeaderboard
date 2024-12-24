@@ -1,9 +1,12 @@
-package helper
+package utils
 
 import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+
+	ut "github.com/go-playground/universal-translator"
+	"github.com/go-playground/validator/v10"
 )
 
 func RespondWithError(w http.ResponseWriter, code int, msg string) {
@@ -21,6 +24,14 @@ func RespondWithJSON(w http.ResponseWriter, code int, payload any) {
 		return
 	}
 	w.Write(data)
+}
+
+func RespondToInvalidBody(w http.ResponseWriter, err error, trans ut.Translator) {
+	resp := map[string]any{}
+	for _, fieldErr := range err.(validator.ValidationErrors) {
+		resp[fieldErr.Field()] = fieldErr.Translate(trans)
+	}
+	RespondWithJSON(w, 400, resp)
 }
 
 func RespondEmpty(w http.ResponseWriter) {

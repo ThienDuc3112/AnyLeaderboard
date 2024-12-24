@@ -2,8 +2,8 @@ package auth
 
 import (
 	"anylbapi/internal/database"
-	"anylbapi/internal/helper"
-	"anylbapi/internal/test"
+	tu "anylbapi/internal/testutils"
+	"anylbapi/internal/utils"
 	"database/sql"
 	"io"
 	"net/http"
@@ -15,7 +15,7 @@ import (
 
 func TestSignUpHandler_Success(t *testing.T) {
 	t.Parallel()
-	m := new(test.MockedQueries)
+	m := new(tu.MockedQueries)
 	service := newAuthService(m)
 
 	// Mock behaviours
@@ -32,7 +32,7 @@ func TestSignUpHandler_Success(t *testing.T) {
 	}
 
 	// Run test
-	w, r, err := test.SetupPostJSONTest("/signup", body)
+	w, r, err := tu.SetupPostJSONTest("/signup", body)
 	if err != nil {
 		assert.Failf(t, "Setup failed", "Unable to setup the test: %v", err)
 	}
@@ -53,7 +53,7 @@ func TestSignUpHandler_Success(t *testing.T) {
 
 func TestSignUpHandler_MissingFields(t *testing.T) {
 	t.Parallel()
-	m := new(test.MockedQueries)
+	m := new(tu.MockedQueries)
 	service := newAuthService(m)
 
 	// Mock behaviours
@@ -62,7 +62,7 @@ func TestSignUpHandler_MissingFields(t *testing.T) {
 	body := signUpReqBody{}
 
 	// Run test
-	w, r, err := test.SetupPostJSONTest("/signup", body)
+	w, r, err := tu.SetupPostJSONTest("/signup", body)
 	if err != nil {
 		assert.Failf(t, "Setup failed", "Unable to setup the test: %v", err)
 	}
@@ -73,7 +73,7 @@ func TestSignUpHandler_MissingFields(t *testing.T) {
 	defer res.Body.Close()
 
 	assert.Equal(t, http.StatusBadRequest, res.StatusCode)
-	resBody, err := helper.ExtractBody[map[string]string](res.Body)
+	resBody, err := utils.ExtractBody[map[string]string](res.Body)
 	assert.Equal(t, err, nil)
 	if err == nil {
 		assert.NotEqual(t, resBody["username"], "")
@@ -87,7 +87,7 @@ func TestSignUpHandler_MissingFields(t *testing.T) {
 
 func TestSignUpHandler_DuplicateUsername(t *testing.T) {
 	t.Parallel()
-	m := new(test.MockedQueries)
+	m := new(tu.MockedQueries)
 	service := newAuthService(m)
 
 	// Mock behaviours
@@ -102,7 +102,7 @@ func TestSignUpHandler_DuplicateUsername(t *testing.T) {
 	}
 
 	// Run test
-	w, r, err := test.SetupPostJSONTest("/signup", body)
+	w, r, err := tu.SetupPostJSONTest("/signup", body)
 	assert.NoError(t, err)
 	service.signUpHandler(w, r)
 
@@ -111,7 +111,7 @@ func TestSignUpHandler_DuplicateUsername(t *testing.T) {
 	defer res.Body.Close()
 
 	assert.Equal(t, http.StatusBadRequest, res.StatusCode)
-	resBody, err := helper.ExtractBody[map[string]string](res.Body)
+	resBody, err := utils.ExtractBody[map[string]string](res.Body)
 	assert.NoError(t, err)
 	assert.Equal(t, "Username is taken", resBody["username"])
 
@@ -120,7 +120,7 @@ func TestSignUpHandler_DuplicateUsername(t *testing.T) {
 
 func TestSignUpHandler_DuplicateEmail(t *testing.T) {
 	t.Parallel()
-	m := new(test.MockedQueries)
+	m := new(tu.MockedQueries)
 	service := newAuthService(m)
 
 	// Mock behaviours
@@ -136,7 +136,7 @@ func TestSignUpHandler_DuplicateEmail(t *testing.T) {
 	}
 
 	// Run test
-	w, r, err := test.SetupPostJSONTest("/signup", body)
+	w, r, err := tu.SetupPostJSONTest("/signup", body)
 	assert.NoError(t, err)
 	service.signUpHandler(w, r)
 
@@ -145,7 +145,7 @@ func TestSignUpHandler_DuplicateEmail(t *testing.T) {
 	defer res.Body.Close()
 
 	assert.Equal(t, http.StatusBadRequest, res.StatusCode)
-	resBody, err := helper.ExtractBody[map[string]string](res.Body)
+	resBody, err := utils.ExtractBody[map[string]string](res.Body)
 	assert.NoError(t, err)
 	assert.Equal(t, "Email is already used", resBody["email"])
 
@@ -154,7 +154,7 @@ func TestSignUpHandler_DuplicateEmail(t *testing.T) {
 
 func TestSignUpHandler_DatabaseFailureOnUsername(t *testing.T) {
 	t.Parallel()
-	m := new(test.MockedQueries)
+	m := new(tu.MockedQueries)
 	service := newAuthService(m)
 
 	// Mock behaviours
@@ -169,7 +169,7 @@ func TestSignUpHandler_DatabaseFailureOnUsername(t *testing.T) {
 	}
 
 	// Run test
-	w, r, err := test.SetupPostJSONTest("/signup", body)
+	w, r, err := tu.SetupPostJSONTest("/signup", body)
 	assert.NoError(t, err)
 	service.signUpHandler(w, r)
 
@@ -182,7 +182,7 @@ func TestSignUpHandler_DatabaseFailureOnUsername(t *testing.T) {
 
 func TestSignUpHandler_UserCreationFailure(t *testing.T) {
 	t.Parallel()
-	m := new(test.MockedQueries)
+	m := new(tu.MockedQueries)
 	service := newAuthService(m)
 
 	// Mock behaviours
@@ -199,7 +199,7 @@ func TestSignUpHandler_UserCreationFailure(t *testing.T) {
 	}
 
 	// Run test
-	w, r, err := test.SetupPostJSONTest("/signup", body)
+	w, r, err := tu.SetupPostJSONTest("/signup", body)
 	assert.NoError(t, err)
 	service.signUpHandler(w, r)
 

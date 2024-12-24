@@ -1,8 +1,7 @@
 package cors
 
 import (
-	"anylbapi/internal/helper"
-	"fmt"
+	"anylbapi/internal/utils"
 	"net/http"
 )
 
@@ -27,7 +26,7 @@ func CorsMiddleware(next http.Handler) http.Handler {
 
 		// Handle preflight OPTIONS requests
 		if r.Method == http.MethodOptions {
-			helper.RespondEmpty(w)
+			utils.RespondEmpty(w)
 			return
 		}
 
@@ -43,12 +42,4 @@ func isOriginAllowed(origin string, allowedOrigins []string) bool {
 		}
 	}
 	return false
-}
-
-func getBaseURL(r *http.Request) string {
-	scheme := "http"
-	if r.TLS != nil {
-		scheme = "https"
-	}
-	return fmt.Sprintf("%s://%s", scheme, r.Host)
 }

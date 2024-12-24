@@ -2,7 +2,7 @@ package auth
 
 import (
 	"anylbapi/internal/database"
-	"anylbapi/internal/helper"
+	"anylbapi/internal/utils"
 )
 
 func newAuthService(repo database.Querierer) authService {
@@ -15,4 +15,4 @@ type authService struct {
 	repo database.Querierer
 }
 
-var validate, trans = helper.NewValidate()
+var validate, trans = utils.NewValidate()

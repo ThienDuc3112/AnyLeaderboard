@@ -2,7 +2,7 @@ package auth
 
 import (
 	"anylbapi/internal/database"
-	"anylbapi/internal/helper"
+	"anylbapi/internal/utils"
 	"net/http"
 )
 
@@ -12,7 +12,7 @@ func AuthRouter(db database.Querierer) http.Handler {
 
 	// Routes
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		helper.RespondWithJSON(w, 200, "Auth service router")
+		utils.RespondWithJSON(w, 200, "Auth service router")
 	})
 	mux.HandleFunc("POST /login", service.loginHandler)
 	mux.HandleFunc("POST /signup", service.signUpHandler)

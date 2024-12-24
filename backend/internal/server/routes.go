@@ -2,8 +2,8 @@ package server
 
 import (
 	"anylbapi/internal/database"
-	"anylbapi/internal/service/auth"
-	"anylbapi/internal/service/cors"
+	"anylbapi/internal/modules/auth"
+	"anylbapi/internal/modules/cors"
 	"net/http"
 )
 
