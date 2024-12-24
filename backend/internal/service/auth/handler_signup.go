@@ -12,15 +12,15 @@ import (
 
 type signUpReqBody struct {
 	Username    string `json:"username" validate:"required,min=3,max=64,isUsername"`
-	Displayname string `json:"displayName" validate:"required,min=3,max=64"`
+	DisplayName string `json:"displayName" validate:"required,min=3,max=64"`
 	Email       string `json:"email" validate:"required,email"`
-	Password    string `json:"password" validate:"required,min=8,max=32"`
+	Password    string `json:"password" validate:"required,min=8,max=64"`
 }
 
 func (s authService) signUpHandler(w http.ResponseWriter, r *http.Request) {
 	var err error
 	defer func() { helper.LogError("signupHandler", err) }()
-	body, err := helper.ExtractBody[signUpReqBody](r)
+	body, err := helper.ExtractBody[signUpReqBody](r.Body)
 	if err != nil {
 		helper.RespondWithError(w, 400, "Unable to decode body")
 		return
@@ -69,7 +69,7 @@ func (s authService) signUpHandler(w http.ResponseWriter, r *http.Request) {
 
 	err = s.repo.CreateUser(r.Context(), database.CreateUserParams{
 		Username:    body.Username,
-		DisplayName: body.Displayname,
+		DisplayName: body.DisplayName,
 		Email:       body.Email,
 		Password:    string(hashedPassword),
 	})

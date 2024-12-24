@@ -7,14 +7,14 @@ import (
 )
 
 var (
-	ErrorIsTx    = fmt.Errorf("query already a transaction")
-	ErrorIsNotTx = fmt.Errorf("query is not a transaction")
+	ErrIsTx    = fmt.Errorf("query already a transaction")
+	ErrIsNotTx = fmt.Errorf("query is not a transaction")
 )
 
 func (q *Queries) BeginTx(ctx context.Context, opts *sql.TxOptions) (Querierer, error) {
 	db, ok := q.db.(*sql.DB)
 	if !ok {
-		return nil, ErrorIsTx
+		return nil, ErrIsTx
 	}
 
 	tx, err := db.BeginTx(ctx, opts)
@@ -28,7 +28,7 @@ func (q *Queries) BeginTx(ctx context.Context, opts *sql.TxOptions) (Querierer, 
 func (q *Queries) Rollback() error {
 	tx, ok := q.db.(*sql.Tx)
 	if !ok {
-		return ErrorIsNotTx
+		return ErrIsNotTx
 	}
 
 	return tx.Rollback()
@@ -37,7 +37,7 @@ func (q *Queries) Rollback() error {
 func (q *Queries) Commit() error {
 	tx, ok := q.db.(*sql.Tx)
 	if !ok {
-		return ErrorIsNotTx
+		return ErrIsNotTx
 	}
 
 	return tx.Commit()

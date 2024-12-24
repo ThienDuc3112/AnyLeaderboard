@@ -2,12 +2,12 @@ package helper
 
 import (
 	"encoding/json"
-	"net/http"
+	"io"
 )
 
-func ExtractBody[T any](r *http.Request) (T, error) {
+func ExtractBody[T any](body io.ReadCloser) (T, error) {
 	var res T
-	if err := json.NewDecoder(r.Body).Decode(&res); err != nil {
+	if err := json.NewDecoder(body).Decode(&res); err != nil {
 		return res, err
 	}
 
