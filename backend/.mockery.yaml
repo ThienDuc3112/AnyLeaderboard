@@ -1,0 +1,10 @@
+keeptree: false
+with-expecter: true
+dir: internal/testutils
+outpkg: testutils
+packages:
+  anylbapi/internal/database:
+    # place your package-specific config here
+    interfaces:
+      # select the interfaces you want mocked
+      Querierer:

@@ -18,7 +18,7 @@ var hash, _ = bcrypt.GenerateFromPassword([]byte("correct_password"), bcrypt.Def
 
 func TestLoginHandler_Success(t *testing.T) {
 	t.Parallel()
-	m := new(tu.MockedQueries)
+	m := tu.NewMockQuerierer(t)
 	service := newAuthService(m)
 
 	// Mock behaviors
@@ -28,7 +28,7 @@ func TestLoginHandler_Success(t *testing.T) {
 		Email:    "test@test.com",
 		Password: string(hash),
 	}
-	m.On("GetUserByEmail", mock.Anything, "test@test.com").Return(mockUser, nil)
+	m.EXPECT().GetUserByEmail(mock.Anything, "test@test.com").Return(mockUser, nil)
 
 	// Test inputs
 	body := loginReqBody{
@@ -55,7 +55,7 @@ func TestLoginHandler_Success(t *testing.T) {
 
 func TestLoginHandler_MissingFields(t *testing.T) {
 	t.Parallel()
-	m := new(tu.MockedQueries)
+	m := tu.NewMockQuerierer(t)
 	service := newAuthService(m)
 
 	// Test inputs
@@ -75,11 +75,11 @@ func TestLoginHandler_MissingFields(t *testing.T) {
 
 func TestLoginHandler_UserNotFound(t *testing.T) {
 	t.Parallel()
-	m := new(tu.MockedQueries)
+	m := tu.NewMockQuerierer(t)
 	service := newAuthService(m)
 
 	// Mock behaviors
-	m.On("GetUserByEmail", mock.Anything, "nonexistent@test.com").Return(database.User{}, sql.ErrNoRows)
+	m.EXPECT().GetUserByEmail(mock.Anything, "nonexistent@test.com").Return(database.User{}, sql.ErrNoRows)
 
 	// Test inputs
 	body := loginReqBody{
@@ -101,7 +101,7 @@ func TestLoginHandler_UserNotFound(t *testing.T) {
 
 func TestLoginHandler_IncorrectPassword(t *testing.T) {
 	t.Parallel()
-	m := new(tu.MockedQueries)
+	m := tu.NewMockQuerierer(t)
 	service := newAuthService(m)
 
 	// Mock behaviors
@@ -111,7 +111,7 @@ func TestLoginHandler_IncorrectPassword(t *testing.T) {
 		Email:    "test@test.com",
 		Password: string(hash),
 	}
-	m.On("GetUserByEmail", mock.Anything, "test@test.com").Return(mockUser, nil)
+	m.EXPECT().GetUserByEmail(mock.Anything, "test@test.com").Return(mockUser, nil)
 
 	// Test inputs
 	body := loginReqBody{
@@ -133,11 +133,11 @@ func TestLoginHandler_IncorrectPassword(t *testing.T) {
 
 func TestLoginHandler_DatabaseFailure(t *testing.T) {
 	t.Parallel()
-	m := new(tu.MockedQueries)
+	m := tu.NewMockQuerierer(t)
 	service := newAuthService(m)
 
 	// Mock behaviors
-	m.On("GetUserByEmail", mock.Anything, "test@test.com").Return(database.User{}, errors.New("database error"))
+	m.EXPECT().GetUserByEmail(mock.Anything, "test@test.com").Return(database.User{}, errors.New("database error"))
 
 	// Test inputs
 	body := loginReqBody{

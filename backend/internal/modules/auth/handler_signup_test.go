@@ -15,13 +15,13 @@ import (
 
 func TestSignUpHandler_Success(t *testing.T) {
 	t.Parallel()
-	m := new(tu.MockedQueries)
+	m := tu.NewMockQuerierer(t)
 	service := newAuthService(m)
 
 	// Mock behaviours
-	m.On("GetUserByUsername", mock.Anything, mock.Anything).Return(database.User{}, sql.ErrNoRows)
-	m.On("GetUserByEmail", mock.Anything, mock.Anything).Return(database.User{}, sql.ErrNoRows)
-	m.On("CreateUser", mock.Anything, mock.Anything).Return(nil)
+	m.EXPECT().GetUserByUsername(mock.Anything, mock.Anything).Return(database.User{}, sql.ErrNoRows)
+	m.EXPECT().GetUserByEmail(mock.Anything, mock.Anything).Return(database.User{}, sql.ErrNoRows)
+	m.EXPECT().CreateUser(mock.Anything, mock.Anything).Return(nil)
 
 	// Test inputs
 	body := signUpReqBody{
@@ -53,7 +53,7 @@ func TestSignUpHandler_Success(t *testing.T) {
 
 func TestSignUpHandler_MissingFields(t *testing.T) {
 	t.Parallel()
-	m := new(tu.MockedQueries)
+	m := tu.NewMockQuerierer(t)
 	service := newAuthService(m)
 
 	// Mock behaviours
@@ -87,11 +87,11 @@ func TestSignUpHandler_MissingFields(t *testing.T) {
 
 func TestSignUpHandler_DuplicateUsername(t *testing.T) {
 	t.Parallel()
-	m := new(tu.MockedQueries)
+	m := tu.NewMockQuerierer(t)
 	service := newAuthService(m)
 
 	// Mock behaviours
-	m.On("GetUserByUsername", mock.Anything, "test_user").Return(database.User{}, nil) // Username exists
+	m.EXPECT().GetUserByUsername(mock.Anything, "test_user").Return(database.User{}, nil) // Username exists
 
 	// Test inputs
 	body := signUpReqBody{
@@ -120,12 +120,12 @@ func TestSignUpHandler_DuplicateUsername(t *testing.T) {
 
 func TestSignUpHandler_DuplicateEmail(t *testing.T) {
 	t.Parallel()
-	m := new(tu.MockedQueries)
+	m := tu.NewMockQuerierer(t)
 	service := newAuthService(m)
 
 	// Mock behaviours
-	m.On("GetUserByUsername", mock.Anything, mock.Anything).Return(database.User{}, sql.ErrNoRows) // Username does not exist
-	m.On("GetUserByEmail", mock.Anything, "test@test.com").Return(database.User{}, nil)            // Email exists
+	m.EXPECT().GetUserByUsername(mock.Anything, mock.Anything).Return(database.User{}, sql.ErrNoRows) // Username does not exist
+	m.EXPECT().GetUserByEmail(mock.Anything, "test@test.com").Return(database.User{}, nil)            // Email exists
 
 	// Test inputs
 	body := signUpReqBody{
@@ -154,11 +154,11 @@ func TestSignUpHandler_DuplicateEmail(t *testing.T) {
 
 func TestSignUpHandler_DatabaseFailureOnUsername(t *testing.T) {
 	t.Parallel()
-	m := new(tu.MockedQueries)
+	m := tu.NewMockQuerierer(t)
 	service := newAuthService(m)
 
 	// Mock behaviours
-	m.On("GetUserByUsername", mock.Anything, "test_user").Return(database.User{}, sql.ErrConnDone) // Simulate DB connection error
+	m.EXPECT().GetUserByUsername(mock.Anything, "test_user").Return(database.User{}, sql.ErrConnDone) // Simulate DB connection error
 
 	// Test inputs
 	body := signUpReqBody{
@@ -182,13 +182,13 @@ func TestSignUpHandler_DatabaseFailureOnUsername(t *testing.T) {
 
 func TestSignUpHandler_UserCreationFailure(t *testing.T) {
 	t.Parallel()
-	m := new(tu.MockedQueries)
+	m := tu.NewMockQuerierer(t)
 	service := newAuthService(m)
 
 	// Mock behaviours
-	m.On("GetUserByUsername", mock.Anything, mock.Anything).Return(database.User{}, sql.ErrNoRows)
-	m.On("GetUserByEmail", mock.Anything, mock.Anything).Return(database.User{}, sql.ErrNoRows)
-	m.On("CreateUser", mock.Anything, mock.Anything).Return(assert.AnError) // Simulate creation failure
+	m.EXPECT().GetUserByUsername(mock.Anything, mock.Anything).Return(database.User{}, sql.ErrNoRows)
+	m.EXPECT().GetUserByEmail(mock.Anything, mock.Anything).Return(database.User{}, sql.ErrNoRows)
+	m.EXPECT().CreateUser(mock.Anything, mock.Anything).Return(assert.AnError) // Simulate creation failure
 
 	// Test inputs
 	body := signUpReqBody{
