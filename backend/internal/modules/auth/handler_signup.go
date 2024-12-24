@@ -5,6 +5,7 @@ import (
 	"anylbapi/internal/utils"
 	"database/sql"
 	"net/http"
+	"strings"
 
 	"golang.org/x/crypto/bcrypt"
 )
@@ -29,6 +30,9 @@ func (s authService) signUpHandler(w http.ResponseWriter, r *http.Request) {
 		utils.RespondToInvalidBody(w, err, trans)
 		return
 	}
+
+	body.Username = strings.ToLower(body.Username)
+	body.Email = strings.ToLower(body.Email)
 
 	// Check duplicate Username
 	_, err = s.repo.GetUserByUsername(r.Context(), body.Username)

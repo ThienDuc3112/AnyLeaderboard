@@ -27,6 +27,8 @@ func (s authService) loginHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	body.Username = strings.ToLower(body.Username)
+
 	if err = validate.Struct(body); err != nil {
 		utils.RespondToInvalidBody(w, err, trans)
 		return

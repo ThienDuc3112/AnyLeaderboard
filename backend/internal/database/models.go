@@ -83,6 +83,17 @@ type LeaderboardOption struct {
 	Option    string
 }
 
+type RefreshToken struct {
+	ID              int32
+	UserID          int32
+	RotationCounter int32
+	IssuedAt        time.Time
+	ExpiresAt       time.Time
+	DeviceInfo      sql.NullString
+	IpAddress       sql.NullString
+	Revoked         bool
+}
+
 type User struct {
 	ID          int32
 	CreatedAt   time.Time
