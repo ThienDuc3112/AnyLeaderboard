@@ -3,19 +3,16 @@ package auth
 import (
 	"anylbapi/internal/database"
 	"anylbapi/internal/helper"
-	"database/sql"
 )
 
-func newUserService(db *sql.DB) authService {
+func newAuthService(repo database.Querierer) authService {
 	return authService{
-		db:   db,
-		repo: database.New(db),
+		repo: repo,
 	}
 }
 
 type authService struct {
-	db   *sql.DB
-	repo *database.Queries
+	repo database.Querierer
 }
 
 var validate, trans = helper.NewValidate()

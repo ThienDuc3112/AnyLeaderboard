@@ -1,14 +1,14 @@
 package auth
 
 import (
+	"anylbapi/internal/database"
 	"anylbapi/internal/helper"
-	"database/sql"
 	"net/http"
 )
 
-func AuthRouter(db *sql.DB) http.Handler {
+func AuthRouter(db database.Querierer) http.Handler {
 	mux := http.NewServeMux()
-	service := newUserService(db)
+	service := newAuthService(db)
 
 	// Routes
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {

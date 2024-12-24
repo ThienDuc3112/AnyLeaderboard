@@ -10,17 +10,17 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+type signUpReqBody struct {
+	Username    string `json:"username" validate:"required,min=3,max=64,isUsername"`
+	Displayname string `json:"displayName" validate:"required,min=3,max=64"`
+	Email       string `json:"email" validate:"required,email"`
+	Password    string `json:"password" validate:"required,min=8,max=32"`
+}
+
 func (s authService) signUpHandler(w http.ResponseWriter, r *http.Request) {
 	var err error
 	defer func() { helper.LogError("signupHandler", err) }()
-	type ReqBody struct {
-		Username    string `json:"username" validate:"required,min=3,max=64,isUsername"`
-		Displayname string `json:"displayName" validate:"required,min=3,max=64"`
-		Email       string `json:"email" validate:"required,email"`
-		Password    string `json:"password" validate:"required,min=8,max=32"`
-	}
-
-	body, err := helper.ExtractBody[ReqBody](r)
+	body, err := helper.ExtractBody[signUpReqBody](r)
 	if err != nil {
 		helper.RespondWithError(w, 400, "Unable to decode body")
 		return
