@@ -1,28 +1,33 @@
 package cors
 
 import (
+	"anylbapi/internal/helper"
 	"fmt"
 	"net/http"
 )
 
 var allowedOrigin = []string{
-	"http://localhost:8080",
+	"http://localhost:8081",
 	"https://localhost:8080",
 }
 
 func CorsMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// Set CORS headers
-		if baseURL := getBaseURL(r); isOriginAllowed(baseURL, allowedOrigin) {
-			w.Header().Set("Access-Control-Allow-Origin", baseURL)
+		allowed := isOriginAllowed(r.Header.Get("Origin"), allowedOrigin)
+		if allowed {
+			w.Header().Set("Access-Control-Allow-Origin", r.Header.Get("Origin"))
+			w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, PATCH")
+			w.Header().Set("Access-Control-Allow-Headers", "Accept, Authorization, Content-Type, X-CSRF-Token")
+			w.Header().Set("Access-Control-Allow-Credentials", "true") // Set to "true" if credentials are required
+		} else {
+			w.WriteHeader(403)
+			return
 		}
-		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, PATCH")
-		w.Header().Set("Access-Control-Allow-Headers", "Accept, Authorization, Content-Type, X-CSRF-Token")
-		w.Header().Set("Access-Control-Allow-Credentials", "true") // Set to "true" if credentials are required
 
 		// Handle preflight OPTIONS requests
 		if r.Method == http.MethodOptions {
-			w.WriteHeader(http.StatusNoContent)
+			helper.RespondEmpty(w)
 			return
 		}
 

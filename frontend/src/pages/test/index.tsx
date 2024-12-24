@@ -5,12 +5,7 @@ const Test: React.FC = () => {
   useEffect(() => {
     (async () => {
       try {
-        const res = await axios.post("http://localhost:9999/auth/signup", {
-          username: "not_huyen",
-          displayName: "huyen the chuni guy",
-          password: "12345678",
-          email: "b@b.com",
-        });
+        const res = await axios.post("https://localhost:9999/auth/signup", {});
         console.log(res.status, res.data);
       } catch (error) {
         if (error instanceof axios.AxiosError) {
