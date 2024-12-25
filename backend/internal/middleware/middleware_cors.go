@@ -3,6 +3,7 @@ package middleware
 import (
 	"anylbapi/internal/utils"
 	"net/http"
+	"os"
 )
 
 var allowedOrigin = []string{
@@ -13,9 +14,16 @@ var allowedOrigin = []string{
 func (m Middleware) CorsMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// Set CORS headers
-		allowed := isOriginAllowed(r.Header.Get("Origin"), allowedOrigin)
+		isProduction := os.Getenv("ENVIRONMENT") == "PRODUCTION"
+		origin := r.Header.Get("Origin")
+		var allowed bool
+		if isProduction {
+			allowed = origin == os.Getenv("FRONTEND_URL")
+		} else {
+			allowed = isOriginAllowed(origin, allowedOrigin)
+		}
 		if allowed {
-			w.Header().Set("Access-Control-Allow-Origin", r.Header.Get("Origin"))
+			w.Header().Set("Access-Control-Allow-Origin", origin)
 			w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, PATCH")
 			w.Header().Set("Access-Control-Allow-Headers", "Accept, Authorization, Content-Type, X-CSRF-Token")
 			w.Header().Set("Access-Control-Allow-Credentials", "true") // Set to "true" if credentials are required
