@@ -91,7 +91,7 @@ type RefreshToken struct {
 	ExpiresAt       time.Time
 	DeviceInfo      sql.NullString
 	IpAddress       sql.NullString
-	Revoked         bool
+	RevokedAt       sql.NullTime
 }
 
 type User struct {

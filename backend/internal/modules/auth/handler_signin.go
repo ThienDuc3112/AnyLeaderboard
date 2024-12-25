@@ -21,6 +21,18 @@ func (s authService) loginHandler(w http.ResponseWriter, r *http.Request) {
 	var err error
 	defer func() { utils.LogError("signupHandler", err) }()
 
+	emptyCookie := &http.Cookie{
+		Name:     "refresh_token",
+		Value:    "",
+		Expires:  time.Now().Add(time.Hour * -1),
+		Secure:   true,
+		HttpOnly: true,
+		Path:     "/",
+		SameSite: http.SameSiteNoneMode,
+		Domain:   r.URL.Host,
+	}
+	http.SetCookie(w, emptyCookie)
+
 	body, err := utils.ExtractBody[loginReqBody](r.Body)
 	if err != nil {
 		utils.RespondWithError(w, 400, "Unable to decode body")
@@ -62,8 +74,44 @@ func (s authService) loginHandler(w http.ResponseWriter, r *http.Request) {
 
 	tokenStr, err := MakeJWT(user, os.Getenv("SECRET"), time.Minute*30)
 	if err != nil {
-		utils.RespondWithError(w, 500, "Cannot create a new session token")
+		utils.RespondWithError(w, 500, "Cannot create a new session")
+		return
 	}
+
+	refreshTokenParam := database.CreateNewRefreshTokenParams{
+		UserID:    user.ID,
+		ExpiresAt: time.Now().Add(14 * 24 * time.Hour),
+	}
+	if len(r.Header["User-Agent"]) != 0 {
+		refreshTokenParam.DeviceInfo = sql.NullString{
+			String: r.Header["User-Agent"][0],
+			Valid:  true,
+		}
+	}
+
+	refreshToken, err := s.repo.CreateNewRefreshToken(r.Context(), refreshTokenParam)
+	if err != nil {
+		utils.RespondWithError(w, 500, "Cannot create a new session")
+		return
+	}
+
+	refreshTokenStr, err := MakeRefreshTokenJWT(refreshToken, os.Getenv("SECRET"), refreshToken.ExpiresAt)
+	if err != nil {
+		utils.RespondWithError(w, 500, "Cannot create a new session")
+		return
+	}
+
+	cookie := &http.Cookie{
+		Name:     "refresh_token",
+		Value:    refreshTokenStr,
+		Expires:  refreshToken.ExpiresAt,
+		Secure:   true,
+		HttpOnly: true,
+		Path:     "/",
+		SameSite: http.SameSiteNoneMode,
+		Domain:   r.URL.Host,
+	}
+	http.SetCookie(w, cookie)
 
 	utils.RespondWithJSON(w, 200, map[string]string{
 		"access_token": tokenStr,

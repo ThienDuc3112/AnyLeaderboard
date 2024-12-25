@@ -8,7 +8,7 @@ CREATE TABLE refresh_tokens (
     expires_at TIMESTAMP NOT NULL,
     device_info VARCHAR,
     ip_address VARCHAR(45),
-    revoked BOOLEAN NOT NULL DEFAULT FALSE
+    revoked_at TIMESTAMP
 );
 -- +goose StatementEnd
 -- +goose Down

@@ -8,6 +8,7 @@ import (
 	"errors"
 	"net/http"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -28,7 +29,18 @@ func TestLoginHandler_Success(t *testing.T) {
 		Email:    "test@test.com",
 		Password: string(hash),
 	}
+	mockRefreshToken := database.RefreshToken{
+		ID:              1,
+		UserID:          1,
+		RotationCounter: 0,
+		IssuedAt:        time.Now(),
+		ExpiresAt:       time.Now().Add(14 * 24 * time.Hour),
+		DeviceInfo:      sql.NullString{},
+		IpAddress:       sql.NullString{},
+		RevokedAt:       sql.NullTime{},
+	}
 	m.EXPECT().GetUserByEmail(mock.Anything, "test@test.com").Return(mockUser, nil)
+	m.EXPECT().CreateNewRefreshToken(mock.Anything, mock.Anything).Return(mockRefreshToken, nil)
 
 	// Test inputs
 	body := loginReqBody{
@@ -49,6 +61,14 @@ func TestLoginHandler_Success(t *testing.T) {
 	resBody, err := utils.ExtractBody[map[string]string](res.Body)
 	assert.NoError(t, err)
 	assert.NotEmpty(t, resBody["access_token"])
+	if assert.NotEmpty(t, res.Cookies()) {
+		cookie := res.Cookies()[len(res.Cookies())-1]
+		assert.Equal(t, "refresh_token", cookie.Name)
+		assert.Equal(t, true, cookie.HttpOnly)
+		assert.Equal(t, true, cookie.Secure)
+		assert.WithinDuration(t, mockRefreshToken.ExpiresAt, cookie.Expires, time.Second)
+		assert.NotEmpty(t, cookie.Value)
+	}
 
 	m.AssertExpectations(t)
 }
@@ -71,6 +91,13 @@ func TestLoginHandler_MissingFields(t *testing.T) {
 	defer res.Body.Close()
 
 	assert.Equal(t, http.StatusBadRequest, res.StatusCode)
+	if assert.NotEmpty(t, res.Cookies()) {
+		cookie := res.Cookies()[len(res.Cookies())-1]
+		assert.Equal(t, "refresh_token", cookie.Name)
+		assert.Equal(t, true, cookie.HttpOnly)
+		assert.Equal(t, true, cookie.Secure)
+		assert.Zero(t, cookie.Value)
+	}
 }
 
 func TestLoginHandler_UserNotFound(t *testing.T) {
@@ -97,6 +124,11 @@ func TestLoginHandler_UserNotFound(t *testing.T) {
 	defer res.Body.Close()
 
 	assert.Equal(t, http.StatusUnauthorized, res.StatusCode)
+	if assert.NotEmpty(t, res.Cookies()) {
+		cookie := res.Cookies()[len(res.Cookies())-1]
+		assert.Equal(t, "refresh_token", cookie.Name)
+		assert.Zero(t, cookie.Value)
+	}
 }
 
 func TestLoginHandler_IncorrectPassword(t *testing.T) {
@@ -129,6 +161,11 @@ func TestLoginHandler_IncorrectPassword(t *testing.T) {
 	defer res.Body.Close()
 
 	assert.Equal(t, http.StatusUnauthorized, res.StatusCode)
+	if assert.NotEmpty(t, res.Cookies()) {
+		cookie := res.Cookies()[len(res.Cookies())-1]
+		assert.Equal(t, "refresh_token", cookie.Name)
+		assert.Zero(t, cookie.Value)
+	}
 }
 
 func TestLoginHandler_DatabaseFailure(t *testing.T) {
@@ -155,4 +192,9 @@ func TestLoginHandler_DatabaseFailure(t *testing.T) {
 	defer res.Body.Close()
 
 	assert.Equal(t, http.StatusInternalServerError, res.StatusCode)
+	if assert.NotEmpty(t, res.Cookies()) {
+		cookie := res.Cookies()[len(res.Cookies())-1]
+		assert.Equal(t, "refresh_token", cookie.Name)
+		assert.Zero(t, cookie.Value)
+	}
 }

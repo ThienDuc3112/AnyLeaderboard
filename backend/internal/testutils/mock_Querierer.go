@@ -128,6 +128,63 @@ func (_c *MockQuerierer_Commit_Call) RunAndReturn(run func() error) *MockQuerier
 	return _c
 }
 
+// CreateNewRefreshToken provides a mock function with given fields: ctx, arg
+func (_m *MockQuerierer) CreateNewRefreshToken(ctx context.Context, arg database.CreateNewRefreshTokenParams) (database.RefreshToken, error) {
+	ret := _m.Called(ctx, arg)
+
+	if len(ret) == 0 {
+		panic("no return value specified for CreateNewRefreshToken")
+	}
+
+	var r0 database.RefreshToken
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context, database.CreateNewRefreshTokenParams) (database.RefreshToken, error)); ok {
+		return rf(ctx, arg)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, database.CreateNewRefreshTokenParams) database.RefreshToken); ok {
+		r0 = rf(ctx, arg)
+	} else {
+		r0 = ret.Get(0).(database.RefreshToken)
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, database.CreateNewRefreshTokenParams) error); ok {
+		r1 = rf(ctx, arg)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// MockQuerierer_CreateNewRefreshToken_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'CreateNewRefreshToken'
+type MockQuerierer_CreateNewRefreshToken_Call struct {
+	*mock.Call
+}
+
+// CreateNewRefreshToken is a helper method to define mock.On call
+//   - ctx context.Context
+//   - arg database.CreateNewRefreshTokenParams
+func (_e *MockQuerierer_Expecter) CreateNewRefreshToken(ctx interface{}, arg interface{}) *MockQuerierer_CreateNewRefreshToken_Call {
+	return &MockQuerierer_CreateNewRefreshToken_Call{Call: _e.mock.On("CreateNewRefreshToken", ctx, arg)}
+}
+
+func (_c *MockQuerierer_CreateNewRefreshToken_Call) Run(run func(ctx context.Context, arg database.CreateNewRefreshTokenParams)) *MockQuerierer_CreateNewRefreshToken_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(database.CreateNewRefreshTokenParams))
+	})
+	return _c
+}
+
+func (_c *MockQuerierer_CreateNewRefreshToken_Call) Return(_a0 database.RefreshToken, _a1 error) *MockQuerierer_CreateNewRefreshToken_Call {
+	_c.Call.Return(_a0, _a1)
+	return _c
+}
+
+func (_c *MockQuerierer_CreateNewRefreshToken_Call) RunAndReturn(run func(context.Context, database.CreateNewRefreshTokenParams) (database.RefreshToken, error)) *MockQuerierer_CreateNewRefreshToken_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // CreateUser provides a mock function with given fields: ctx, arg
 func (_m *MockQuerierer) CreateUser(ctx context.Context, arg database.CreateUserParams) error {
 	ret := _m.Called(ctx, arg)
@@ -336,6 +393,100 @@ func (_c *MockQuerierer_GetUserByUsername_Call) RunAndReturn(run func(context.Co
 	return _c
 }
 
+// RevokedAllRefreshToken provides a mock function with given fields: ctx, userID
+func (_m *MockQuerierer) RevokedAllRefreshToken(ctx context.Context, userID int32) error {
+	ret := _m.Called(ctx, userID)
+
+	if len(ret) == 0 {
+		panic("no return value specified for RevokedAllRefreshToken")
+	}
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(context.Context, int32) error); ok {
+		r0 = rf(ctx, userID)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
+// MockQuerierer_RevokedAllRefreshToken_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'RevokedAllRefreshToken'
+type MockQuerierer_RevokedAllRefreshToken_Call struct {
+	*mock.Call
+}
+
+// RevokedAllRefreshToken is a helper method to define mock.On call
+//   - ctx context.Context
+//   - userID int32
+func (_e *MockQuerierer_Expecter) RevokedAllRefreshToken(ctx interface{}, userID interface{}) *MockQuerierer_RevokedAllRefreshToken_Call {
+	return &MockQuerierer_RevokedAllRefreshToken_Call{Call: _e.mock.On("RevokedAllRefreshToken", ctx, userID)}
+}
+
+func (_c *MockQuerierer_RevokedAllRefreshToken_Call) Run(run func(ctx context.Context, userID int32)) *MockQuerierer_RevokedAllRefreshToken_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(int32))
+	})
+	return _c
+}
+
+func (_c *MockQuerierer_RevokedAllRefreshToken_Call) Return(_a0 error) *MockQuerierer_RevokedAllRefreshToken_Call {
+	_c.Call.Return(_a0)
+	return _c
+}
+
+func (_c *MockQuerierer_RevokedAllRefreshToken_Call) RunAndReturn(run func(context.Context, int32) error) *MockQuerierer_RevokedAllRefreshToken_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// RevokedRefreshToken provides a mock function with given fields: ctx, id
+func (_m *MockQuerierer) RevokedRefreshToken(ctx context.Context, id int32) error {
+	ret := _m.Called(ctx, id)
+
+	if len(ret) == 0 {
+		panic("no return value specified for RevokedRefreshToken")
+	}
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(context.Context, int32) error); ok {
+		r0 = rf(ctx, id)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
+// MockQuerierer_RevokedRefreshToken_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'RevokedRefreshToken'
+type MockQuerierer_RevokedRefreshToken_Call struct {
+	*mock.Call
+}
+
+// RevokedRefreshToken is a helper method to define mock.On call
+//   - ctx context.Context
+//   - id int32
+func (_e *MockQuerierer_Expecter) RevokedRefreshToken(ctx interface{}, id interface{}) *MockQuerierer_RevokedRefreshToken_Call {
+	return &MockQuerierer_RevokedRefreshToken_Call{Call: _e.mock.On("RevokedRefreshToken", ctx, id)}
+}
+
+func (_c *MockQuerierer_RevokedRefreshToken_Call) Run(run func(ctx context.Context, id int32)) *MockQuerierer_RevokedRefreshToken_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(int32))
+	})
+	return _c
+}
+
+func (_c *MockQuerierer_RevokedRefreshToken_Call) Return(_a0 error) *MockQuerierer_RevokedRefreshToken_Call {
+	_c.Call.Return(_a0)
+	return _c
+}
+
+func (_c *MockQuerierer_RevokedRefreshToken_Call) RunAndReturn(run func(context.Context, int32) error) *MockQuerierer_RevokedRefreshToken_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // Rollback provides a mock function with no fields
 func (_m *MockQuerierer) Rollback() error {
 	ret := _m.Called()
@@ -377,6 +528,63 @@ func (_c *MockQuerierer_Rollback_Call) Return(_a0 error) *MockQuerierer_Rollback
 }
 
 func (_c *MockQuerierer_Rollback_Call) RunAndReturn(run func() error) *MockQuerierer_Rollback_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// UpdateRefreshToken provides a mock function with given fields: ctx, arg
+func (_m *MockQuerierer) UpdateRefreshToken(ctx context.Context, arg database.UpdateRefreshTokenParams) (database.RefreshToken, error) {
+	ret := _m.Called(ctx, arg)
+
+	if len(ret) == 0 {
+		panic("no return value specified for UpdateRefreshToken")
+	}
+
+	var r0 database.RefreshToken
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context, database.UpdateRefreshTokenParams) (database.RefreshToken, error)); ok {
+		return rf(ctx, arg)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, database.UpdateRefreshTokenParams) database.RefreshToken); ok {
+		r0 = rf(ctx, arg)
+	} else {
+		r0 = ret.Get(0).(database.RefreshToken)
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, database.UpdateRefreshTokenParams) error); ok {
+		r1 = rf(ctx, arg)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// MockQuerierer_UpdateRefreshToken_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'UpdateRefreshToken'
+type MockQuerierer_UpdateRefreshToken_Call struct {
+	*mock.Call
+}
+
+// UpdateRefreshToken is a helper method to define mock.On call
+//   - ctx context.Context
+//   - arg database.UpdateRefreshTokenParams
+func (_e *MockQuerierer_Expecter) UpdateRefreshToken(ctx interface{}, arg interface{}) *MockQuerierer_UpdateRefreshToken_Call {
+	return &MockQuerierer_UpdateRefreshToken_Call{Call: _e.mock.On("UpdateRefreshToken", ctx, arg)}
+}
+
+func (_c *MockQuerierer_UpdateRefreshToken_Call) Run(run func(ctx context.Context, arg database.UpdateRefreshTokenParams)) *MockQuerierer_UpdateRefreshToken_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(database.UpdateRefreshTokenParams))
+	})
+	return _c
+}
+
+func (_c *MockQuerierer_UpdateRefreshToken_Call) Return(_a0 database.RefreshToken, _a1 error) *MockQuerierer_UpdateRefreshToken_Call {
+	_c.Call.Return(_a0, _a1)
+	return _c
+}
+
+func (_c *MockQuerierer_UpdateRefreshToken_Call) RunAndReturn(run func(context.Context, database.UpdateRefreshTokenParams) (database.RefreshToken, error)) *MockQuerierer_UpdateRefreshToken_Call {
 	_c.Call.Return(run)
 	return _c
 }
