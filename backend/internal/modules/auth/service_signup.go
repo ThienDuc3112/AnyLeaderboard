@@ -3,9 +3,9 @@ package auth
 import (
 	"anylbapi/internal/database"
 	"context"
-	"database/sql"
 	"strings"
 
+	"github.com/jackc/pgx/v5"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -19,7 +19,7 @@ func (s authService) signup(context context.Context, param signUpParam) error {
 	if err == nil {
 		return errUsernameTaken
 	}
-	if err != sql.ErrNoRows {
+	if err != pgx.ErrNoRows {
 		return err
 	}
 
@@ -28,7 +28,7 @@ func (s authService) signup(context context.Context, param signUpParam) error {
 	if err == nil {
 		return errEmailUsed
 	}
-	if err != sql.ErrNoRows {
+	if err != pgx.ErrNoRows {
 		return err
 	}
 

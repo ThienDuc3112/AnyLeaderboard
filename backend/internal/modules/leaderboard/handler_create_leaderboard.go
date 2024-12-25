@@ -22,6 +22,10 @@ func (s leaderboardService) createLeaderboardHandler(w http.ResponseWriter, r *h
 		utils.RespondToInvalidBody(w, err, trans)
 		return
 	}
+	if len(body.Fields) == 0 {
+		utils.RespondWithError(w, 400, "There must be atleast a field")
+		return
+	}
 
 	userCtx := r.Context().Value(middleware.KeyUser)
 	var user database.User
@@ -43,7 +47,16 @@ func (s leaderboardService) createLeaderboardHandler(w http.ResponseWriter, r *h
 	})
 
 	if err != nil {
-		utils.RespondWithError(w, 500, "Internal server error")
+		switch err {
+		case errMultipleForRankField:
+			utils.RespondWithError(w, 400, "Multiple 'For rank' field, only one field can be 'For rank'")
+		case errNoForRankField:
+			utils.RespondWithError(w, 400, "No 'For rank' field, one field must be 'For rank'")
+		case errNoPublicField:
+			utils.RespondWithError(w, 400, "No public field, one field must be not hidden")
+		default:
+			utils.RespondWithError(w, 500, "Internal server error")
+		}
 		return
 	}
 

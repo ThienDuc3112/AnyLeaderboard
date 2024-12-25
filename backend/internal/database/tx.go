@@ -2,7 +2,6 @@ package database
 
 import (
 	"context"
-	"database/sql"
 	"fmt"
 
 	"github.com/jackc/pgx/v5"
@@ -13,7 +12,7 @@ var (
 	ErrIsNotTx = fmt.Errorf("query is not a transaction")
 )
 
-func (q *Queries) BeginTx(ctx context.Context, opts *sql.TxOptions) (Querierer, error) {
+func (q *Queries) BeginTx(ctx context.Context) (Querierer, error) {
 	db, ok := q.db.(*pgxpool.Pool)
 	var tx pgx.Tx
 	if !ok {

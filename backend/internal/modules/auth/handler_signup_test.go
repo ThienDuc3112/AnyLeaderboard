@@ -4,11 +4,11 @@ import (
 	"anylbapi/internal/database"
 	tu "anylbapi/internal/testutils"
 	"anylbapi/internal/utils"
-	"database/sql"
 	"io"
 	"net/http"
 	"testing"
 
+	"github.com/jackc/pgx/v5"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -19,8 +19,8 @@ func TestSignUpHandler_Success(t *testing.T) {
 	service := newAuthService(m)
 
 	// Mock behaviours
-	m.EXPECT().GetUserByUsername(mock.Anything, mock.Anything).Return(database.User{}, sql.ErrNoRows)
-	m.EXPECT().GetUserByEmail(mock.Anything, mock.Anything).Return(database.User{}, sql.ErrNoRows)
+	m.EXPECT().GetUserByUsername(mock.Anything, mock.Anything).Return(database.User{}, pgx.ErrNoRows)
+	m.EXPECT().GetUserByEmail(mock.Anything, mock.Anything).Return(database.User{}, pgx.ErrNoRows)
 	m.EXPECT().CreateUser(mock.Anything, mock.Anything).Return(nil)
 
 	// Test inputs
@@ -124,7 +124,7 @@ func TestSignUpHandler_DuplicateEmail(t *testing.T) {
 	service := newAuthService(m)
 
 	// Mock behaviours
-	m.EXPECT().GetUserByUsername(mock.Anything, mock.Anything).Return(database.User{}, sql.ErrNoRows) // Username does not exist
+	m.EXPECT().GetUserByUsername(mock.Anything, mock.Anything).Return(database.User{}, pgx.ErrNoRows) // Username does not exist
 	m.EXPECT().GetUserByEmail(mock.Anything, "test@test.com").Return(database.User{}, nil)            // Email exists
 
 	// Test inputs
@@ -158,7 +158,7 @@ func TestSignUpHandler_DatabaseFailureOnUsername(t *testing.T) {
 	service := newAuthService(m)
 
 	// Mock behaviours
-	m.EXPECT().GetUserByUsername(mock.Anything, "test_user").Return(database.User{}, sql.ErrConnDone) // Simulate DB connection error
+	m.EXPECT().GetUserByUsername(mock.Anything, "test_user").Return(database.User{}, assert.AnError) // Simulate DB connection error
 
 	// Test inputs
 	body := signUpReqBody{
@@ -186,8 +186,8 @@ func TestSignUpHandler_UserCreationFailure(t *testing.T) {
 	service := newAuthService(m)
 
 	// Mock behaviours
-	m.EXPECT().GetUserByUsername(mock.Anything, mock.Anything).Return(database.User{}, sql.ErrNoRows)
-	m.EXPECT().GetUserByEmail(mock.Anything, mock.Anything).Return(database.User{}, sql.ErrNoRows)
+	m.EXPECT().GetUserByUsername(mock.Anything, mock.Anything).Return(database.User{}, pgx.ErrNoRows)
+	m.EXPECT().GetUserByEmail(mock.Anything, mock.Anything).Return(database.User{}, pgx.ErrNoRows)
 	m.EXPECT().CreateUser(mock.Anything, mock.Anything).Return(assert.AnError) // Simulate creation failure
 
 	// Test inputs

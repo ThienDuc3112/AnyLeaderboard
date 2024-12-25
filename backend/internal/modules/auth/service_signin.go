@@ -5,11 +5,11 @@ import (
 	"anylbapi/internal/database"
 	"anylbapi/internal/utils"
 	"context"
-	"database/sql"
 	"os"
 	"strings"
 	"time"
 
+	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgtype"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -25,10 +25,10 @@ func (s authService) login(context context.Context, param loginParam) (loginRetu
 	if loginWithEmail {
 		user, err = s.repo.GetUserByEmail(context, param.Username)
 	} else {
-		user, err = s.repo.GetUserByEmail(context, param.Username)
+		user, err = s.repo.GetUserByUsername(context, param.Username)
 	}
 
-	if err == sql.ErrNoRows {
+	if err == pgx.ErrNoRows {
 		return loginReturn{}, errNoUser
 	} else if err != nil {
 		return loginReturn{}, err

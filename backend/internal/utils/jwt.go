@@ -47,10 +47,9 @@ func MakeRefreshTokenJWT(refreshToken database.RefreshToken, tokenSecret string,
 	return token.SignedString([]byte(tokenSecret))
 }
 
-func ValidateToken[T jwt.Claims](tokenString string, tokenSecret string) (*T, error) {
-	var claims T
+func ValidateAccessToken(tokenString string, tokenSecret string) (*AccessTokenClaims, error) {
 	// Parse the token with a key function
-	token, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
+	token, err := jwt.ParseWithClaims(tokenString, &AccessTokenClaims{}, func(token *jwt.Token) (interface{}, error) {
 		// Ensure the signing method is as expected
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
@@ -63,8 +62,29 @@ func ValidateToken[T jwt.Claims](tokenString string, tokenSecret string) (*T, er
 	}
 
 	// Extract and validate the claims
-	if claims, ok := token.Claims.(T); ok && token.Valid {
-		return &claims, nil
+	if claims, ok := token.Claims.(*AccessTokenClaims); ok && token.Valid {
+		return claims, nil
+	}
+	return nil, fmt.Errorf("invalid token")
+}
+
+func ValidateRefreshToken(tokenString string, tokenSecret string) (*RefreshTokenClaims, error) {
+	// Parse the token with a key function
+	token, err := jwt.ParseWithClaims(tokenString, &RefreshTokenClaims{}, func(token *jwt.Token) (interface{}, error) {
+		// Ensure the signing method is as expected
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
+		}
+		return []byte(tokenSecret), nil
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	// Extract and validate the claims
+	if claims, ok := token.Claims.(*RefreshTokenClaims); ok && token.Valid {
+		return claims, nil
 	}
 	return nil, fmt.Errorf("invalid token")
 }

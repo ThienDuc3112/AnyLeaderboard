@@ -3,13 +3,12 @@ package leaderboard
 import (
 	"anylbapi/internal/database"
 	"context"
-	"database/sql"
 
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
 func (s leaderboardService) createLeaderboard(ctx context.Context, param createLeaderboardParam) (database.Leaderboard, error) {
-	tx, err := s.repo.BeginTx(ctx, &sql.TxOptions{})
+	tx, err := s.repo.BeginTx(ctx)
 	if err != nil {
 		return database.Leaderboard{}, nil
 	}
@@ -41,16 +40,18 @@ func (s leaderboardService) createLeaderboard(ctx context.Context, param createL
 	fields := make([]database.CreateLeadeboardFieldsParams, 0)
 	opts := make([]optionsToInsert, 0)
 	forRankExist := false
-	for i, field := range param.Fields {
+	nonHiddenFieldExist := false
+	for _, field := range param.Fields {
 		if forRankExist && field.ForRank {
 			return database.Leaderboard{}, errMultipleForRankField
 		}
 		forRankExist = forRankExist || field.ForRank
+		nonHiddenFieldExist = nonHiddenFieldExist || !field.Hidden
 		fields = append(fields, database.CreateLeadeboardFieldsParams{
 			Lid:        lb.ID,
 			FieldName:  field.Name,
 			FieldValue: database.FieldType(field.Type),
-			FieldOrder: int32(i),
+			FieldOrder: int32(field.FieldOrder),
 			ForRank:    field.ForRank,
 		})
 		if field.Type == "OPTION" {
@@ -63,6 +64,9 @@ func (s leaderboardService) createLeaderboard(ctx context.Context, param createL
 	}
 	if !forRankExist {
 		return database.Leaderboard{}, errNoForRankField
+	}
+	if !nonHiddenFieldExist {
+		return database.Leaderboard{}, errNoPublicField
 	}
 
 	n, err := tx.CreateLeadeboardFields(ctx, fields)

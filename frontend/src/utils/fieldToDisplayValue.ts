@@ -8,8 +8,7 @@ export const fieldToDisplayValue = (row: Entry, field: Field): string => {
     case "TEXT":
     case "SHORT_TEXT":
       return shortenStr(value);
-    case "INTEGER":
-    case "REAL":
+    case "NUMBER":
       return shortenNum(value);
     case "DURATION":
       return formatDuration(value);
