@@ -2,7 +2,7 @@ package server
 
 import (
 	"anylbapi/internal/constants"
-	"database/sql"
+	"context"
 	"fmt"
 	"log"
 	"net/http"
@@ -10,12 +10,14 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/jackc/pgx/v5/pgxpool"
 	_ "github.com/jackc/pgx/v5/stdlib"
 	"github.com/joho/godotenv"
 )
 
 type Server struct {
-	db *sql.DB
+	// db *sql.DB
+	db *pgxpool.Pool
 }
 
 func NewServer() *http.Server {
@@ -25,7 +27,7 @@ func NewServer() *http.Server {
 	}
 
 	port, _ := strconv.Atoi(os.Getenv(constants.EnvKeyPort))
-	db, err := sql.Open("pgx", os.Getenv(constants.EnvKeyDbUrl))
+	db, err := pgxpool.New(context.Background(), os.Getenv(constants.EnvKeyDbUrl))
 	if err != nil {
 		log.Fatal(err)
 	}

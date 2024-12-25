@@ -2,12 +2,12 @@
 -- +goose StatementBegin
 CREATE TABLE refresh_tokens (
     id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    user_id INTEGER NOT NULL REFERENCES users(id),
+    user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     rotation_counter INTEGER NOT NULL DEFAULT 0,
     issued_at TIMESTAMP NOT NULL DEFAULT NOW(),
     expires_at TIMESTAMP NOT NULL,
-    device_info VARCHAR,
-    ip_address VARCHAR(45),
+    device_info VARCHAR NOT NULL,
+    ip_address VARCHAR(45) NOT NULL,
     revoked_at TIMESTAMP
 );
 -- +goose StatementEnd

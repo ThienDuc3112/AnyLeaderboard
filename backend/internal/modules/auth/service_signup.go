@@ -37,15 +37,11 @@ func (s authService) signup(context context.Context, param signUpParam) error {
 		return err
 	}
 
-	err = s.repo.CreateUser(context, database.CreateUserParams{
+	return s.repo.CreateUser(context, database.CreateUserParams{
 		Username:    param.Username,
 		DisplayName: param.DisplayName,
 		Email:       param.Email,
 		Password:    string(hashedPassword),
 	})
-	if err != nil {
-		return err
-	}
 
-	return nil
 }

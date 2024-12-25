@@ -10,6 +10,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/jackc/pgx/v5/pgtype"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -44,20 +45,13 @@ func (s authService) login(context context.Context, param loginParam) (loginRetu
 	}
 
 	refreshTokenParam := database.CreateNewRefreshTokenParams{
-		UserID:    user.ID,
-		ExpiresAt: time.Now().Add(14 * 24 * time.Hour),
-	}
-	if param.DeviceInfo != "" {
-		refreshTokenParam.DeviceInfo = sql.NullString{
-			String: param.DeviceInfo,
-			Valid:  true,
-		}
-	}
-	if param.IpAddress != "" {
-		refreshTokenParam.IpAddress = sql.NullString{
-			String: param.IpAddress,
-			Valid:  true,
-		}
+		UserID: user.ID,
+		ExpiresAt: pgtype.Timestamp{
+			Time:  time.Now().Add(14 * 24 * time.Hour),
+			Valid: true,
+		},
+		DeviceInfo: param.DeviceInfo,
+		IpAddress:  param.IpAddress,
 	}
 
 	refreshToken, err := s.repo.CreateNewRefreshToken(context, refreshTokenParam)
@@ -65,7 +59,7 @@ func (s authService) login(context context.Context, param loginParam) (loginRetu
 		return loginReturn{}, err
 	}
 
-	refreshTokenStr, err := utils.MakeRefreshTokenJWT(refreshToken, os.Getenv(constants.EnvKeySecret), refreshToken.ExpiresAt)
+	refreshTokenStr, err := utils.MakeRefreshTokenJWT(refreshToken, os.Getenv(constants.EnvKeySecret), refreshToken.ExpiresAt.Time)
 	if err != nil {
 		return loginReturn{}, err
 	}

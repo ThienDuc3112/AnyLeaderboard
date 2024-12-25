@@ -4,8 +4,9 @@ CREATE TABLE leaderboard_entries (
     id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
-    user_id INTEGER NOT NULL REFERENCES users(id),
-    leaderboard_id INTEGER NOT NULL REFERENCES leaderboards(id),
+    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+    username VARCHAR(64) NOT NULL,
+    leaderboard_id INTEGER NOT NULL REFERENCES leaderboards(id) ON DELETE CASCADE,
     sorted_field FLOAT8 NOT NULL DEFAULT 0,
     custom_fields JSONB NOT NULL
 );

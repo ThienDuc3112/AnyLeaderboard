@@ -8,7 +8,7 @@ CREATE TABLE users (
     display_name VARCHAR(64) NOT NULL,
     email VARCHAR(256) UNIQUE NOT NULL,
     password VARCHAR(60) NOT NULL,
-    description VARCHAR(1024)
+    description VARCHAR(1024) NOT NULL
 );
 -- +goose StatementEnd
 -- +goose Down

@@ -5,11 +5,10 @@
 package database
 
 import (
-	"database/sql"
 	"database/sql/driver"
-	"encoding/json"
 	"fmt"
-	"time"
+
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
 type FieldType string
@@ -17,8 +16,7 @@ type FieldType string
 const (
 	FieldTypeTEXT      FieldType = "TEXT"
 	FieldTypeSHORTTEXT FieldType = "SHORT_TEXT"
-	FieldTypeINTEGER   FieldType = "INTEGER"
-	FieldTypeREAL      FieldType = "REAL"
+	FieldTypeNUMBER    FieldType = "NUMBER"
 	FieldTypeDURATION  FieldType = "DURATION"
 	FieldTypeTIMESTAMP FieldType = "TIMESTAMP"
 	FieldTypeOPTION    FieldType = "OPTION"
@@ -62,23 +60,24 @@ func (ns NullFieldType) Value() (driver.Value, error) {
 type Leaderboard struct {
 	ID                  int32
 	Name                string
-	Description         sql.NullString
-	CreatedAt           time.Time
-	UpdatedAt           time.Time
-	CoverImageUrl       sql.NullString
-	AllowAnnonymous     sql.NullBool
-	RequireVerification sql.NullBool
+	Description         string
+	CreatedAt           pgtype.Timestamp
+	UpdatedAt           pgtype.Timestamp
+	CoverImageUrl       pgtype.Text
+	AllowAnnonymous     bool
+	RequireVerification bool
 	Creator             int32
 }
 
 type LeaderboardEntry struct {
 	ID            int32
-	CreatedAt     time.Time
-	UpdatedAt     time.Time
-	UserID        int32
+	CreatedAt     pgtype.Timestamp
+	UpdatedAt     pgtype.Timestamp
+	UserID        pgtype.Int4
+	Username      string
 	LeaderboardID int32
 	SortedField   float64
-	CustomFields  json.RawMessage
+	CustomFields  []byte
 }
 
 type LeaderboardField struct {
@@ -99,20 +98,20 @@ type RefreshToken struct {
 	ID              int32
 	UserID          int32
 	RotationCounter int32
-	IssuedAt        time.Time
-	ExpiresAt       time.Time
-	DeviceInfo      sql.NullString
-	IpAddress       sql.NullString
-	RevokedAt       sql.NullTime
+	IssuedAt        pgtype.Timestamp
+	ExpiresAt       pgtype.Timestamp
+	DeviceInfo      string
+	IpAddress       string
+	RevokedAt       pgtype.Timestamp
 }
 
 type User struct {
 	ID          int32
-	CreatedAt   time.Time
-	UpdatedAt   time.Time
+	CreatedAt   pgtype.Timestamp
+	UpdatedAt   pgtype.Timestamp
 	Username    string
 	DisplayName string
 	Email       string
 	Password    string
-	Description sql.NullString
+	Description string
 }

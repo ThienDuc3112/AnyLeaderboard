@@ -7,8 +7,8 @@ package database
 
 import (
 	"context"
-	"database/sql"
-	"time"
+
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
 const createNewRefreshToken = `-- name: CreateNewRefreshToken :one
@@ -24,13 +24,13 @@ RETURNING id, user_id, rotation_counter, issued_at, expires_at, device_info, ip_
 
 type CreateNewRefreshTokenParams struct {
 	UserID     int32
-	ExpiresAt  time.Time
-	DeviceInfo sql.NullString
-	IpAddress  sql.NullString
+	ExpiresAt  pgtype.Timestamp
+	DeviceInfo string
+	IpAddress  string
 }
 
 func (q *Queries) CreateNewRefreshToken(ctx context.Context, arg CreateNewRefreshTokenParams) (RefreshToken, error) {
-	row := q.db.QueryRowContext(ctx, createNewRefreshToken,
+	row := q.db.QueryRow(ctx, createNewRefreshToken,
 		arg.UserID,
 		arg.ExpiresAt,
 		arg.DeviceInfo,
@@ -58,7 +58,7 @@ WHERE user_id = $1
 `
 
 func (q *Queries) RevokedAllRefreshToken(ctx context.Context, userID int32) error {
-	_, err := q.db.ExecContext(ctx, revokedAllRefreshToken, userID)
+	_, err := q.db.Exec(ctx, revokedAllRefreshToken, userID)
 	return err
 }
 
@@ -70,7 +70,7 @@ WHERE id = $1
 `
 
 func (q *Queries) RevokedRefreshToken(ctx context.Context, id int32) error {
-	_, err := q.db.ExecContext(ctx, revokedRefreshToken, id)
+	_, err := q.db.Exec(ctx, revokedRefreshToken, id)
 	return err
 }
 
@@ -86,14 +86,14 @@ RETURNING id, user_id, rotation_counter, issued_at, expires_at, device_info, ip_
 `
 
 type UpdateRefreshTokenParams struct {
-	ExpiresAt  time.Time
-	DeviceInfo sql.NullString
-	IpAddress  sql.NullString
+	ExpiresAt  pgtype.Timestamp
+	DeviceInfo string
+	IpAddress  string
 	ID         int32
 }
 
 func (q *Queries) UpdateRefreshToken(ctx context.Context, arg UpdateRefreshTokenParams) (RefreshToken, error) {
-	row := q.db.QueryRowContext(ctx, updateRefreshToken,
+	row := q.db.QueryRow(ctx, updateRefreshToken,
 		arg.ExpiresAt,
 		arg.DeviceInfo,
 		arg.IpAddress,

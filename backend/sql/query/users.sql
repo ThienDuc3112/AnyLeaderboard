@@ -22,7 +22,8 @@ SET description = $1,
 WHERE username = $2;
 -- name: UpdateUserPassword :exec
 UPDATE users
-SET password = $1
+SET password = $1,
+    updated_at = NOW()
 WHERE username = $2;
 -- name: DeleteUserByUsername :exec
 DELETE FROM users

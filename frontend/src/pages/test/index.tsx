@@ -6,7 +6,10 @@ const Test: React.FC = () => {
     (async () => {
       try {
         const res = await axios.post("https://localhost:9999/auth/signup", {
-          username: "asdf@",
+          username: "tester",
+          displayName: "The best tester that ever lived",
+          password: "password",
+          email: "test@testing.com",
         });
         console.log(res.status, res.data);
       } catch (error) {

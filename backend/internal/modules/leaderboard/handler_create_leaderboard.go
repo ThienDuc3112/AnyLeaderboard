@@ -1,7 +1,10 @@
 package leaderboard
 
 import (
+	"anylbapi/internal/database"
+	"anylbapi/internal/middleware"
 	"anylbapi/internal/utils"
+	"fmt"
 	"net/http"
 )
 
@@ -20,7 +23,24 @@ func (s leaderboardService) createLeaderboardHandler(w http.ResponseWriter, r *h
 		return
 	}
 
-	leaderboard, err := s.createLeaderboard(r.Context(), body)
+	userCtx := r.Context().Value(middleware.KeyUser)
+	var user database.User
+	var ok bool
+	if userCtx == nil {
+		utils.RespondWithError(w, 500, "Internal server error")
+		err = fmt.Errorf("user context don't exist on a Force Auth path")
+		return
+	}
+	if user, ok = userCtx.(database.User); !ok {
+		utils.RespondWithError(w, 500, "Internal server error")
+		err = fmt.Errorf("user context is not of type database.User")
+		return
+	}
+
+	leaderboard, err := s.createLeaderboard(r.Context(), createLeaderboardParam{
+		createLeaderboardReqBody: body,
+		User:                     user,
+	})
 
 	if err != nil {
 		utils.RespondWithError(w, 500, "Internal server error")

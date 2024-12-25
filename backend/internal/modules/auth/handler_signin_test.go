@@ -10,6 +10,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/jackc/pgx/v5/pgtype"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"golang.org/x/crypto/bcrypt"
@@ -33,11 +34,19 @@ func TestLoginHandler_Success(t *testing.T) {
 		ID:              1,
 		UserID:          1,
 		RotationCounter: 0,
-		IssuedAt:        time.Now(),
-		ExpiresAt:       time.Now().Add(14 * 24 * time.Hour),
-		DeviceInfo:      sql.NullString{},
-		IpAddress:       sql.NullString{},
-		RevokedAt:       sql.NullTime{},
+		IssuedAt: pgtype.Timestamp{
+			Time:  time.Now(),
+			Valid: true,
+		},
+		ExpiresAt: pgtype.Timestamp{
+			Time:  time.Now().Add(14 * 24 * time.Hour),
+			Valid: true,
+		},
+		DeviceInfo: "",
+		IpAddress:  "",
+		RevokedAt: pgtype.Timestamp{
+			Valid: false,
+		},
 	}
 	m.EXPECT().GetUserByEmail(mock.Anything, "test@test.com").Return(mockUser, nil)
 	m.EXPECT().CreateNewRefreshToken(mock.Anything, mock.Anything).Return(mockRefreshToken, nil)
@@ -66,7 +75,7 @@ func TestLoginHandler_Success(t *testing.T) {
 		assert.Equal(t, "refresh_token", cookie.Name)
 		assert.Equal(t, true, cookie.HttpOnly)
 		assert.Equal(t, true, cookie.Secure)
-		assert.WithinDuration(t, mockRefreshToken.ExpiresAt, cookie.Expires, time.Second)
+		assert.WithinDuration(t, mockRefreshToken.ExpiresAt.Time, cookie.Expires, time.Second)
 		assert.NotEmpty(t, cookie.Value)
 	}
 

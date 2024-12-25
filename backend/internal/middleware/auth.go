@@ -19,7 +19,7 @@ func (m Middleware) AuthAccessToken(next http.Handler) http.Handler {
 
 		claim, err := utils.ValidateToken[utils.AccessTokenClaims](token, os.Getenv(constants.EnvKeySecret))
 		if err != nil {
-			utils.RespondWithError(w, 401, "You are not log in")
+			utils.RespondWithError(w, 401, "You are not logged in")
 			return
 		}
 

@@ -3,17 +3,17 @@
 CREATE TYPE field_type AS ENUM (
     'TEXT',
     'SHORT_TEXT',
-    'INTEGER',
-    'REAL',
+    'NUMBER',
     'DURATION',
     'TIMESTAMP',
     'OPTION'
 );
 CREATE TABLE leaderboard_fields(
-    lid INTEGER NOT NULL,
+    lid INTEGER NOT NULL REFERENCES leaderboards(id) ON DELETE CASCADE,
     field_name VARCHAR(32) NOT NULL,
     field_value field_type NOT NULL,
     field_order INTEGER NOT NULL,
+    for_rank BOOLEAN NOT NULL,
     PRIMARY KEY (lid, field_name)
 );
 CREATE INDEX idx_leaderboard_id ON leaderboard_fields(lid);

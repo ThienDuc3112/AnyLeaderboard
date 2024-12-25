@@ -52,7 +52,7 @@ func (s authService) loginHandler(w http.ResponseWriter, r *http.Request) {
 	cookie := &http.Cookie{
 		Name:     "refresh_token",
 		Value:    session.refreshToken,
-		Expires:  session.refreshTokenRaw.ExpiresAt,
+		Expires:  session.refreshTokenRaw.ExpiresAt.Time,
 		Secure:   true,
 		HttpOnly: true,
 		Path:     "/",
