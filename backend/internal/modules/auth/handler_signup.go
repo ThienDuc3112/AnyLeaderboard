@@ -1,21 +1,9 @@
 package auth
 
 import (
-	"anylbapi/internal/database"
 	"anylbapi/internal/utils"
-	"database/sql"
 	"net/http"
-	"strings"
-
-	"golang.org/x/crypto/bcrypt"
 )
-
-type signUpReqBody struct {
-	Username    string `json:"username" validate:"required,min=3,max=64,isUsername"`
-	DisplayName string `json:"displayName" validate:"required,min=3,max=64"`
-	Email       string `json:"email" validate:"required,email"`
-	Password    string `json:"password" validate:"required,min=8,max=64"`
-}
 
 func (s authService) signUpHandler(w http.ResponseWriter, r *http.Request) {
 	var err error
@@ -31,50 +19,22 @@ func (s authService) signUpHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	body.Username = strings.ToLower(body.Username)
-	body.Email = strings.ToLower(body.Email)
+	err = s.signup(r.Context(), signUpParam{
+		signUpReqBody: body,
+	})
 
-	// Check duplicate Username
-	_, err = s.repo.GetUserByUsername(r.Context(), body.Username)
-	if err == nil {
+	if err == errUsernameTaken {
 		utils.RespondWithJSON(w, 400, map[string]any{
 			"username": "Username is taken",
 		})
 		return
-	}
-	if err != sql.ErrNoRows {
-		utils.RespondWithError(w, 500, "Cannot connect to database")
-		return
-	}
-
-	// Check duplicate Email
-	_, err = s.repo.GetUserByEmail(r.Context(), body.Email)
-	if err == nil {
+	} else if err == errEmailUsed {
 		utils.RespondWithJSON(w, 400, map[string]any{
 			"email": "Email is already used",
 		})
 		return
-	}
-	if err != sql.ErrNoRows {
-		utils.RespondWithError(w, 500, "Cannot connect to database")
-		return
-	}
-
-	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(body.Password), bcrypt.DefaultCost)
-	if err != nil {
-		utils.RespondWithError(w, 500, "Cannot hash password")
-		return
-	}
-
-	err = s.repo.CreateUser(r.Context(), database.CreateUserParams{
-		Username:    body.Username,
-		DisplayName: body.DisplayName,
-		Email:       body.Email,
-		Password:    string(hashedPassword),
-	})
-
-	if err != nil {
-		utils.RespondWithError(w, 500, "Cannot create user")
+	} else if err != nil {
+		utils.RespondWithError(w, 500, "Cannot create new user")
 		return
 	}
 
