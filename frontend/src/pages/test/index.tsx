@@ -5,7 +5,9 @@ const Test: React.FC = () => {
   useEffect(() => {
     (async () => {
       try {
-        const res = await axios.post("https://localhost:9999/auth/signup", {});
+        const res = await axios.post("https://localhost:9999/auth/signup", {
+          username: "asdf@",
+        });
         console.log(res.status, res.data);
       } catch (error) {
         if (error instanceof axios.AxiosError) {

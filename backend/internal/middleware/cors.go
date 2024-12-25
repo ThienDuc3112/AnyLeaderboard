@@ -8,7 +8,7 @@ import (
 )
 
 var allowedOrigin = []string{
-	"http://localhost:8081",
+	"http://localhost:8080",
 	"https://localhost:8080",
 }
 

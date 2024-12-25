@@ -23,7 +23,13 @@ func (m Middleware) AuthAccessToken(next http.Handler) http.Handler {
 			return
 		}
 
-		newCtx := context.WithValue(r.Context(), KeyUsername, claim.Username)
+		user, err := m.db.GetUserByUsername(r.Context(), claim.Username)
+		if err != nil {
+			utils.RespondWithError(w, 500, "Internal server error")
+			return
+		}
+
+		newCtx := context.WithValue(r.Context(), KeyUser, user)
 		next.ServeHTTP(w, r.WithContext(newCtx))
 	})
 }

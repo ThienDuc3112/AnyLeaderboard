@@ -10,7 +10,6 @@ export const MockLeaderboardFull: LeaderboardFull = {
     {
       displayValue: "Community Discord",
       url: "discord.gg/lmaoBTD",
-      icon: "discord",
     },
   ],
   allowAnonymous: true,
@@ -28,8 +27,8 @@ export const MockLeaderboardFull: LeaderboardFull = {
     {
       name: "Score",
       fieldName: "score",
-      type: "INTEGER",
-      defaultSort: true,
+      type: "NUMBER",
+      for_rank: true,
       required: true,
       fieldOrder: 2,
     },

@@ -24,36 +24,27 @@ export interface Entry {
 export interface ExternalLinkType {
   displayValue: string;
   url: string;
-  icon?: string;
 }
 
 export type Field = PrimitiveField | OptionField | UserField;
-
-export interface PrimitiveField {
-  name: string;
-  fieldName: string;
-  type: "TEXT" | "SHORT_TEXT" | "INTEGER" | "REAL" | "DURATION" | "TIMESTAMP";
-  defaultSort?: boolean;
-  required?: boolean;
-  hidden?: boolean;
-  fieldOrder: number;
+export interface PrimitiveField extends CommonFieldAttributes {
+  type: "TEXT" | "SHORT_TEXT" | "NUMBER" | "DURATION" | "TIMESTAMP";
+  for_rank?: boolean;
 }
 
-export interface OptionField {
-  name: string;
-  fieldName: string;
+export interface OptionField extends CommonFieldAttributes {
   type: "OPTION";
   options: string[];
-  required?: boolean;
-  hidden?: boolean;
-  fieldOrder: number;
 }
 
-export interface UserField {
-  name: string;
-  fieldName: string;
+export interface UserField extends CommonFieldAttributes {
   type: "USER";
   allowAnonymous: boolean;
+}
+
+interface CommonFieldAttributes {
+  name: string;
+  fieldName: string;
   required?: boolean;
   hidden?: boolean;
   fieldOrder: number;

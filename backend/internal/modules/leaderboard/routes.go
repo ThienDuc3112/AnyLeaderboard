@@ -23,7 +23,7 @@ func Router(db database.Querierer) http.Handler {
 	mux.Handle("/", m.AuthAccessToken(authMux))
 
 	// CRUD on leaderboard
-	authMux.HandleFunc("POST /", s.dummyFunction)
+	authMux.HandleFunc("POST /", s.createLeaderboardHandler)
 	authMux.HandleFunc("PUT /{lid}", s.dummyFunction)
 	authMux.HandleFunc("DELETE /{lid}", s.dummyFunction)
 

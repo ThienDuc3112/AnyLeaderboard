@@ -7,6 +7,7 @@ package database
 import (
 	"database/sql"
 	"database/sql/driver"
+	"encoding/json"
 	"fmt"
 	"time"
 )
@@ -70,11 +71,22 @@ type Leaderboard struct {
 	Creator             int32
 }
 
+type LeaderboardEntry struct {
+	ID            int32
+	CreatedAt     time.Time
+	UpdatedAt     time.Time
+	UserID        int32
+	LeaderboardID int32
+	SortedField   float64
+	CustomFields  json.RawMessage
+}
+
 type LeaderboardField struct {
 	Lid        int32
 	FieldName  string
 	FieldValue FieldType
 	FieldOrder int32
+	ForRank    bool
 }
 
 type LeaderboardOption struct {

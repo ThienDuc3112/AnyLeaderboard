@@ -13,18 +13,18 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-func (s authService) login(context context.Context, body loginParam) (loginReturn, error) {
+func (s authService) login(context context.Context, param loginParam) (loginReturn, error) {
 	loginWithEmail := false
-	if strings.Contains(body.Username, "@") {
+	if strings.Contains(param.Username, "@") {
 		loginWithEmail = true
 	}
 
 	var user database.User
 	var err error
 	if loginWithEmail {
-		user, err = s.repo.GetUserByEmail(context, body.Username)
+		user, err = s.repo.GetUserByEmail(context, param.Username)
 	} else {
-		user, err = s.repo.GetUserByEmail(context, body.Username)
+		user, err = s.repo.GetUserByEmail(context, param.Username)
 	}
 
 	if err == sql.ErrNoRows {
@@ -33,7 +33,7 @@ func (s authService) login(context context.Context, body loginParam) (loginRetur
 		return loginReturn{}, err
 	}
 
-	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(body.Password))
+	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(param.Password))
 	if err != nil {
 		return loginReturn{}, errIncorrectPassword
 	}
@@ -47,15 +47,15 @@ func (s authService) login(context context.Context, body loginParam) (loginRetur
 		UserID:    user.ID,
 		ExpiresAt: time.Now().Add(14 * 24 * time.Hour),
 	}
-	if body.DeviceInfo != "" {
+	if param.DeviceInfo != "" {
 		refreshTokenParam.DeviceInfo = sql.NullString{
-			String: body.DeviceInfo,
+			String: param.DeviceInfo,
 			Valid:  true,
 		}
 	}
-	if body.IpAddress != "" {
+	if param.IpAddress != "" {
 		refreshTokenParam.IpAddress = sql.NullString{
-			String: body.IpAddress,
+			String: param.IpAddress,
 			Valid:  true,
 		}
 	}

@@ -9,13 +9,13 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-func (s authService) signup(context context.Context, body signUpParam) error {
+func (s authService) signup(context context.Context, param signUpParam) error {
 	// Clean data
-	body.Username = strings.ToLower(body.Username)
-	body.Email = strings.ToLower(body.Email)
+	param.Username = strings.ToLower(param.Username)
+	param.Email = strings.ToLower(param.Email)
 
 	// Check duplicate Username
-	_, err := s.repo.GetUserByUsername(context, body.Username)
+	_, err := s.repo.GetUserByUsername(context, param.Username)
 	if err == nil {
 		return errUsernameTaken
 	}
@@ -24,7 +24,7 @@ func (s authService) signup(context context.Context, body signUpParam) error {
 	}
 
 	// Check duplicate Email
-	_, err = s.repo.GetUserByEmail(context, body.Email)
+	_, err = s.repo.GetUserByEmail(context, param.Email)
 	if err == nil {
 		return errEmailUsed
 	}
@@ -32,15 +32,15 @@ func (s authService) signup(context context.Context, body signUpParam) error {
 		return err
 	}
 
-	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(body.Password), bcrypt.DefaultCost)
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(param.Password), bcrypt.DefaultCost)
 	if err != nil {
 		return err
 	}
 
 	err = s.repo.CreateUser(context, database.CreateUserParams{
-		Username:    body.Username,
-		DisplayName: body.DisplayName,
-		Email:       body.Email,
+		Username:    param.Username,
+		DisplayName: param.DisplayName,
+		Email:       param.Email,
 		Password:    string(hashedPassword),
 	})
 	if err != nil {

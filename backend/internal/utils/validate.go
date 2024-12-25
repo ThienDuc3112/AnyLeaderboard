@@ -12,7 +12,6 @@ import (
 )
 
 func NewValidate() (*validator.Validate, ut.Translator) {
-
 	validate := validator.New()
 	english := en.New()
 	trans, _ := ut.New(english, english).GetTranslator("en")
@@ -27,16 +26,30 @@ func NewValidate() (*validator.Validate, ut.Translator) {
 		return name
 	})
 
-	validate.RegisterValidation("isUsername", func(fl validator.FieldLevel) bool {
-		re := regexp.MustCompile(`^[a-zA-Z0-9_\-]+$`)
-		return re.MatchString(fl.Field().String())
-	})
-	validate.RegisterTranslation("isUsername", trans, func(trans ut.Translator) error {
-		return trans.Add("isUsername", "The {0} must be composed of alphanumeric or '-' and '_' character.", true)
-	}, func(ut ut.Translator, fe validator.FieldError) string {
-		t, _ := ut.T("isUsername", fe.Field())
-		return t
-	})
+	registerCustomValidation(validate, trans, "isUsername",
+		"The {0} must be composed of only alphanumeric, '-', or '_' character.",
+		func(fl validator.FieldLevel) bool {
+			re := regexp.MustCompile(`^[a-zA-Z0-9_\-]+$`)
+			return re.MatchString(fl.Field().String())
+		},
+	)
+	registerCustomValidation(validate, trans, "isLBName",
+		"The {0} must be composed of only alphanumeric, '-', '_', or whitespace character.",
+		func(fl validator.FieldLevel) bool {
+			re := regexp.MustCompile(`^[a-zA-Z0-9_\- ]+$`)
+			return re.MatchString(fl.Field().String())
+		},
+	)
 
 	return validate, trans
+}
+
+func registerCustomValidation(validate *validator.Validate, trans ut.Translator, name, translation string, validationFunc validator.Func) {
+	validate.RegisterValidation(name, validationFunc)
+	validate.RegisterTranslation(name, trans, func(trans ut.Translator) error {
+		return trans.Add(name, translation, true)
+	}, func(ut ut.Translator, fe validator.FieldError) string {
+		t, _ := ut.T(name, fe.Field())
+		return t
+	})
 }
