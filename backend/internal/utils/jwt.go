@@ -8,13 +8,13 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
-type AnyLBClaims struct {
+type AccessTokenClaims struct {
 	jwt.RegisteredClaims
 	Username string `json:"username"`
 }
 
 func MakeJWT(user database.User, tokenSecret string, expiresIn time.Duration) (string, error) {
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, AnyLBClaims{
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, AccessTokenClaims{
 		RegisteredClaims: jwt.RegisteredClaims{
 			Issuer:    "AnyLB",
 			Subject:   user.Username,

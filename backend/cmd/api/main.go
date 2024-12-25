@@ -1,6 +1,7 @@
 package main
 
 import (
+	"anylbapi/internal/constants"
 	"anylbapi/internal/server"
 	"fmt"
 	"net/http"
@@ -25,7 +26,7 @@ func main() {
 
 func getTLSFilePaths() (certPath string, keyPath string, err error) {
 	// Get the ENVIRONMENT variable
-	environment := os.Getenv("ENVIRONMENT")
+	environment := os.Getenv(constants.EnvKeyEnvironment)
 
 	var projectRoot string
 

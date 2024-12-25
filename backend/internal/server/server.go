@@ -1,6 +1,7 @@
 package server
 
 import (
+	"anylbapi/internal/constants"
 	"database/sql"
 	"fmt"
 	"log"
@@ -18,13 +19,13 @@ type Server struct {
 }
 
 func NewServer() *http.Server {
-	isProduction := os.Getenv("ENVIRONMENT") == "PRODUCTION"
+	isProduction := os.Getenv(constants.EnvKeyEnvironment) == "PRODUCTION"
 	if !isProduction {
 		godotenv.Load(".env.local")
 	}
 
-	port, _ := strconv.Atoi(os.Getenv("PORT"))
-	db, err := sql.Open("pgx", os.Getenv("DB_URL"))
+	port, _ := strconv.Atoi(os.Getenv(constants.EnvKeyPort))
+	db, err := sql.Open("pgx", os.Getenv(constants.EnvKeyDbUrl))
 	if err != nil {
 		log.Fatal(err)
 	}

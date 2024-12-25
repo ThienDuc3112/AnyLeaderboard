@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"anylbapi/internal/constants"
 	"anylbapi/internal/utils"
 	"net/http"
 	"os"
@@ -11,14 +12,14 @@ var allowedOrigin = []string{
 	"https://localhost:8080",
 }
 
-func (m Middleware) CorsMiddleware(next http.Handler) http.Handler {
+func (m Middleware) Cors(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// Set CORS headers
-		isProduction := os.Getenv("ENVIRONMENT") == "PRODUCTION"
+		isProduction := os.Getenv(constants.EnvKeyEnvironment) == "PRODUCTION"
 		origin := r.Header.Get("Origin")
 		var allowed bool
 		if isProduction {
-			allowed = origin == os.Getenv("FRONTEND_URL")
+			allowed = origin == os.Getenv(constants.EnvKeyFrontendUrl)
 		} else {
 			allowed = isOriginAllowed(origin, allowedOrigin)
 		}

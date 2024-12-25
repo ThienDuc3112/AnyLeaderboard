@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"anylbapi/internal/constants"
 	"anylbapi/internal/database"
 	"anylbapi/internal/utils"
 	"context"
@@ -37,7 +38,7 @@ func (s authService) login(context context.Context, body loginParam) (loginRetur
 		return loginReturn{}, errIncorrectPassword
 	}
 
-	accessToken, err := utils.MakeJWT(user, os.Getenv("SECRET"), time.Minute*30)
+	accessToken, err := utils.MakeJWT(user, os.Getenv(constants.EnvKeySecret), time.Minute*30)
 	if err != nil {
 		return loginReturn{}, err
 	}
@@ -64,7 +65,7 @@ func (s authService) login(context context.Context, body loginParam) (loginRetur
 		return loginReturn{}, err
 	}
 
-	refreshTokenStr, err := utils.MakeRefreshTokenJWT(refreshToken, os.Getenv("SECRET"), refreshToken.ExpiresAt)
+	refreshTokenStr, err := utils.MakeRefreshTokenJWT(refreshToken, os.Getenv(constants.EnvKeySecret), refreshToken.ExpiresAt)
 	if err != nil {
 		return loginReturn{}, err
 	}

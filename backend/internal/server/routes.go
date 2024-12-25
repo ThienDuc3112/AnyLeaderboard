@@ -16,5 +16,5 @@ func (s Server) RegisterRoutes() http.Handler {
 	// Service routes
 	mux.Handle("/auth/", http.StripPrefix("/auth", auth.AuthRouter(repo)))
 
-	return middleware.CorsMiddleware(mux)
+	return middleware.Cors(mux)
 }
