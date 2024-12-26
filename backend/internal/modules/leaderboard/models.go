@@ -10,10 +10,10 @@ type createLeaderboardReqBody struct {
 	Name                 string         `json:"name" validate:"required,isLBName"`
 	Description          string         `json:"description" validate:"max=256"`
 	CoverImageURL        string         `json:"coverImageUrl" validate:"omitempty,http_url"`
-	ExternalLinks        []externalLink `json:"externalLinks" validate:"dive"`
+	ExternalLinks        []externalLink `json:"externalLinks" validate:"max=5,unique=DisplayValue,dive"`
 	AllowAnonymous       bool           `json:"allowAnonymous"`
 	RequiredVerification bool           `json:"requiredVerification"`
-	Fields               []field        `json:"fields" validate:"required,unique=Name,dive"`
+	Fields               []field        `json:"fields" validate:"required,min=1,max=10,unique=Name,unique=FieldOrder,dive"`
 }
 
 type externalLink struct {
@@ -27,7 +27,7 @@ type field struct {
 	Hidden     bool     `json:"hidden"`
 	FieldOrder int      `json:"fieldOrder" validate:"required"`
 	Type       string   `json:"type" validate:"required,oneof=TEXT SHORT_TEXT NUMBER DURATION TIMESTAMP OPTION"`
-	Options    []string `json:"options" validate:"required_if=Type OPTION,dive,max=32"`
+	Options    []string `json:"options" validate:"required_if=Type OPTION,omitempty,unique,min=1,dive,max=32"`
 	ForRank    bool     `json:"forRank" validate:"excluded_if=Type OPTION"`
 }
 
@@ -44,4 +44,6 @@ var (
 	errNoForRankField           = errors.New("no for rank field found")
 	errUnableToInsertAllOptions = errors.New("unable to insert all options")
 	errNoPublicField            = errors.New("no public field exist")
+	errNoOptions                = errors.New("option field have no options")
+	errUnableToInsertAllLinks   = errors.New("unable to insert all links")
 )

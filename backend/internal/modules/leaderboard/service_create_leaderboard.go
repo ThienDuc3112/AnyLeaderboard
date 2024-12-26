@@ -14,6 +14,7 @@ func (s leaderboardService) createLeaderboard(ctx context.Context, param createL
 	}
 	defer tx.Rollback(ctx)
 
+	// ================== Processing leaderboard ==================
 	lbParam := database.CreateLeaderboardParams{
 		Name:                param.Name,
 		Creator:             param.User.ID,
@@ -27,11 +28,34 @@ func (s leaderboardService) createLeaderboard(ctx context.Context, param createL
 			Valid:  true,
 		}
 	}
+	// ================== Inserting leaderboard ==================
 	lb, err := tx.CreateLeaderboard(ctx, lbParam)
 	if err != nil {
 		return database.Leaderboard{}, err
 	}
 
+	// ================== Processing leaderboard links ==================
+	links := make([]database.CreateLeaderboardExternalLinkParams, 0)
+	for _, link := range param.ExternalLinks {
+		links = append(links, database.CreateLeaderboardExternalLinkParams{
+			LeaderboardID: lb.ID,
+			DisplayValue:  link.DisplayValue,
+			Url:           link.URL,
+		})
+	}
+
+	// ================== Inserting leaderboard links ==================
+	if len(links) > 0 {
+		n, err := tx.CreateLeaderboardExternalLink(ctx, links)
+		if err != nil {
+			return database.Leaderboard{}, err
+		}
+		if n != int64(len(links)) {
+			return database.Leaderboard{}, errUnableToInsertAllLinks
+		}
+	}
+
+	// ================== Processing leaderboard fields ==================
 	type optionsToInsert struct {
 		fieldName string
 		lid       int32
@@ -54,7 +78,10 @@ func (s leaderboardService) createLeaderboard(ctx context.Context, param createL
 			FieldOrder: int32(field.FieldOrder),
 			ForRank:    field.ForRank,
 		})
-		if field.Type == "OPTION" {
+		if field.Type == string(database.FieldTypeOPTION) {
+			if len(field.Options) == 0 {
+				return database.Leaderboard{}, errNoOptions
+			}
 			opts = append(opts, optionsToInsert{
 				fieldName: field.Name,
 				lid:       lb.ID,
@@ -69,6 +96,7 @@ func (s leaderboardService) createLeaderboard(ctx context.Context, param createL
 		return database.Leaderboard{}, errNoPublicField
 	}
 
+	// ================== Inserting leaderboard fields ==================
 	n, err := tx.CreateLeadeboardFields(ctx, fields)
 	if err != nil {
 		return database.Leaderboard{}, err
@@ -78,6 +106,7 @@ func (s leaderboardService) createLeaderboard(ctx context.Context, param createL
 	}
 
 	for _, opt := range opts {
+		// ================== Processing leaderboard options ==================
 		optParam := make([]database.CreateLeadeboardOptionsParams, 0)
 		for _, o := range opt.option {
 			optParam = append(optParam, database.CreateLeadeboardOptionsParams{
@@ -86,6 +115,7 @@ func (s leaderboardService) createLeaderboard(ctx context.Context, param createL
 				Option:    o,
 			})
 		}
+		// ================== Inserting leaderboard options ==================
 		n, err = tx.CreateLeadeboardOptions(ctx, optParam)
 		if err != nil {
 			return database.Leaderboard{}, err
@@ -95,6 +125,7 @@ func (s leaderboardService) createLeaderboard(ctx context.Context, param createL
 		}
 	}
 
+	// ================== Commiting changes ==================
 	err = tx.Commit(ctx)
 	if err != nil {
 		return database.Leaderboard{}, err

@@ -12,6 +12,7 @@ type Querier interface {
 	CreateLeadeboardFields(ctx context.Context, arg []CreateLeadeboardFieldsParams) (int64, error)
 	CreateLeadeboardOptions(ctx context.Context, arg []CreateLeadeboardOptionsParams) (int64, error)
 	CreateLeaderboard(ctx context.Context, arg CreateLeaderboardParams) (Leaderboard, error)
+	CreateLeaderboardExternalLink(ctx context.Context, arg []CreateLeaderboardExternalLinkParams) (int64, error)
 	CreateNewRefreshToken(ctx context.Context, arg CreateNewRefreshTokenParams) (RefreshToken, error)
 	CreateUser(ctx context.Context, arg CreateUserParams) error
 	DeleteUserByUsername(ctx context.Context, username string) error

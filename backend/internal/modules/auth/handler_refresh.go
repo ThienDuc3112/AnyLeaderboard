@@ -29,14 +29,14 @@ func (s authService) refreshHandler(w http.ResponseWriter, r *http.Request) {
 		} else {
 			emptyCookie := utils.CreateCookie(
 				cookieKeyRefreshToken,
-				"", r.Host, time.Now().Add(time.Hour*-1))
+				"", r.URL.Host, time.Now().Add(time.Hour*-1))
 			http.SetCookie(w, emptyCookie)
 		}
 		utils.RespondWithError(w, statusCode, response.responseStr)
 		return
 	}
 
-	newCookie := utils.CreateCookie(cookieKeyRefreshToken, tokens.refreshToken, r.Host, tokens.refreshTokenRaw.ExpiresAt.Time)
+	newCookie := utils.CreateCookie(cookieKeyRefreshToken, tokens.refreshToken, r.URL.Host, tokens.refreshTokenRaw.ExpiresAt.Time)
 	http.SetCookie(w, newCookie)
 	utils.RespondWithJSON(w, 200, map[string]string{
 		"access_token": tokens.accessToken,

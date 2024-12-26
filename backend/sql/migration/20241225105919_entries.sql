@@ -10,6 +10,8 @@ CREATE TABLE leaderboard_entries (
     sorted_field FLOAT8 NOT NULL DEFAULT 0,
     custom_fields JSONB NOT NULL
 );
+CREATE INDEX idx_leaderboard_entries_user_id ON leaderboard_entries(user_id);
+CREATE INDEX idx_leaderboard_entries_leaderboard_id ON leaderboard_entries(leaderboard_id);
 -- +goose StatementEnd
 -- +goose Down
 -- +goose StatementBegin

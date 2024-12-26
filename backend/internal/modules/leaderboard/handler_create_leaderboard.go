@@ -54,6 +54,8 @@ func (s leaderboardService) createLeaderboardHandler(w http.ResponseWriter, r *h
 			utils.RespondWithError(w, 400, "No 'For rank' field, one field must be 'For rank'")
 		case errNoPublicField:
 			utils.RespondWithError(w, 400, "No public field, one field must be not hidden")
+		case errNoOptions:
+			utils.RespondWithError(w, 400, "An Option field must have atleast one option")
 		default:
 			utils.RespondWithError(w, 500, "Internal server error")
 		}

@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"anylbapi/internal/constants"
 	"anylbapi/internal/database"
 	tu "anylbapi/internal/testutils"
 	"anylbapi/internal/utils"
@@ -38,7 +39,7 @@ func TestLoginHandler_Success_Email_login(t *testing.T) {
 			Valid: true,
 		},
 		ExpiresAt: pgtype.Timestamp{
-			Time:  time.Now().Add(14 * 24 * time.Hour),
+			Time:  time.Now().Add(constants.RefreshTokenDuration),
 			Valid: true,
 		},
 		DeviceInfo: "",

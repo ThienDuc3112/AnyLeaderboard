@@ -80,6 +80,13 @@ type LeaderboardEntry struct {
 	CustomFields  []byte
 }
 
+type LeaderboardExternalLink struct {
+	ID            int32
+	LeaderboardID int32
+	DisplayValue  string
+	Url           string
+}
+
 type LeaderboardField struct {
 	Lid        int32
 	FieldName  string

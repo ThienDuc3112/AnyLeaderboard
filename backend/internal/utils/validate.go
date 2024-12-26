@@ -19,7 +19,6 @@ func NewValidate() (*validator.Validate, ut.Translator) {
 
 	validate.RegisterTagNameFunc(func(field reflect.StructField) string {
 		name := strings.SplitN(field.Tag.Get("json"), ",", 2)[0]
-		// skip if tag key says it should be ignored
 		if name == "-" || name == "" {
 			return ""
 		}

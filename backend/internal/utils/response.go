@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strings"
 
 	ut "github.com/go-playground/universal-translator"
 	"github.com/go-playground/validator/v10"
@@ -29,7 +30,8 @@ func RespondWithJSON(w http.ResponseWriter, code int, payload any) {
 func RespondToInvalidBody(w http.ResponseWriter, err error, trans ut.Translator) {
 	resp := map[string]any{}
 	for _, fieldErr := range err.(validator.ValidationErrors) {
-		resp[fieldErr.Field()] = fieldErr.Translate(trans)
+		fieldName := strings.SplitN(fieldErr.Namespace(), ".", 2)[1]
+		resp[fieldName] = fieldErr.Translate(trans)
 	}
 	RespondWithJSON(w, 400, resp)
 }

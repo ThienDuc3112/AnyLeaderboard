@@ -13,7 +13,7 @@ func (s authService) loginHandler(w http.ResponseWriter, r *http.Request) {
 
 	emptyCookie := utils.CreateCookie(
 		cookieKeyRefreshToken,
-		"", r.Host, time.Now().Add(time.Hour*-1))
+		"", r.URL.Host, time.Now().Add(time.Hour*-1))
 	http.SetCookie(w, emptyCookie)
 
 	body, err := utils.ExtractBody[loginReqBody](r.Body)
@@ -42,7 +42,7 @@ func (s authService) loginHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	cookie := utils.CreateCookie(cookieKeyRefreshToken, session.refreshToken, r.Host, session.refreshTokenRaw.IssuedAt.Time)
+	cookie := utils.CreateCookie(cookieKeyRefreshToken, session.refreshToken, r.URL.Host, session.refreshTokenRaw.ExpiresAt.Time)
 	http.SetCookie(w, cookie)
 
 	utils.RespondWithJSON(w, 200, map[string]string{

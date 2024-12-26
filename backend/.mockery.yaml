@@ -1,5 +1,6 @@
 keeptree: false
 with-expecter: true
+issue-845-fix: true
 dir: internal/testutils
 outpkg: testutils
 packages:

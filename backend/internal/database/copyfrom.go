@@ -78,3 +78,37 @@ func (r iteratorForCreateLeadeboardOptions) Err() error {
 func (q *Queries) CreateLeadeboardOptions(ctx context.Context, arg []CreateLeadeboardOptionsParams) (int64, error) {
 	return q.db.CopyFrom(ctx, []string{"leaderboard_options"}, []string{"lid", "field_name", "option"}, &iteratorForCreateLeadeboardOptions{rows: arg})
 }
+
+// iteratorForCreateLeaderboardExternalLink implements pgx.CopyFromSource.
+type iteratorForCreateLeaderboardExternalLink struct {
+	rows                 []CreateLeaderboardExternalLinkParams
+	skippedFirstNextCall bool
+}
+
+func (r *iteratorForCreateLeaderboardExternalLink) Next() bool {
+	if len(r.rows) == 0 {
+		return false
+	}
+	if !r.skippedFirstNextCall {
+		r.skippedFirstNextCall = true
+		return true
+	}
+	r.rows = r.rows[1:]
+	return len(r.rows) > 0
+}
+
+func (r iteratorForCreateLeaderboardExternalLink) Values() ([]interface{}, error) {
+	return []interface{}{
+		r.rows[0].LeaderboardID,
+		r.rows[0].DisplayValue,
+		r.rows[0].Url,
+	}, nil
+}
+
+func (r iteratorForCreateLeaderboardExternalLink) Err() error {
+	return nil
+}
+
+func (q *Queries) CreateLeaderboardExternalLink(ctx context.Context, arg []CreateLeaderboardExternalLinkParams) (int64, error) {
+	return q.db.CopyFrom(ctx, []string{"leaderboard_external_links"}, []string{"leaderboard_id", "display_value", "url"}, &iteratorForCreateLeaderboardExternalLink{rows: arg})
+}

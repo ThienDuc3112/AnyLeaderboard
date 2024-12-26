@@ -297,6 +297,63 @@ func (_c *MockQuerierer_CreateLeaderboard_Call) RunAndReturn(run func(context.Co
 	return _c
 }
 
+// CreateLeaderboardExternalLink provides a mock function with given fields: ctx, arg
+func (_m *MockQuerierer) CreateLeaderboardExternalLink(ctx context.Context, arg []database.CreateLeaderboardExternalLinkParams) (int64, error) {
+	ret := _m.Called(ctx, arg)
+
+	if len(ret) == 0 {
+		panic("no return value specified for CreateLeaderboardExternalLink")
+	}
+
+	var r0 int64
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context, []database.CreateLeaderboardExternalLinkParams) (int64, error)); ok {
+		return rf(ctx, arg)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, []database.CreateLeaderboardExternalLinkParams) int64); ok {
+		r0 = rf(ctx, arg)
+	} else {
+		r0 = ret.Get(0).(int64)
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, []database.CreateLeaderboardExternalLinkParams) error); ok {
+		r1 = rf(ctx, arg)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// MockQuerierer_CreateLeaderboardExternalLink_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'CreateLeaderboardExternalLink'
+type MockQuerierer_CreateLeaderboardExternalLink_Call struct {
+	*mock.Call
+}
+
+// CreateLeaderboardExternalLink is a helper method to define mock.On call
+//   - ctx context.Context
+//   - arg []database.CreateLeaderboardExternalLinkParams
+func (_e *MockQuerierer_Expecter) CreateLeaderboardExternalLink(ctx interface{}, arg interface{}) *MockQuerierer_CreateLeaderboardExternalLink_Call {
+	return &MockQuerierer_CreateLeaderboardExternalLink_Call{Call: _e.mock.On("CreateLeaderboardExternalLink", ctx, arg)}
+}
+
+func (_c *MockQuerierer_CreateLeaderboardExternalLink_Call) Run(run func(ctx context.Context, arg []database.CreateLeaderboardExternalLinkParams)) *MockQuerierer_CreateLeaderboardExternalLink_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].([]database.CreateLeaderboardExternalLinkParams))
+	})
+	return _c
+}
+
+func (_c *MockQuerierer_CreateLeaderboardExternalLink_Call) Return(_a0 int64, _a1 error) *MockQuerierer_CreateLeaderboardExternalLink_Call {
+	_c.Call.Return(_a0, _a1)
+	return _c
+}
+
+func (_c *MockQuerierer_CreateLeaderboardExternalLink_Call) RunAndReturn(run func(context.Context, []database.CreateLeaderboardExternalLinkParams) (int64, error)) *MockQuerierer_CreateLeaderboardExternalLink_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // CreateNewRefreshToken provides a mock function with given fields: ctx, arg
 func (_m *MockQuerierer) CreateNewRefreshToken(ctx context.Context, arg database.CreateNewRefreshTokenParams) (database.RefreshToken, error) {
 	ret := _m.Called(ctx, arg)
