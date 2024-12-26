@@ -13,6 +13,7 @@ func (m Middleware) AuthAccessToken(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		var err error
 		defer func() { utils.LogError("authAccessTokenMiddleware", err) }()
+
 		authHeader := r.Header.Get("Authorization")
 		if len(authHeader) <= 7 || authHeader[:7] != "Bearer " {
 			utils.RespondWithError(w, 401, "You are not logged in")

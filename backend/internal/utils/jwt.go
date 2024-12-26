@@ -13,7 +13,7 @@ type AccessTokenClaims struct {
 	Username string `json:"username"`
 }
 
-func MakeJWT(user database.User, tokenSecret string, expiresIn time.Duration) (string, error) {
+func MakeAccessTokenJWT(user database.User, tokenSecret string, expiresIn time.Duration) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, AccessTokenClaims{
 		RegisteredClaims: jwt.RegisteredClaims{
 			Issuer:    "AnyLB",
@@ -29,8 +29,8 @@ func MakeJWT(user database.User, tokenSecret string, expiresIn time.Duration) (s
 
 type RefreshTokenClaims struct {
 	jwt.RegisteredClaims
-	ID               int32 `json:"asdf"`
-	Rotation_counter int32 `json:"poiu"`
+	TokenID         int32 `json:"asdf"`
+	RotationCounter int32 `json:"poiu"`
 }
 
 func MakeRefreshTokenJWT(refreshToken database.RefreshToken, tokenSecret string, expires_at time.Time) (string, error) {
@@ -40,8 +40,8 @@ func MakeRefreshTokenJWT(refreshToken database.RefreshToken, tokenSecret string,
 			IssuedAt:  jwt.NewNumericDate(time.Now()),
 			ExpiresAt: jwt.NewNumericDate(expires_at),
 		},
-		ID:               refreshToken.ID,
-		Rotation_counter: refreshToken.RotationCounter,
+		TokenID:         refreshToken.ID,
+		RotationCounter: refreshToken.RotationCounter,
 	})
 
 	return token.SignedString([]byte(tokenSecret))

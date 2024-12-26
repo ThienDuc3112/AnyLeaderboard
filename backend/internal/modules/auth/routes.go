@@ -12,6 +12,7 @@ func Router(db database.Querierer) http.Handler {
 	// Routes
 	mux.HandleFunc("POST /login", service.loginHandler)
 	mux.HandleFunc("POST /signup", service.signUpHandler)
+	mux.HandleFunc("POST /refresh", service.refreshHandler)
 
 	return mux
 }

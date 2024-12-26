@@ -7,6 +7,10 @@ INSERT INTO refresh_tokens (
     )
 VALUES ($1, $2, $3, $4)
 RETURNING *;
+-- name: GetRefreshToken :one
+SELECT *
+FROM refresh_tokens
+WHERE id = $1;
 -- name: UpdateRefreshToken :one
 UPDATE refresh_tokens
 SET rotation_counter = rotation_counter + 1,

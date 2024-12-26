@@ -50,6 +50,28 @@ func (q *Queries) CreateNewRefreshToken(ctx context.Context, arg CreateNewRefres
 	return i, err
 }
 
+const getRefreshToken = `-- name: GetRefreshToken :one
+SELECT id, user_id, rotation_counter, issued_at, expires_at, device_info, ip_address, revoked_at
+FROM refresh_tokens
+WHERE id = $1
+`
+
+func (q *Queries) GetRefreshToken(ctx context.Context, id int32) (RefreshToken, error) {
+	row := q.db.QueryRow(ctx, getRefreshToken, id)
+	var i RefreshToken
+	err := row.Scan(
+		&i.ID,
+		&i.UserID,
+		&i.RotationCounter,
+		&i.IssuedAt,
+		&i.ExpiresAt,
+		&i.DeviceInfo,
+		&i.IpAddress,
+		&i.RevokedAt,
+	)
+	return i, err
+}
+
 const revokedAllRefreshToken = `-- name: RevokedAllRefreshToken :exec
 UPDATE refresh_tokens
 SET revoked_at = NOW()

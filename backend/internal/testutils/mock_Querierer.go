@@ -448,6 +448,63 @@ func (_c *MockQuerierer_DeleteUserByUsername_Call) RunAndReturn(run func(context
 	return _c
 }
 
+// GetRefreshToken provides a mock function with given fields: ctx, id
+func (_m *MockQuerierer) GetRefreshToken(ctx context.Context, id int32) (database.RefreshToken, error) {
+	ret := _m.Called(ctx, id)
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetRefreshToken")
+	}
+
+	var r0 database.RefreshToken
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context, int32) (database.RefreshToken, error)); ok {
+		return rf(ctx, id)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, int32) database.RefreshToken); ok {
+		r0 = rf(ctx, id)
+	} else {
+		r0 = ret.Get(0).(database.RefreshToken)
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, int32) error); ok {
+		r1 = rf(ctx, id)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// MockQuerierer_GetRefreshToken_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetRefreshToken'
+type MockQuerierer_GetRefreshToken_Call struct {
+	*mock.Call
+}
+
+// GetRefreshToken is a helper method to define mock.On call
+//   - ctx context.Context
+//   - id int32
+func (_e *MockQuerierer_Expecter) GetRefreshToken(ctx interface{}, id interface{}) *MockQuerierer_GetRefreshToken_Call {
+	return &MockQuerierer_GetRefreshToken_Call{Call: _e.mock.On("GetRefreshToken", ctx, id)}
+}
+
+func (_c *MockQuerierer_GetRefreshToken_Call) Run(run func(ctx context.Context, id int32)) *MockQuerierer_GetRefreshToken_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(int32))
+	})
+	return _c
+}
+
+func (_c *MockQuerierer_GetRefreshToken_Call) Return(_a0 database.RefreshToken, _a1 error) *MockQuerierer_GetRefreshToken_Call {
+	_c.Call.Return(_a0, _a1)
+	return _c
+}
+
+func (_c *MockQuerierer_GetRefreshToken_Call) RunAndReturn(run func(context.Context, int32) (database.RefreshToken, error)) *MockQuerierer_GetRefreshToken_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // GetUserByEmail provides a mock function with given fields: ctx, email
 func (_m *MockQuerierer) GetUserByEmail(ctx context.Context, email string) (database.User, error) {
 	ret := _m.Called(ctx, email)
@@ -501,6 +558,63 @@ func (_c *MockQuerierer_GetUserByEmail_Call) Return(_a0 database.User, _a1 error
 }
 
 func (_c *MockQuerierer_GetUserByEmail_Call) RunAndReturn(run func(context.Context, string) (database.User, error)) *MockQuerierer_GetUserByEmail_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// GetUserByID provides a mock function with given fields: ctx, id
+func (_m *MockQuerierer) GetUserByID(ctx context.Context, id int32) (database.User, error) {
+	ret := _m.Called(ctx, id)
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetUserByID")
+	}
+
+	var r0 database.User
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context, int32) (database.User, error)); ok {
+		return rf(ctx, id)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, int32) database.User); ok {
+		r0 = rf(ctx, id)
+	} else {
+		r0 = ret.Get(0).(database.User)
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, int32) error); ok {
+		r1 = rf(ctx, id)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// MockQuerierer_GetUserByID_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetUserByID'
+type MockQuerierer_GetUserByID_Call struct {
+	*mock.Call
+}
+
+// GetUserByID is a helper method to define mock.On call
+//   - ctx context.Context
+//   - id int32
+func (_e *MockQuerierer_Expecter) GetUserByID(ctx interface{}, id interface{}) *MockQuerierer_GetUserByID_Call {
+	return &MockQuerierer_GetUserByID_Call{Call: _e.mock.On("GetUserByID", ctx, id)}
+}
+
+func (_c *MockQuerierer_GetUserByID_Call) Run(run func(ctx context.Context, id int32)) *MockQuerierer_GetUserByID_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(int32))
+	})
+	return _c
+}
+
+func (_c *MockQuerierer_GetUserByID_Call) Return(_a0 database.User, _a1 error) *MockQuerierer_GetUserByID_Call {
+	_c.Call.Return(_a0, _a1)
+	return _c
+}
+
+func (_c *MockQuerierer_GetUserByID_Call) RunAndReturn(run func(context.Context, int32) (database.User, error)) *MockQuerierer_GetUserByID_Call {
 	_c.Call.Return(run)
 	return _c
 }

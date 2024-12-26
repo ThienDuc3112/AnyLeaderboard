@@ -5,6 +5,11 @@ import (
 	"errors"
 )
 
+// ============ Constants ============
+const (
+	cookieKeyRefreshToken = "refresh_token"
+)
+
 // ============ Request body type ============
 type loginReqBody struct {
 	Username string `json:"username" validate:"required"`
@@ -24,7 +29,14 @@ type loginParam struct {
 	DeviceInfo string
 	IpAddress  string
 }
-type loginReturn struct {
+
+type refreshParam struct {
+	RefreshToken string
+	DeviceInfo   string
+	IpAddress    string
+}
+
+type tokensReturn struct {
 	accessToken     string
 	refreshToken    string
 	refreshTokenRaw database.RefreshToken
@@ -35,10 +47,14 @@ type signUpParam struct {
 }
 
 // ============ Service returned errors ============
-
 var (
-	errNoUser            = errors.New("user don't exist")
-	errIncorrectPassword = errors.New("incorrect password")
-	errUsernameTaken     = errors.New("username is taken")
-	errEmailUsed         = errors.New("email is already used")
+	errNoUser                  = errors.New("user don't exist")
+	errIncorrectPassword       = errors.New("incorrect password")
+	errUsernameTaken           = errors.New("username is taken")
+	errEmailUsed               = errors.New("email is already used")
+	errNoTokenExist            = errors.New("refresh token don't exist")
+	errMismatchRotationCounter = errors.New("refresh token rotationCounter don't match")
+	errMismatchUpdatedRC       = errors.New("refresh token rotationCounter don't match after update, potential race condition")
+	errTokenRevoked            = errors.New("refresh token revoked")
+	errInvalidToken            = errors.New("invalid token")
 )
