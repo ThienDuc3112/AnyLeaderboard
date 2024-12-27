@@ -126,6 +126,63 @@ func (_c *MockQuerierer_Commit_Call) RunAndReturn(run func(context.Context) erro
 	return _c
 }
 
+// CreateLeadeboardEntry provides a mock function with given fields: ctx, arg
+func (_m *MockQuerierer) CreateLeadeboardEntry(ctx context.Context, arg database.CreateLeadeboardEntryParams) (database.LeaderboardEntry, error) {
+	ret := _m.Called(ctx, arg)
+
+	if len(ret) == 0 {
+		panic("no return value specified for CreateLeadeboardEntry")
+	}
+
+	var r0 database.LeaderboardEntry
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context, database.CreateLeadeboardEntryParams) (database.LeaderboardEntry, error)); ok {
+		return rf(ctx, arg)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, database.CreateLeadeboardEntryParams) database.LeaderboardEntry); ok {
+		r0 = rf(ctx, arg)
+	} else {
+		r0 = ret.Get(0).(database.LeaderboardEntry)
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, database.CreateLeadeboardEntryParams) error); ok {
+		r1 = rf(ctx, arg)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// MockQuerierer_CreateLeadeboardEntry_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'CreateLeadeboardEntry'
+type MockQuerierer_CreateLeadeboardEntry_Call struct {
+	*mock.Call
+}
+
+// CreateLeadeboardEntry is a helper method to define mock.On call
+//   - ctx context.Context
+//   - arg database.CreateLeadeboardEntryParams
+func (_e *MockQuerierer_Expecter) CreateLeadeboardEntry(ctx interface{}, arg interface{}) *MockQuerierer_CreateLeadeboardEntry_Call {
+	return &MockQuerierer_CreateLeadeboardEntry_Call{Call: _e.mock.On("CreateLeadeboardEntry", ctx, arg)}
+}
+
+func (_c *MockQuerierer_CreateLeadeboardEntry_Call) Run(run func(ctx context.Context, arg database.CreateLeadeboardEntryParams)) *MockQuerierer_CreateLeadeboardEntry_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(database.CreateLeadeboardEntryParams))
+	})
+	return _c
+}
+
+func (_c *MockQuerierer_CreateLeadeboardEntry_Call) Return(_a0 database.LeaderboardEntry, _a1 error) *MockQuerierer_CreateLeadeboardEntry_Call {
+	_c.Call.Return(_a0, _a1)
+	return _c
+}
+
+func (_c *MockQuerierer_CreateLeadeboardEntry_Call) RunAndReturn(run func(context.Context, database.CreateLeadeboardEntryParams) (database.LeaderboardEntry, error)) *MockQuerierer_CreateLeadeboardEntry_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // CreateLeadeboardFields provides a mock function with given fields: ctx, arg
 func (_m *MockQuerierer) CreateLeadeboardFields(ctx context.Context, arg []database.CreateLeadeboardFieldsParams) (int64, error) {
 	ret := _m.Called(ctx, arg)

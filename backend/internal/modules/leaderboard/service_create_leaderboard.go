@@ -28,6 +28,7 @@ func (s leaderboardService) createLeaderboard(ctx context.Context, param createL
 			Valid:  true,
 		}
 	}
+
 	// ================== Inserting leaderboard ==================
 	lb, err := tx.CreateLeaderboard(ctx, lbParam)
 	if err != nil {
@@ -65,9 +66,13 @@ func (s leaderboardService) createLeaderboard(ctx context.Context, param createL
 	opts := make([]optionsToInsert, 0)
 	forRankExist := false
 	nonHiddenFieldExist := false
+
 	for _, field := range param.Fields {
 		if forRankExist && field.ForRank {
 			return database.Leaderboard{}, errMultipleForRankField
+		}
+		if field.ForRank && !field.Required {
+			return database.Leaderboard{}, errForRankRequired
 		}
 		forRankExist = forRankExist || field.ForRank
 		nonHiddenFieldExist = nonHiddenFieldExist || !field.Hidden
@@ -77,7 +82,10 @@ func (s leaderboardService) createLeaderboard(ctx context.Context, param createL
 			FieldValue: database.FieldType(field.Type),
 			FieldOrder: int32(field.FieldOrder),
 			ForRank:    field.ForRank,
+			Required:   field.Required,
+			Hidden:     field.Hidden,
 		})
+
 		if field.Type == string(database.FieldTypeOPTION) {
 			if len(field.Options) == 0 {
 				return database.Leaderboard{}, errNoOptions
@@ -89,6 +97,7 @@ func (s leaderboardService) createLeaderboard(ctx context.Context, param createL
 			})
 		}
 	}
+
 	if !forRankExist {
 		return database.Leaderboard{}, errNoForRankField
 	}
@@ -115,6 +124,7 @@ func (s leaderboardService) createLeaderboard(ctx context.Context, param createL
 				Option:    o,
 			})
 		}
+
 		// ================== Inserting leaderboard options ==================
 		n, err = tx.CreateLeadeboardOptions(ctx, optParam)
 		if err != nil {

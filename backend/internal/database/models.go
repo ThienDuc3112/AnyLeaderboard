@@ -15,7 +15,6 @@ type FieldType string
 
 const (
 	FieldTypeTEXT      FieldType = "TEXT"
-	FieldTypeSHORTTEXT FieldType = "SHORT_TEXT"
 	FieldTypeNUMBER    FieldType = "NUMBER"
 	FieldTypeDURATION  FieldType = "DURATION"
 	FieldTypeTIMESTAMP FieldType = "TIMESTAMP"
@@ -93,6 +92,8 @@ type LeaderboardField struct {
 	FieldValue FieldType
 	FieldOrder int32
 	ForRank    bool
+	Hidden     bool
+	Required   bool
 }
 
 type LeaderboardOption struct {

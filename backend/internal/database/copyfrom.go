@@ -34,6 +34,8 @@ func (r iteratorForCreateLeadeboardFields) Values() ([]interface{}, error) {
 		r.rows[0].FieldValue,
 		r.rows[0].FieldOrder,
 		r.rows[0].ForRank,
+		r.rows[0].Required,
+		r.rows[0].Hidden,
 	}, nil
 }
 
@@ -42,7 +44,7 @@ func (r iteratorForCreateLeadeboardFields) Err() error {
 }
 
 func (q *Queries) CreateLeadeboardFields(ctx context.Context, arg []CreateLeadeboardFieldsParams) (int64, error) {
-	return q.db.CopyFrom(ctx, []string{"leaderboard_fields"}, []string{"lid", "field_name", "field_value", "field_order", "for_rank"}, &iteratorForCreateLeadeboardFields{rows: arg})
+	return q.db.CopyFrom(ctx, []string{"leaderboard_fields"}, []string{"lid", "field_name", "field_value", "field_order", "for_rank", "required", "hidden"}, &iteratorForCreateLeadeboardFields{rows: arg})
 }
 
 // iteratorForCreateLeadeboardOptions implements pgx.CopyFromSource.

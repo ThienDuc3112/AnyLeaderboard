@@ -2,7 +2,6 @@
 -- +goose StatementBegin
 CREATE TYPE field_type AS ENUM (
     'TEXT',
-    'SHORT_TEXT',
     'NUMBER',
     'DURATION',
     'TIMESTAMP',
@@ -14,6 +13,8 @@ CREATE TABLE leaderboard_fields(
     field_value field_type NOT NULL,
     field_order INTEGER NOT NULL,
     for_rank BOOLEAN NOT NULL,
+    hidden BOOLEAN NOT NULL,
+    required BOOLEAN NOT NULL,
     PRIMARY KEY (lid, field_name)
 );
 CREATE INDEX idx_leaderboard_id ON leaderboard_fields(lid);

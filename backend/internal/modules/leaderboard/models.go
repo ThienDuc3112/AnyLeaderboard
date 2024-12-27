@@ -26,7 +26,7 @@ type field struct {
 	Required   bool     `json:"required"`
 	Hidden     bool     `json:"hidden"`
 	FieldOrder int      `json:"fieldOrder" validate:"required"`
-	Type       string   `json:"type" validate:"required,oneof=TEXT SHORT_TEXT NUMBER DURATION TIMESTAMP OPTION"`
+	Type       string   `json:"type" validate:"required,oneof=TEXT NUMBER DURATION TIMESTAMP OPTION"`
 	Options    []string `json:"options" validate:"required_if=Type OPTION,omitempty,unique,min=1,dive,max=32"`
 	ForRank    bool     `json:"forRank" validate:"excluded_if=Type OPTION"`
 }
@@ -37,13 +37,31 @@ type createLeaderboardParam struct {
 	User database.User
 }
 
+type createEntryParam struct {
+	Leaderboard database.Leaderboard
+	Fields      []database.LeaderboardField
+	Options     map[string][]database.LeaderboardOption
+	Entry       map[string]interface{}
+	User        *database.User
+	DisplayName string
+}
+
 // ============ Service errors ============
 var (
 	errMultipleForRankField     = errors.New("multiple for rank field")
-	errUnableToInsertAllFields  = errors.New("unable to insert all fields")
 	errNoForRankField           = errors.New("no for rank field found")
-	errUnableToInsertAllOptions = errors.New("unable to insert all options")
+	errForRankRequired          = errors.New("for rank need to be required")
 	errNoPublicField            = errors.New("no public field exist")
 	errNoOptions                = errors.New("option field have no options")
+	errUnableToInsertAllFields  = errors.New("unable to insert all fields")
+	errUnableToInsertAllOptions = errors.New("unable to insert all options")
 	errUnableToInsertAllLinks   = errors.New("unable to insert all links")
+
+	errRequiredFieldNotExist   = errors.New("required field must be filled in")
+	errUnrecognizedField       = errors.New("unrecognized field type")
+	errOptionFieldNoOptions    = errors.New("option field don't have any options")
+	errNotAnOption             = errors.New("value not in option")
+	errNonAnonymousLeaderboard = errors.New("leaderboard required user account")
+	errConflictForRankField    = errors.New("more than 1 for rank field found")
+	errUnrankableFieldType     = errors.New("field type cannot be rank")
 )

@@ -9,6 +9,7 @@ import (
 )
 
 type Querier interface {
+	CreateLeadeboardEntry(ctx context.Context, arg CreateLeadeboardEntryParams) (LeaderboardEntry, error)
 	CreateLeadeboardFields(ctx context.Context, arg []CreateLeadeboardFieldsParams) (int64, error)
 	CreateLeadeboardOptions(ctx context.Context, arg []CreateLeadeboardOptionsParams) (int64, error)
 	CreateLeaderboard(ctx context.Context, arg CreateLeaderboardParams) (Leaderboard, error)

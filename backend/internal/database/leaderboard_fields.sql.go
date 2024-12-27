@@ -11,4 +11,6 @@ type CreateLeadeboardFieldsParams struct {
 	FieldValue FieldType
 	FieldOrder int32
 	ForRank    bool
+	Required   bool
+	Hidden     bool
 }
