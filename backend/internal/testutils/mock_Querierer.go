@@ -562,6 +562,63 @@ func (_c *MockQuerierer_DeleteUserByUsername_Call) RunAndReturn(run func(context
 	return _c
 }
 
+// GetLeaderboardById provides a mock function with given fields: ctx, id
+func (_m *MockQuerierer) GetLeaderboardById(ctx context.Context, id int32) (database.Leaderboard, error) {
+	ret := _m.Called(ctx, id)
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetLeaderboardById")
+	}
+
+	var r0 database.Leaderboard
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context, int32) (database.Leaderboard, error)); ok {
+		return rf(ctx, id)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, int32) database.Leaderboard); ok {
+		r0 = rf(ctx, id)
+	} else {
+		r0 = ret.Get(0).(database.Leaderboard)
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, int32) error); ok {
+		r1 = rf(ctx, id)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// MockQuerierer_GetLeaderboardById_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetLeaderboardById'
+type MockQuerierer_GetLeaderboardById_Call struct {
+	*mock.Call
+}
+
+// GetLeaderboardById is a helper method to define mock.On call
+//   - ctx context.Context
+//   - id int32
+func (_e *MockQuerierer_Expecter) GetLeaderboardById(ctx interface{}, id interface{}) *MockQuerierer_GetLeaderboardById_Call {
+	return &MockQuerierer_GetLeaderboardById_Call{Call: _e.mock.On("GetLeaderboardById", ctx, id)}
+}
+
+func (_c *MockQuerierer_GetLeaderboardById_Call) Run(run func(ctx context.Context, id int32)) *MockQuerierer_GetLeaderboardById_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(int32))
+	})
+	return _c
+}
+
+func (_c *MockQuerierer_GetLeaderboardById_Call) Return(_a0 database.Leaderboard, _a1 error) *MockQuerierer_GetLeaderboardById_Call {
+	_c.Call.Return(_a0, _a1)
+	return _c
+}
+
+func (_c *MockQuerierer_GetLeaderboardById_Call) RunAndReturn(run func(context.Context, int32) (database.Leaderboard, error)) *MockQuerierer_GetLeaderboardById_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // GetRefreshToken provides a mock function with given fields: ctx, id
 func (_m *MockQuerierer) GetRefreshToken(ctx context.Context, id int32) (database.RefreshToken, error) {
 	ret := _m.Called(ctx, id)

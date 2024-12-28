@@ -10,7 +10,7 @@ import (
 
 func (s leaderboardService) createLeaderboardHandler(w http.ResponseWriter, r *http.Request) {
 	var err error
-	defer func() { utils.LogError("signupHandler", err) }()
+	defer func() { utils.LogError("createLeaderboardHandler", err) }()
 
 	body, err := utils.ExtractBody[createLeaderboardReqBody](r.Body)
 	if err != nil {
@@ -61,6 +61,9 @@ func (s leaderboardService) createLeaderboardHandler(w http.ResponseWriter, r *h
 		}
 		return
 	}
+
+	// Remove caching if exist
+	s.cache.Delete(fmt.Sprintf("lbnotfound-%d", leaderboard.ID))
 
 	utils.RespondWithJSON(w, 201, map[string]any{
 		"id": leaderboard.ID,

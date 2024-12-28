@@ -9,3 +9,7 @@ INSERT INTO leaderboards(
     )
 VALUES ($1, $2, $3, $4, $5, $6)
 RETURNING *;
+-- name: GetLeaderboardById :one
+SELECT *
+FROM leaderboards
+WHERE id = $1;

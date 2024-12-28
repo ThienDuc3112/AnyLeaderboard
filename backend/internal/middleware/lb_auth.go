@@ -11,23 +11,40 @@ import (
 	"strings"
 )
 
-func (m Middleware) AuthAccessToken(next http.Handler) http.Handler {
+func (m Middleware) AuthAccessTokenIfLb(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		var err error
-		defer func() { utils.LogError("authAccessTokenMiddleware", err) }()
+		defer func() { utils.LogError("authAccessTokenIfLbMiddleware", err) }()
+
+		lb, ok := r.Context().Value(KeyLeaderboard).(database.Leaderboard)
+		if !ok {
+			utils.RespondWithError(w, 500, "Internal server error")
+			err = fmt.Errorf("context value don't return leaderboard")
+			return
+		}
 
 		authHeader := r.Header.Get("Authorization")
 		if len(authHeader) <= 7 || authHeader[:7] != "Bearer " {
-			utils.RespondWithError(w, 401, "You are not logged in")
-			return
+			if lb.RequireVerification {
+				utils.RespondWithError(w, 401, "You are not logged in")
+				return
+			} else {
+				next.ServeHTTP(w, r)
+				return
+			}
 		}
 
 		token := strings.TrimSpace(authHeader[7:])
 
 		claim, err := utils.ValidateAccessToken(token, os.Getenv(constants.EnvKeySecret))
 		if err != nil {
-			utils.RespondWithError(w, 401, "You are not logged in")
-			return
+			if lb.RequireVerification {
+				utils.RespondWithError(w, 401, "You are not logged in")
+				return
+			} else {
+				next.ServeHTTP(w, r)
+				return
+			}
 		}
 
 		// Check cache

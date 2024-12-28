@@ -12,3 +12,14 @@ const (
 	AccessTokenDuration  = 30 * time.Minute
 	RefreshTokenDuration = 14 * 24 * time.Hour
 )
+
+const (
+	PathValueLeaderboardId = "lid"
+	PathValueEntryId       = "eid"
+	PathValueUserId        = "uid"
+)
+
+const (
+	EntryFieldPrefix      = "field"
+	EntryDisplayNameField = "displayName"
+)

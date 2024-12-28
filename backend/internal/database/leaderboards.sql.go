@@ -56,3 +56,26 @@ func (q *Queries) CreateLeaderboard(ctx context.Context, arg CreateLeaderboardPa
 	)
 	return i, err
 }
+
+const getLeaderboardById = `-- name: GetLeaderboardById :one
+SELECT id, name, description, created_at, updated_at, cover_image_url, allow_annonymous, require_verification, creator
+FROM leaderboards
+WHERE id = $1
+`
+
+func (q *Queries) GetLeaderboardById(ctx context.Context, id int32) (Leaderboard, error) {
+	row := q.db.QueryRow(ctx, getLeaderboardById, id)
+	var i Leaderboard
+	err := row.Scan(
+		&i.ID,
+		&i.Name,
+		&i.Description,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.CoverImageUrl,
+		&i.AllowAnnonymous,
+		&i.RequireVerification,
+		&i.Creator,
+	)
+	return i, err
+}
