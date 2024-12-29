@@ -49,7 +49,7 @@ func (s leaderboardService) createEntryHandler(w http.ResponseWriter, r *http.Re
 		}
 	}
 
-	eid, err, fieldName := s.createEntry(r.Context(), createEntryParam{
+	eid, fieldName, err := s.createEntry(r.Context(), createEntryParam{
 		Leaderboard: lb,
 		User:        user,
 		Entry:       body,
@@ -59,7 +59,29 @@ func (s leaderboardService) createEntryHandler(w http.ResponseWriter, r *http.Re
 	if err != nil {
 		// Error handling here
 		switch err {
-
+		case errNonAnonymousLeaderboard:
+			utils.RespondWithError(w, 500, "Internal server error")
+			err = fmt.Errorf("no user on nonAnon lb, should've been blocked by middleware")
+		case errRequiredFieldNotExist:
+			utils.RespondWithError(w, 400, fmt.Sprintf("field '%s' missing", fieldName))
+			err = nil
+		case errConflictForRankField:
+			utils.RespondWithError(w, 500, fmt.Sprintf("Leaderboard have conflicting field, contact leaderboard owner to resolve '%s' field", fieldName))
+			err = fmt.Errorf("field '%s' conflicting for rank: %v", fieldName, err)
+		case errOptionFieldNoOptions:
+			utils.RespondWithError(w, 500, fmt.Sprintf("Leaderboard have emtpy option field, contact leaderboard owner to resolve '%s' field", fieldName))
+			err = fmt.Errorf("field '%s' have no options: %v", fieldName, err)
+		case errNotAnOption:
+			utils.RespondWithError(w, 400, fmt.Sprintf("field '%s' is not a valid option", fieldName))
+			err = nil
+		case errUnrankableFieldType:
+			utils.RespondWithError(w, 500, fmt.Sprintf("Leaderboard have unrankable field ranked, contact leaderboard owner to resolve '%s' field", fieldName))
+			err = fmt.Errorf("field '%s' ranked despite unrankable: %v", fieldName, err)
+		case errUnrecognizedField:
+			utils.RespondWithError(w, 500, fmt.Sprintf("Leaderboard have unknown field, contact leaderboard owner to resolve '%s' field", fieldName))
+			err = fmt.Errorf("field '%s' with unknown/unimplemented field type: %v", fieldName, err)
+		default:
+			utils.RespondWithError(w, 500, "Internal server error")
 		}
 		return
 	}

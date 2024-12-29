@@ -22,12 +22,12 @@ type externalLink struct {
 }
 
 type field struct {
-	Name       string   `json:"name" validate:"required,max=32"`
+	Name       string   `json:"name" validate:"required,max=32,isSafeName"`
 	Required   bool     `json:"required"`
 	Hidden     bool     `json:"hidden"`
 	FieldOrder int      `json:"fieldOrder" validate:"required"`
 	Type       string   `json:"type" validate:"required,oneof=TEXT NUMBER DURATION TIMESTAMP OPTION"`
-	Options    []string `json:"options" validate:"required_if=Type OPTION,omitempty,unique,min=1,dive,max=32"`
+	Options    []string `json:"options" validate:"required_if=Type OPTION,omitempty,unique,min=1,dive,min=1,max=32,isSafeName"`
 	ForRank    bool     `json:"forRank" validate:"excluded_if=Type OPTION"`
 }
 
@@ -39,8 +39,6 @@ type createLeaderboardParam struct {
 
 type createEntryParam struct {
 	Leaderboard database.Leaderboard
-	Fields      []database.LeaderboardField
-	Options     map[string][]database.LeaderboardOption
 	Entry       map[string]interface{}
 	User        *database.User
 	DisplayName string

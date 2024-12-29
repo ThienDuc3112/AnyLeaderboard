@@ -5,8 +5,44 @@
 
 package database
 
+import (
+	"context"
+)
+
 type CreateLeadeboardOptionsParams struct {
 	Lid       int32
 	FieldName string
 	Option    string
+}
+
+const getFieldOptions = `-- name: GetFieldOptions :many
+SELECT lid, field_name, option
+FROM leaderboard_options
+WHERE lid = $1
+    AND field_name = $2
+`
+
+type GetFieldOptionsParams struct {
+	Lid       int32
+	FieldName string
+}
+
+func (q *Queries) GetFieldOptions(ctx context.Context, arg GetFieldOptionsParams) ([]LeaderboardOption, error) {
+	rows, err := q.db.Query(ctx, getFieldOptions, arg.Lid, arg.FieldName)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []LeaderboardOption
+	for rows.Next() {
+		var i LeaderboardOption
+		if err := rows.Scan(&i.Lid, &i.FieldName, &i.Option); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }

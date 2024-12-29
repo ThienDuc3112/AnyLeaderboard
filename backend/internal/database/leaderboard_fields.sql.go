@@ -5,6 +5,10 @@
 
 package database
 
+import (
+	"context"
+)
+
 type CreateLeadeboardFieldsParams struct {
 	Lid        int32
 	FieldName  string
@@ -13,4 +17,38 @@ type CreateLeadeboardFieldsParams struct {
 	ForRank    bool
 	Required   bool
 	Hidden     bool
+}
+
+const getLeaderboardFieldsByLID = `-- name: GetLeaderboardFieldsByLID :many
+SELECT lid, field_name, field_value, field_order, for_rank, hidden, required
+FROM leaderboard_fields
+WHERE lid = $1
+`
+
+func (q *Queries) GetLeaderboardFieldsByLID(ctx context.Context, lid int32) ([]LeaderboardField, error) {
+	rows, err := q.db.Query(ctx, getLeaderboardFieldsByLID, lid)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []LeaderboardField
+	for rows.Next() {
+		var i LeaderboardField
+		if err := rows.Scan(
+			&i.Lid,
+			&i.FieldName,
+			&i.FieldValue,
+			&i.FieldOrder,
+			&i.ForRank,
+			&i.Hidden,
+			&i.Required,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }

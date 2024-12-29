@@ -21,5 +21,5 @@ const (
 
 const (
 	EntryFieldPrefix      = "field"
-	EntryDisplayNameField = "displayName"
+	EntryDisplayNameField = "\"displayName"
 )

@@ -39,6 +39,13 @@ func NewValidate() (*validator.Validate, ut.Translator) {
 			return re.MatchString(fl.Field().String())
 		},
 	)
+	registerCustomValidation(validate, trans, "isSafeName",
+		"The {0} must not contain `'` or `\"`.",
+		func(fl validator.FieldLevel) bool {
+			re := regexp.MustCompile(`['"]`)
+			return !re.MatchString(fl.Field().String())
+		},
+	)
 
 	return validate, trans
 }

@@ -17,7 +17,9 @@ type Querier interface {
 	CreateNewRefreshToken(ctx context.Context, arg CreateNewRefreshTokenParams) (RefreshToken, error)
 	CreateUser(ctx context.Context, arg CreateUserParams) error
 	DeleteUserByUsername(ctx context.Context, username string) error
+	GetFieldOptions(ctx context.Context, arg GetFieldOptionsParams) ([]LeaderboardOption, error)
 	GetLeaderboardById(ctx context.Context, id int32) (Leaderboard, error)
+	GetLeaderboardFieldsByLID(ctx context.Context, lid int32) ([]LeaderboardField, error)
 	GetRefreshToken(ctx context.Context, id int32) (RefreshToken, error)
 	GetUserByEmail(ctx context.Context, email string) (User, error)
 	GetUserByID(ctx context.Context, id int32) (User, error)
