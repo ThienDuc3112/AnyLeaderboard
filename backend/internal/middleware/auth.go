@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"anylbapi/internal/constants"
+	c "anylbapi/internal/constants"
 	"anylbapi/internal/database"
 	"anylbapi/internal/utils"
 	"context"
@@ -24,18 +24,18 @@ func (m Middleware) AuthAccessToken(next http.Handler) http.Handler {
 
 		token := strings.TrimSpace(authHeader[7:])
 
-		claim, err := utils.ValidateAccessToken(token, os.Getenv(constants.EnvKeySecret))
+		claim, err := utils.ValidateAccessToken(token, os.Getenv(c.EnvKeySecret))
 		if err != nil {
 			utils.RespondWithError(w, 401, "You are not logged in")
 			return
 		}
 
 		// Check cache
-		cacheKey := fmt.Sprintf("%s-%s", CachePrefixUser, claim.Username)
+		cacheKey := fmt.Sprintf("%s-%s", c.CachePrefixUser, claim.Username)
 		cached, exist := m.cache.Get(cacheKey)
 		if exist {
 			if user, ok := cached.(database.User); ok {
-				newCtx := context.WithValue(r.Context(), KeyUser, user)
+				newCtx := context.WithValue(r.Context(), c.MiddlewareKeyUser, user)
 				next.ServeHTTP(w, r.WithContext(newCtx))
 				return
 			} else {
@@ -50,7 +50,7 @@ func (m Middleware) AuthAccessToken(next http.Handler) http.Handler {
 		}
 
 		m.cache.SetDefault(cacheKey, user)
-		newCtx := context.WithValue(r.Context(), KeyUser, user)
+		newCtx := context.WithValue(r.Context(), c.MiddlewareKeyUser, user)
 		next.ServeHTTP(w, r.WithContext(newCtx))
 	})
 }

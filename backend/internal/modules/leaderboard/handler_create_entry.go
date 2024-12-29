@@ -1,9 +1,8 @@
 package leaderboard
 
 import (
-	"anylbapi/internal/constants"
+	c "anylbapi/internal/constants"
 	"anylbapi/internal/database"
-	"anylbapi/internal/middleware"
 	"anylbapi/internal/utils"
 	"fmt"
 	"net/http"
@@ -19,7 +18,7 @@ func (s leaderboardService) createEntryHandler(w http.ResponseWriter, r *http.Re
 		return
 	}
 
-	lb, ok := r.Context().Value(middleware.KeyLeaderboard).(database.Leaderboard)
+	lb, ok := r.Context().Value(c.MiddlewareKeyLeaderboard).(database.Leaderboard)
 	if !ok {
 		utils.RespondWithError(w, 500, "Internal server error")
 		err = fmt.Errorf("context does not give leaderboard type")
@@ -27,7 +26,7 @@ func (s leaderboardService) createEntryHandler(w http.ResponseWriter, r *http.Re
 	}
 
 	var user *database.User
-	userData, ok := r.Context().Value(middleware.KeyUser).(database.User)
+	userData, ok := r.Context().Value(c.MiddlewareKeyUser).(database.User)
 	if !ok {
 		if lb.RequireVerification {
 			utils.RespondWithError(w, 500, "Internal server error")
@@ -41,7 +40,7 @@ func (s leaderboardService) createEntryHandler(w http.ResponseWriter, r *http.Re
 	}
 
 	displayName := ""
-	displayNameData, ok := body[constants.EntryDisplayNameField]
+	displayNameData, ok := body[c.EntryDisplayNameField]
 	if ok {
 		dn, ok := displayNameData.(string)
 		if ok {

@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"anylbapi/internal/constants"
+	c "anylbapi/internal/constants"
 	"anylbapi/internal/database"
 	"anylbapi/internal/utils"
 	"context"
@@ -16,7 +16,7 @@ func (m Middleware) AuthAccessTokenIfLb(next http.Handler) http.Handler {
 		var err error
 		defer func() { utils.LogError("authAccessTokenIfLbMiddleware", err) }()
 
-		lb, ok := r.Context().Value(KeyLeaderboard).(database.Leaderboard)
+		lb, ok := r.Context().Value(c.MiddlewareKeyLeaderboard).(database.Leaderboard)
 		if !ok {
 			utils.RespondWithError(w, 500, "Internal server error")
 			err = fmt.Errorf("context value don't return leaderboard")
@@ -36,7 +36,7 @@ func (m Middleware) AuthAccessTokenIfLb(next http.Handler) http.Handler {
 
 		token := strings.TrimSpace(authHeader[7:])
 
-		claim, err := utils.ValidateAccessToken(token, os.Getenv(constants.EnvKeySecret))
+		claim, err := utils.ValidateAccessToken(token, os.Getenv(c.EnvKeySecret))
 		if err != nil {
 			if lb.RequireVerification {
 				err = nil
@@ -49,11 +49,11 @@ func (m Middleware) AuthAccessTokenIfLb(next http.Handler) http.Handler {
 		}
 
 		// Check cache
-		cacheKey := fmt.Sprintf("%s-%s", CachePrefixUser, claim.Username)
+		cacheKey := fmt.Sprintf("%s-%s", c.CachePrefixUser, claim.Username)
 		cached, exist := m.cache.Get(cacheKey)
 		if exist {
 			if user, ok := cached.(database.User); ok {
-				newCtx := context.WithValue(r.Context(), KeyUser, user)
+				newCtx := context.WithValue(r.Context(), c.MiddlewareKeyUser, user)
 				next.ServeHTTP(w, r.WithContext(newCtx))
 				return
 			} else {
@@ -68,7 +68,7 @@ func (m Middleware) AuthAccessTokenIfLb(next http.Handler) http.Handler {
 		}
 
 		m.cache.SetDefault(cacheKey, user)
-		newCtx := context.WithValue(r.Context(), KeyUser, user)
+		newCtx := context.WithValue(r.Context(), c.MiddlewareKeyUser, user)
 		next.ServeHTTP(w, r.WithContext(newCtx))
 	})
 }

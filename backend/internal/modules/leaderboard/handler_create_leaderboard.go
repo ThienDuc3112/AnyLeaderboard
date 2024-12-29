@@ -1,8 +1,8 @@
 package leaderboard
 
 import (
+	c "anylbapi/internal/constants"
 	"anylbapi/internal/database"
-	"anylbapi/internal/middleware"
 	"anylbapi/internal/utils"
 	"fmt"
 	"net/http"
@@ -22,12 +22,8 @@ func (s leaderboardService) createLeaderboardHandler(w http.ResponseWriter, r *h
 		utils.RespondToInvalidBody(w, err, trans)
 		return
 	}
-	if len(body.Fields) == 0 {
-		utils.RespondWithError(w, 400, "There must be atleast a field")
-		return
-	}
 
-	userCtx := r.Context().Value(middleware.KeyUser)
+	userCtx := r.Context().Value(c.MiddlewareKeyUser)
 	var user database.User
 	var ok bool
 	if userCtx == nil {
@@ -70,7 +66,7 @@ func (s leaderboardService) createLeaderboardHandler(w http.ResponseWriter, r *h
 	}
 
 	// Remove caching if exist
-	s.cache.Delete(fmt.Sprintf("lbnotfound-%d", leaderboard.ID))
+	s.cache.Delete(fmt.Sprintf("%s-%d", c.CachePrefixNoLeaderboard, leaderboard.ID))
 
 	utils.RespondWithJSON(w, 201, map[string]any{
 		"id": leaderboard.ID,

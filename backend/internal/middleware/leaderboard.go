@@ -15,12 +15,12 @@ import (
 func (m Middleware) GetLeaderboard(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		lid := r.PathValue(c.PathValueLeaderboardId)
-		cachedKey, cachedNotFoundKey := fmt.Sprintf("%s-%s", CachePrefixLeaderboard, lid), fmt.Sprintf("%s-%s", CachePrefixNoLeaderboard, lid)
+		cachedKey, cachedNotFoundKey := fmt.Sprintf("%s-%s", c.CachePrefixLeaderboard, lid), fmt.Sprintf("%s-%s", c.CachePrefixNoLeaderboard, lid)
 
 		// Check cache
 		if data, exist := m.cache.Get(cachedKey); exist {
 			if lb, ok := data.(database.Leaderboard); ok {
-				newCtx := context.WithValue(r.Context(), KeyLeaderboard, lb)
+				newCtx := context.WithValue(r.Context(), c.MiddlewareKeyLeaderboard, lb)
 				next.ServeHTTP(w, r.WithContext(newCtx))
 				return
 			} else {
@@ -45,7 +45,7 @@ func (m Middleware) GetLeaderboard(next http.Handler) http.Handler {
 		}
 
 		m.cache.SetDefault(cachedKey, lb)
-		newCtx := context.WithValue(r.Context(), KeyLeaderboard, lb)
+		newCtx := context.WithValue(r.Context(), c.MiddlewareKeyLeaderboard, lb)
 		next.ServeHTTP(w, r.WithContext(newCtx))
 	})
 }
