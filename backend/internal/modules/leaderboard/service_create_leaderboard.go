@@ -72,7 +72,7 @@ func (s leaderboardService) createLeaderboard(ctx context.Context, param createL
 			return database.Leaderboard{}, errMultipleForRankField
 		}
 		if field.ForRank && !field.Required {
-			return database.Leaderboard{}, errForRankRequired
+			return database.Leaderboard{}, errForRankNotRequired
 		}
 		forRankExist = forRankExist || field.ForRank
 		nonHiddenFieldExist = nonHiddenFieldExist || !field.Hidden

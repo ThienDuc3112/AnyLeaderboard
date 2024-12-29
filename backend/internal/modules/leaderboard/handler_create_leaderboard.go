@@ -50,12 +50,19 @@ func (s leaderboardService) createLeaderboardHandler(w http.ResponseWriter, r *h
 		switch err {
 		case errMultipleForRankField:
 			utils.RespondWithError(w, 400, "Multiple 'For rank' field, only one field can be 'For rank'")
+			err = nil
+		case errForRankNotRequired:
+			utils.RespondWithError(w, 400, "A 'For rank' field must be required")
+			err = nil
 		case errNoForRankField:
 			utils.RespondWithError(w, 400, "No 'For rank' field, one field must be 'For rank'")
+			err = nil
 		case errNoPublicField:
 			utils.RespondWithError(w, 400, "No public field, one field must be not hidden")
+			err = nil
 		case errNoOptions:
 			utils.RespondWithError(w, 400, "An Option field must have atleast one option")
+			err = nil
 		default:
 			utils.RespondWithError(w, 500, "Internal server error")
 		}

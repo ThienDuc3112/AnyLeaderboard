@@ -3,11 +3,9 @@ package leaderboard
 import (
 	"anylbapi/internal/database"
 	"anylbapi/internal/utils"
-
-	"github.com/patrickmn/go-cache"
 )
 
-func newLeaderboardSerivce(repo database.Querierer, cache *cache.Cache) leaderboardService {
+func newLeaderboardService(repo database.Querierer, cache utils.Cache) leaderboardService {
 	return leaderboardService{
 		repo:  repo,
 		cache: cache,
@@ -16,7 +14,7 @@ func newLeaderboardSerivce(repo database.Querierer, cache *cache.Cache) leaderbo
 
 type leaderboardService struct {
 	repo  database.Querierer
-	cache *cache.Cache
+	cache utils.Cache
 }
 
 var validate, trans = utils.NewValidate()

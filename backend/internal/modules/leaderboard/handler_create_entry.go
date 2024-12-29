@@ -62,6 +62,9 @@ func (s leaderboardService) createEntryHandler(w http.ResponseWriter, r *http.Re
 		case errNonAnonymousLeaderboard:
 			utils.RespondWithError(w, 500, "Internal server error")
 			err = fmt.Errorf("no user on nonAnon lb, should've been blocked by middleware")
+		case errNoDisplayName:
+			utils.RespondWithError(w, 400, "No display name in request or user token found")
+			err = nil
 		case errRequiredFieldNotExist:
 			utils.RespondWithError(w, 400, fmt.Sprintf("field '%s' missing", fieldName))
 			err = nil

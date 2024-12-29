@@ -3,9 +3,13 @@ with-expecter: true
 issue-845-fix: true
 dir: internal/testutils
 outpkg: testutils
+resolve-type-alias: false
 packages:
   anylbapi/internal/database:
     # place your package-specific config here
     interfaces:
       # select the interfaces you want mocked
       Querierer:
+  anylbapi/internal/utils:
+    interfaces:
+      Cache:

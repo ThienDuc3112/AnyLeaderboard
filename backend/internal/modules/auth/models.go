@@ -12,13 +12,13 @@ const (
 
 // ============ Request body type ============
 type loginReqBody struct {
-	Username string `json:"username" validate:"required"`
+	Username string `json:"username" validate:"required,isSafeName"`
 	Password string `json:"password" validate:"required"`
 }
 
 type signUpReqBody struct {
 	Username    string `json:"username" validate:"required,min=3,max=64,isUsername"`
-	DisplayName string `json:"displayName" validate:"required,min=3,max=64"`
+	DisplayName string `json:"displayName" validate:"required,min=3,max=64,isSafeName"`
 	Email       string `json:"email" validate:"required,email"`
 	Password    string `json:"password" validate:"required,min=8,max=64"`
 }

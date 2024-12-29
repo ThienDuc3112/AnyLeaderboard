@@ -15,7 +15,7 @@ func Router(db database.Querierer, cache *cache.Cache) http.Handler {
 	mux := http.NewServeMux()
 	authMux := http.NewServeMux()
 
-	s := newLeaderboardSerivce(db, cache)
+	s := newLeaderboardService(db, cache)
 	m := middleware.New(db, cache)
 
 	// Unauth routes
@@ -51,7 +51,7 @@ func Router(db database.Querierer, cache *cache.Cache) http.Handler {
 
 	// CRUD on entry in leaderboard
 	mux.Handle(
-		fmt.Sprintf("POST /{%s}", c.PathValueLeaderboardId),
+		fmt.Sprintf("POST /{%s}/entry", c.PathValueLeaderboardId),
 		middleware.CreateStack(
 			http.HandlerFunc(s.createEntryHandler),
 			m.GetLeaderboard,
@@ -59,11 +59,11 @@ func Router(db database.Querierer, cache *cache.Cache) http.Handler {
 		),
 	)
 	authMux.HandleFunc(
-		fmt.Sprintf("PUT /{%s}/entry", c.PathValueLeaderboardId),
+		fmt.Sprintf("PUT /{%s}/entry/{%s}", c.PathValueLeaderboardId, c.PathValueEntryId),
 		s.dummyFunction,
 	)
 	authMux.HandleFunc(
-		fmt.Sprintf("DELETE /{%s}/entry", c.PathValueLeaderboardId),
+		fmt.Sprintf("DELETE /{%s}/entry/{%s}", c.PathValueLeaderboardId, c.PathValueEntryId),
 		s.dummyFunction,
 	)
 

@@ -1,9 +1,15 @@
 package utils
 
-import "log"
+import (
+	"fmt"
+	"log"
+	"strings"
+)
 
 func LogError(handlerName string, e error) {
 	if e != nil {
-		log.Printf("\n========== %s error ==========\n%v\n========================================\n\n", handlerName, e)
+		topBar := fmt.Sprintf("========== %s error ==========", handlerName)
+		bottomBar := strings.Map(func(r rune) rune { return '=' }, topBar)
+		log.Printf("\n%s\n%v\n%s\n\n", topBar, e, bottomBar)
 	}
 }

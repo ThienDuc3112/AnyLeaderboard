@@ -8,5 +8,6 @@
     "watch": [
         "*.go"
     ],
+    "delay": 500,
     "signal": "SIGTERM"
 }

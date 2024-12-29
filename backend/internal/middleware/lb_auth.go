@@ -39,6 +39,7 @@ func (m Middleware) AuthAccessTokenIfLb(next http.Handler) http.Handler {
 		claim, err := utils.ValidateAccessToken(token, os.Getenv(constants.EnvKeySecret))
 		if err != nil {
 			if lb.RequireVerification {
+				err = nil
 				utils.RespondWithError(w, 401, "You are not logged in")
 				return
 			} else {

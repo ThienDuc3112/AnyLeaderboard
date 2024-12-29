@@ -15,7 +15,7 @@ func (s leaderboardService) createEntry(ctx context.Context, param createEntryPa
 	if !param.Leaderboard.AllowAnnonymous && param.User == nil {
 		return database.LeaderboardEntry{}, "", errNonAnonymousLeaderboard
 	} else if param.DisplayName == "" && param.User == nil {
-		return database.LeaderboardEntry{}, "", errNonAnonymousLeaderboard
+		return database.LeaderboardEntry{}, "", errNoDisplayName
 	}
 
 	// Get LB fields

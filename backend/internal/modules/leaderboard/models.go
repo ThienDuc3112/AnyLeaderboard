@@ -48,7 +48,7 @@ type createEntryParam struct {
 var (
 	errMultipleForRankField     = errors.New("multiple for rank field")
 	errNoForRankField           = errors.New("no for rank field found")
-	errForRankRequired          = errors.New("for rank need to be required")
+	errForRankNotRequired       = errors.New("for rank need to be required")
 	errNoPublicField            = errors.New("no public field exist")
 	errNoOptions                = errors.New("option field have no options")
 	errUnableToInsertAllFields  = errors.New("unable to insert all fields")
@@ -62,4 +62,5 @@ var (
 	errNonAnonymousLeaderboard = errors.New("leaderboard required user account")
 	errConflictForRankField    = errors.New("more than 1 for rank field found")
 	errUnrankableFieldType     = errors.New("field type cannot be rank")
+	errNoDisplayName           = errors.New("no user or display name found")
 )
