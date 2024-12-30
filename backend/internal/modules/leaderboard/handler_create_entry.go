@@ -28,9 +28,8 @@ func (s leaderboardService) createEntryHandler(w http.ResponseWriter, r *http.Re
 	var user *database.User
 	userData, ok := r.Context().Value(c.MiddlewareKeyUser).(database.User)
 	if !ok {
-		if lb.RequireVerification {
-			utils.RespondWithError(w, 500, "Internal server error")
-			err = fmt.Errorf("context does not give user type")
+		if !lb.AllowAnnonymous {
+			utils.RespondWithError(w, 401, "You are not logged in")
 			return
 		} else {
 			user = nil
@@ -40,8 +39,8 @@ func (s leaderboardService) createEntryHandler(w http.ResponseWriter, r *http.Re
 	}
 
 	displayName := ""
-	displayNameData, ok := body[c.EntryDisplayNameField]
-	if ok {
+	displayNameData, exist := body[c.EntryDisplayNameField]
+	if exist {
 		dn, ok := displayNameData.(string)
 		if ok {
 			displayName = dn

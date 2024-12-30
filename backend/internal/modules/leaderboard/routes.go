@@ -21,7 +21,7 @@ func Router(db database.Querierer, cache *cache.Cache) http.Handler {
 	// Unauth routes
 	mux.HandleFunc(
 		"GET /",
-		s.dummyFunction,
+		s.getLeaderboardHandler,
 	)
 	mux.HandleFunc(
 		fmt.Sprintf("GET /{%s}", c.PathValueLeaderboardId),
@@ -54,8 +54,8 @@ func Router(db database.Querierer, cache *cache.Cache) http.Handler {
 		fmt.Sprintf("POST /{%s}/entry", c.PathValueLeaderboardId),
 		middleware.CreateStack(
 			http.HandlerFunc(s.createEntryHandler),
+			m.OptionalAuthAccessToken,
 			m.GetLeaderboard,
-			m.AuthAccessTokenIfLb,
 		),
 	)
 	authMux.HandleFunc(

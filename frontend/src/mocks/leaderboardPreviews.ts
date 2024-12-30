@@ -14,7 +14,7 @@ export const MockLeaderboardPreview: LeaderboardPreview[] = [
         icon: "https://www.lorempixel.com/657/856",
       },
     ],
-    entryCount: 210,
+    entriesCount: 210,
   },
   {
     id: "dasflkjjlkadjs",
@@ -34,7 +34,7 @@ export const MockLeaderboardPreview: LeaderboardPreview[] = [
         icon: "https://placekitten.com/712/581",
       },
     ],
-    entryCount: 1,
+    entriesCount: 1,
   },
   {
     id: "dasflkjjlkad",
@@ -49,7 +49,7 @@ export const MockLeaderboardPreview: LeaderboardPreview[] = [
         icon: "https://dummyimage.com/871x388",
       },
     ],
-    entryCount: 21,
+    entriesCount: 21,
   },
   {
     id: "dasflkadfs",
@@ -64,7 +64,7 @@ export const MockLeaderboardPreview: LeaderboardPreview[] = [
         icon: "https://placeimg.com/815/852/any",
       },
     ],
-    entryCount: 13,
+    entriesCount: 13,
   },
   {
     id: "dajjlkadfs",
@@ -79,6 +79,6 @@ export const MockLeaderboardPreview: LeaderboardPreview[] = [
         icon: "discord",
       },
     ],
-    entryCount: 3,
+    entriesCount: 3,
   },
 ];

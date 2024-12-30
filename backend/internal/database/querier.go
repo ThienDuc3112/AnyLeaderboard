@@ -20,6 +20,7 @@ type Querier interface {
 	GetFieldOptions(ctx context.Context, arg GetFieldOptionsParams) ([]LeaderboardOption, error)
 	GetLeaderboardById(ctx context.Context, id int32) (Leaderboard, error)
 	GetLeaderboardFieldsByLID(ctx context.Context, lid int32) ([]LeaderboardField, error)
+	GetRecentLeaderboards(ctx context.Context, arg GetRecentLeaderboardsParams) ([]GetRecentLeaderboardsRow, error)
 	GetRefreshToken(ctx context.Context, id int32) (RefreshToken, error)
 	GetUserByEmail(ctx context.Context, email string) (User, error)
 	GetUserByID(ctx context.Context, id int32) (User, error)

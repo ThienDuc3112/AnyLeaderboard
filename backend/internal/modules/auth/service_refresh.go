@@ -42,7 +42,7 @@ func (s authService) refresh(ctx context.Context, param refreshParam) (tokensRet
 	if err != nil {
 		return tokensReturn{}, err
 	}
-	rToken.ExpiresAt = pgtype.Timestamp{
+	rToken.ExpiresAt = pgtype.Timestamptz{
 		Time:  time.Now().Add(constants.RefreshTokenDuration),
 		Valid: true,
 	}

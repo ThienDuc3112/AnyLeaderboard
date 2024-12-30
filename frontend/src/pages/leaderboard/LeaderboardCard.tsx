@@ -31,7 +31,7 @@ const LeaderboardCard: React.FC<PropType> = ({ board }) => {
         <div className="mt-4 flex items-center gap-4">
           <div className="flex items-center gap-1 text-sm text-muted-foreground">
             <Users className="h-4 w-4" />
-            {board.entryCount} entries
+            {board.entriesCount} entries
           </div>
         </div>
       </div>

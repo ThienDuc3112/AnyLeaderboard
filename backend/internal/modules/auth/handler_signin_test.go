@@ -34,17 +34,17 @@ func TestLoginHandler_Success_Email_login(t *testing.T) {
 		ID:              1,
 		UserID:          1,
 		RotationCounter: 0,
-		IssuedAt: pgtype.Timestamp{
+		IssuedAt: pgtype.Timestamptz{
 			Time:  time.Now(),
 			Valid: true,
 		},
-		ExpiresAt: pgtype.Timestamp{
+		ExpiresAt: pgtype.Timestamptz{
 			Time:  time.Now().Add(constants.RefreshTokenDuration),
 			Valid: true,
 		},
 		DeviceInfo: "",
 		IpAddress:  "",
-		RevokedAt: pgtype.Timestamp{
+		RevokedAt: pgtype.Timestamptz{
 			Valid: false,
 		},
 	}
@@ -98,17 +98,17 @@ func TestLoginHandler_Success_Username_login(t *testing.T) {
 		ID:              1,
 		UserID:          1,
 		RotationCounter: 0,
-		IssuedAt: pgtype.Timestamp{
+		IssuedAt: pgtype.Timestamptz{
 			Time:  time.Now(),
 			Valid: true,
 		},
-		ExpiresAt: pgtype.Timestamp{
+		ExpiresAt: pgtype.Timestamptz{
 			Time:  time.Now().Add(14 * 24 * time.Hour),
 			Valid: true,
 		},
 		DeviceInfo: "",
 		IpAddress:  "",
-		RevokedAt: pgtype.Timestamp{
+		RevokedAt: pgtype.Timestamptz{
 			Valid: false,
 		},
 	}

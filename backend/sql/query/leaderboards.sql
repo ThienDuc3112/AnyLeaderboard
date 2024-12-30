@@ -13,3 +13,20 @@ RETURNING *;
 SELECT *
 FROM leaderboards
 WHERE id = $1;
+-- name: GetRecentLeaderboards :many
+SELECT l.id,
+    l.name,
+    l.description,
+    l.cover_image_url,
+    l.created_at,
+    COUNT(le.id) AS entries_count
+FROM leaderboards l
+    LEFT JOIN leaderboard_entries le ON l.id = le.leaderboard_id
+WHERE l.created_at < $1
+GROUP BY l.id,
+    l.name,
+    l.description,
+    l.cover_image_url,
+    l.created_at
+ORDER BY l.created_at DESC
+LIMIT $2;

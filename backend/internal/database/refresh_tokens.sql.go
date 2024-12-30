@@ -24,7 +24,7 @@ RETURNING id, user_id, rotation_counter, issued_at, expires_at, device_info, ip_
 
 type CreateNewRefreshTokenParams struct {
 	UserID     int32
-	ExpiresAt  pgtype.Timestamp
+	ExpiresAt  pgtype.Timestamptz
 	DeviceInfo string
 	IpAddress  string
 }
@@ -108,7 +108,7 @@ RETURNING id, user_id, rotation_counter, issued_at, expires_at, device_info, ip_
 `
 
 type UpdateRefreshTokenParams struct {
-	ExpiresAt  pgtype.Timestamp
+	ExpiresAt  pgtype.Timestamptz
 	DeviceInfo string
 	IpAddress  string
 	ID         int32

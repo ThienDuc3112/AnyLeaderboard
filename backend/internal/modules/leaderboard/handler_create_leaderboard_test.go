@@ -228,7 +228,7 @@ func TestCreateLeaderboardHandler_Validation(t *testing.T) {
 		{
 			name: "MissingName",
 			setupBody: func() createLeaderboardReqBody {
-				body := mockBody
+				body := copyMockBody()
 				body.Name = "" // Missing name
 				return body
 			},
@@ -238,7 +238,7 @@ func TestCreateLeaderboardHandler_Validation(t *testing.T) {
 		{
 			name: "InvalidLBName",
 			setupBody: func() createLeaderboardReqBody {
-				body := mockBody
+				body := copyMockBody()
 				body.Name = "Invalid Name!" // Invalid LBName due to special character "!"
 				return body
 			},
@@ -248,7 +248,7 @@ func TestCreateLeaderboardHandler_Validation(t *testing.T) {
 		{
 			name: "MissingFields",
 			setupBody: func() createLeaderboardReqBody {
-				body := mockBody
+				body := copyMockBody()
 				body.Fields = []field{} // No fields
 				return body
 			},
@@ -258,7 +258,7 @@ func TestCreateLeaderboardHandler_Validation(t *testing.T) {
 		{
 			name: "InvalidFieldName",
 			setupBody: func() createLeaderboardReqBody {
-				body := mockBody
+				body := copyMockBody()
 				body.Fields[0].Name = "\"Invalid Name!\"" // Invalid field name
 				return body
 			},
@@ -268,7 +268,7 @@ func TestCreateLeaderboardHandler_Validation(t *testing.T) {
 		{
 			name: "InvalidExternalLinkURL",
 			setupBody: func() createLeaderboardReqBody {
-				body := mockBody
+				body := copyMockBody()
 				body.ExternalLinks[0].URL = "invalid-url" // Invalid URL
 				return body
 			},
@@ -306,4 +306,21 @@ func TestCreateLeaderboardHandler_Validation(t *testing.T) {
 			assert.NotEmpty(t, resBody[tt.expectedErrorField])
 		})
 	}
+}
+
+func copyMockBody() createLeaderboardReqBody {
+	res := mockBody
+	res.ExternalLinks = make([]externalLink, 0)
+	res.Fields = make([]field, 0)
+	res.ExternalLinks = append(res.ExternalLinks, mockBody.ExternalLinks...)
+	for _, field := range mockBody.Fields {
+		newField := field
+		if len(field.Options) > 0 {
+			newField.Options = make([]string, 0)
+			newField.Options = append(newField.Options, field.Options...)
+		}
+		res.Fields = append(res.Fields, newField)
+	}
+
+	return res
 }

@@ -32,17 +32,17 @@ func TestRefreshHandler_Success(t *testing.T) {
 		ID:              1,
 		UserID:          1,
 		RotationCounter: 1,
-		IssuedAt: pgtype.Timestamp{
+		IssuedAt: pgtype.Timestamptz{
 			Time:  time.Now(),
 			Valid: true,
 		},
-		ExpiresAt: pgtype.Timestamp{
+		ExpiresAt: pgtype.Timestamptz{
 			Time:  time.Now().Add(14 * 24 * time.Hour),
 			Valid: true,
 		},
 		DeviceInfo: "TestDevice",
 		IpAddress:  "127.0.0.1",
-		RevokedAt: pgtype.Timestamp{
+		RevokedAt: pgtype.Timestamptz{
 			Valid: false,
 		},
 	}
@@ -93,17 +93,17 @@ func TestRefreshHandler_ExpiredToken(t *testing.T) {
 		ID:              1,
 		UserID:          1,
 		RotationCounter: 1,
-		IssuedAt: pgtype.Timestamp{
+		IssuedAt: pgtype.Timestamptz{
 			Time:  time.Now(),
 			Valid: true,
 		},
-		ExpiresAt: pgtype.Timestamp{
+		ExpiresAt: pgtype.Timestamptz{
 			Time:  time.Now().Add(-1 * time.Hour),
 			Valid: true,
 		},
 		DeviceInfo: "TestDevice",
 		IpAddress:  "127.0.0.1",
-		RevokedAt: pgtype.Timestamp{
+		RevokedAt: pgtype.Timestamptz{
 			Valid: false,
 		},
 	}

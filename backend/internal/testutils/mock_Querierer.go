@@ -737,6 +737,65 @@ func (_c *MockQuerierer_GetLeaderboardFieldsByLID_Call) RunAndReturn(run func(co
 	return _c
 }
 
+// GetRecentLeaderboards provides a mock function with given fields: ctx, arg
+func (_m *MockQuerierer) GetRecentLeaderboards(ctx context.Context, arg database.GetRecentLeaderboardsParams) ([]database.GetRecentLeaderboardsRow, error) {
+	ret := _m.Called(ctx, arg)
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetRecentLeaderboards")
+	}
+
+	var r0 []database.GetRecentLeaderboardsRow
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context, database.GetRecentLeaderboardsParams) ([]database.GetRecentLeaderboardsRow, error)); ok {
+		return rf(ctx, arg)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, database.GetRecentLeaderboardsParams) []database.GetRecentLeaderboardsRow); ok {
+		r0 = rf(ctx, arg)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]database.GetRecentLeaderboardsRow)
+		}
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, database.GetRecentLeaderboardsParams) error); ok {
+		r1 = rf(ctx, arg)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// MockQuerierer_GetRecentLeaderboards_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetRecentLeaderboards'
+type MockQuerierer_GetRecentLeaderboards_Call struct {
+	*mock.Call
+}
+
+// GetRecentLeaderboards is a helper method to define mock.On call
+//   - ctx context.Context
+//   - arg database.GetRecentLeaderboardsParams
+func (_e *MockQuerierer_Expecter) GetRecentLeaderboards(ctx interface{}, arg interface{}) *MockQuerierer_GetRecentLeaderboards_Call {
+	return &MockQuerierer_GetRecentLeaderboards_Call{Call: _e.mock.On("GetRecentLeaderboards", ctx, arg)}
+}
+
+func (_c *MockQuerierer_GetRecentLeaderboards_Call) Run(run func(ctx context.Context, arg database.GetRecentLeaderboardsParams)) *MockQuerierer_GetRecentLeaderboards_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(database.GetRecentLeaderboardsParams))
+	})
+	return _c
+}
+
+func (_c *MockQuerierer_GetRecentLeaderboards_Call) Return(_a0 []database.GetRecentLeaderboardsRow, _a1 error) *MockQuerierer_GetRecentLeaderboards_Call {
+	_c.Call.Return(_a0, _a1)
+	return _c
+}
+
+func (_c *MockQuerierer_GetRecentLeaderboards_Call) RunAndReturn(run func(context.Context, database.GetRecentLeaderboardsParams) ([]database.GetRecentLeaderboardsRow, error)) *MockQuerierer_GetRecentLeaderboards_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // GetRefreshToken provides a mock function with given fields: ctx, id
 func (_m *MockQuerierer) GetRefreshToken(ctx context.Context, id int32) (database.RefreshToken, error) {
 	ret := _m.Called(ctx, id)

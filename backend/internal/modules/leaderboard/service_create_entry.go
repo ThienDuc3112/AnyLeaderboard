@@ -74,13 +74,13 @@ func (s leaderboardService) createEntry(ctx context.Context, param createEntryPa
 				}
 				return database.LeaderboardEntry{}, field.FieldName, errRequiredFieldNotExist
 			}
-			entry[field.FieldName] = val.Unix()
+			entry[field.FieldName] = val.UnixMilli()
 
 			if foundForRankField && field.ForRank {
 				return database.LeaderboardEntry{}, field.FieldName, errConflictForRankField
 			}
 			if field.ForRank {
-				sortedValue = float64(val.Unix())
+				sortedValue = float64(val.UnixMilli())
 				foundForRankField = true
 			}
 

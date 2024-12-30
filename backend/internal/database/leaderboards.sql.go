@@ -79,3 +79,63 @@ func (q *Queries) GetLeaderboardById(ctx context.Context, id int32) (Leaderboard
 	)
 	return i, err
 }
+
+const getRecentLeaderboards = `-- name: GetRecentLeaderboards :many
+SELECT l.id,
+    l.name,
+    l.description,
+    l.cover_image_url,
+    l.created_at,
+    COUNT(le.id) AS entries_count
+FROM leaderboards l
+    LEFT JOIN leaderboard_entries le ON l.id = le.leaderboard_id
+WHERE l.created_at < $1
+GROUP BY l.id,
+    l.name,
+    l.description,
+    l.cover_image_url,
+    l.created_at
+ORDER BY l.created_at DESC
+LIMIT $2
+`
+
+type GetRecentLeaderboardsParams struct {
+	CreatedAt pgtype.Timestamptz
+	Limit     int32
+}
+
+type GetRecentLeaderboardsRow struct {
+	ID            int32
+	Name          string
+	Description   string
+	CoverImageUrl pgtype.Text
+	CreatedAt     pgtype.Timestamptz
+	EntriesCount  int64
+}
+
+func (q *Queries) GetRecentLeaderboards(ctx context.Context, arg GetRecentLeaderboardsParams) ([]GetRecentLeaderboardsRow, error) {
+	rows, err := q.db.Query(ctx, getRecentLeaderboards, arg.CreatedAt, arg.Limit)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetRecentLeaderboardsRow
+	for rows.Next() {
+		var i GetRecentLeaderboardsRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.Name,
+			&i.Description,
+			&i.CoverImageUrl,
+			&i.CreatedAt,
+			&i.EntriesCount,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}

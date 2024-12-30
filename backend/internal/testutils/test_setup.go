@@ -35,8 +35,8 @@ func SetupPostJSONTestWithUser(path string, payload any) (*httptest.ResponseReco
 		mockDate := time.Date(2024, time.Month(1+rand.Int31n(12)), int(1+rand.Int31n(28)), 0, 0, 0, 0, time.Local)
 		mockUser = database.User{
 			ID:          rand.Int31n(math.MaxInt32),
-			CreatedAt:   pgtype.Timestamp{Time: mockDate},
-			UpdatedAt:   pgtype.Timestamp{Time: mockDate},
+			CreatedAt:   pgtype.Timestamptz{Time: mockDate},
+			UpdatedAt:   pgtype.Timestamptz{Time: mockDate},
 			Username:    "tester",
 			DisplayName: "The best tester to ever lived",
 			Email:       "tester@professional.com",

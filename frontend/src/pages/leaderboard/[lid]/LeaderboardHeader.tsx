@@ -41,7 +41,7 @@ const LeaderboardHeader: React.FC<PropType> = ({ data }) => {
             <p className="text-sm text-gray-600 mt-1">{data.description}</p>
           )}
           <div className="mt-2 text-xs text-gray-600">
-            <span className="font-mono">{data.entryCount}</span> entries
+            <span className="font-mono">{data.entriesCount}</span> entries
           </div>
           <div className="flex flex-wrap gap-2 mt-2">
             {data.externalLinks?.map((link, i) => (

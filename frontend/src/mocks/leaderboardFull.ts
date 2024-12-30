@@ -14,7 +14,7 @@ export const MockLeaderboardFull: LeaderboardFull = {
   ],
   allowAnonymous: true,
   requiredVerification: false,
-  entryCount: 3,
+  entriesCount: 3,
   fields: [
     {
       name: "Player",

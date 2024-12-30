@@ -60,8 +60,8 @@ type Leaderboard struct {
 	ID                  int32
 	Name                string
 	Description         string
-	CreatedAt           pgtype.Timestamp
-	UpdatedAt           pgtype.Timestamp
+	CreatedAt           pgtype.Timestamptz
+	UpdatedAt           pgtype.Timestamptz
 	CoverImageUrl       pgtype.Text
 	AllowAnnonymous     bool
 	RequireVerification bool
@@ -70,8 +70,8 @@ type Leaderboard struct {
 
 type LeaderboardEntry struct {
 	ID            int32
-	CreatedAt     pgtype.Timestamp
-	UpdatedAt     pgtype.Timestamp
+	CreatedAt     pgtype.Timestamptz
+	UpdatedAt     pgtype.Timestamptz
 	UserID        pgtype.Int4
 	Username      string
 	LeaderboardID int32
@@ -84,6 +84,11 @@ type LeaderboardExternalLink struct {
 	LeaderboardID int32
 	DisplayValue  string
 	Url           string
+}
+
+type LeaderboardFavourite struct {
+	UserID        int32
+	LeaderboardID int32
 }
 
 type LeaderboardField struct {
@@ -106,17 +111,17 @@ type RefreshToken struct {
 	ID              int32
 	UserID          int32
 	RotationCounter int32
-	IssuedAt        pgtype.Timestamp
-	ExpiresAt       pgtype.Timestamp
+	IssuedAt        pgtype.Timestamptz
+	ExpiresAt       pgtype.Timestamptz
 	DeviceInfo      string
 	IpAddress       string
-	RevokedAt       pgtype.Timestamp
+	RevokedAt       pgtype.Timestamptz
 }
 
 type User struct {
 	ID          int32
-	CreatedAt   pgtype.Timestamp
-	UpdatedAt   pgtype.Timestamp
+	CreatedAt   pgtype.Timestamptz
+	UpdatedAt   pgtype.Timestamptz
 	Username    string
 	DisplayName string
 	Email       string

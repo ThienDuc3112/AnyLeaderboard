@@ -46,7 +46,7 @@ func (s authService) login(context context.Context, param loginParam) (tokensRet
 
 	refreshTokenParam := database.CreateNewRefreshTokenParams{
 		UserID: user.ID,
-		ExpiresAt: pgtype.Timestamp{
+		ExpiresAt: pgtype.Timestamptz{
 			Time:  time.Now().Add(constants.RefreshTokenDuration),
 			Valid: true,
 		},

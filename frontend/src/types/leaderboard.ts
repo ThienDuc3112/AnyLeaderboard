@@ -3,14 +3,14 @@ export interface LeaderboardPreview {
   name: string;
   description?: string;
   coverImageUrl?: string;
-  externalLinks?: ExternalLinkType[];
-  entryCount: number;
+  entriesCount: number;
 }
 
 export interface LeaderboardFull extends LeaderboardPreview {
   fields: Field[];
   data: Entry[];
   allowAnonymous?: boolean;
+  externalLinks?: ExternalLinkType[];
   requiredVerification?: boolean;
 }
 
