@@ -3,6 +3,7 @@ package leaderboard
 import (
 	"anylbapi/internal/database"
 	"errors"
+	"time"
 )
 
 // ============ Request body type ============
@@ -14,6 +15,26 @@ type createLeaderboardReqBody struct {
 	AllowAnonymous       bool           `json:"allowAnonymous"`
 	RequiredVerification bool           `json:"requiredVerification"`
 	Fields               []field        `json:"fields" validate:"required,min=1,max=10,unique=Name,unique=FieldOrder,dive"`
+}
+
+type leaderboardWithEntry struct {
+	ID                   int            `json:"id"`
+	Name                 string         `json:"name"`
+	Description          string         `json:"description"`
+	CoverImageUrl        string         `json:"coverImageUrl,omitempty"`
+	EntriesCount         int            `json:"entriesCount"`
+	AllowAnonymous       bool           `json:"allowAnonymous"`
+	RequiredVerification bool           `json:"requiredVerification"`
+	ExternalLink         []externalLink `json:"externalLinks"`
+	Fields               []field        `json:"fields"`
+	Data                 []entry        `json:"data"`
+}
+
+type entry struct {
+	Id        int       `json:"id"`
+	CreatedAt time.Time `json:"createdAt"`
+	UpdatedAt time.Time `json:"updatedAt"`
+	Fields    any       `json:"fields"`
 }
 
 type externalLink struct {
@@ -63,4 +84,6 @@ var (
 	errConflictForRankField    = errors.New("more than 1 for rank field found")
 	errUnrankableFieldType     = errors.New("field type cannot be rank")
 	errNoDisplayName           = errors.New("no user or display name found")
+
+	errNoLeaderboard = errors.New("leaderboard don't exist")
 )

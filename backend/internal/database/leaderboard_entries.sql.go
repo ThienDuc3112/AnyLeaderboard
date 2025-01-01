@@ -52,3 +52,58 @@ func (q *Queries) CreateLeadeboardEntry(ctx context.Context, arg CreateLeadeboar
 	)
 	return i, err
 }
+
+const getEntriesFromLeaderboardId = `-- name: GetEntriesFromLeaderboardId :many
+SELECT id, created_at, updated_at, user_id, username, leaderboard_id, sorted_field, custom_fields
+FROM leaderboard_entries
+WHERE leaderboard_id = $1 OFFSET $2
+LIMIT $3
+`
+
+type GetEntriesFromLeaderboardIdParams struct {
+	LeaderboardID int32
+	Offset        int32
+	Limit         int32
+}
+
+func (q *Queries) GetEntriesFromLeaderboardId(ctx context.Context, arg GetEntriesFromLeaderboardIdParams) ([]LeaderboardEntry, error) {
+	rows, err := q.db.Query(ctx, getEntriesFromLeaderboardId, arg.LeaderboardID, arg.Offset, arg.Limit)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []LeaderboardEntry
+	for rows.Next() {
+		var i LeaderboardEntry
+		if err := rows.Scan(
+			&i.ID,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+			&i.UserID,
+			&i.Username,
+			&i.LeaderboardID,
+			&i.SortedField,
+			&i.CustomFields,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getLeaderboardEntriesCount = `-- name: GetLeaderboardEntriesCount :one
+SELECT COUNT(*)
+FROM leaderboard_entries
+WHERE leaderboard_id = $1
+`
+
+func (q *Queries) GetLeaderboardEntriesCount(ctx context.Context, leaderboardID int32) (int64, error) {
+	row := q.db.QueryRow(ctx, getLeaderboardEntriesCount, leaderboardID)
+	var count int64
+	err := row.Scan(&count)
+	return count, err
+}

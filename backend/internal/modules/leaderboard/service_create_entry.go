@@ -25,7 +25,7 @@ func (s leaderboardService) createEntry(ctx context.Context, param createEntryPa
 	}
 
 	// Get option field options
-	options := map[string][]database.LeaderboardOption{}
+	options := map[string][]string{}
 	for _, field := range fields {
 		if field.FieldValue == database.FieldTypeOPTION {
 			optionsForFields, err := s.repo.GetFieldOptions(ctx, database.GetFieldOptionsParams{
@@ -99,7 +99,7 @@ func (s leaderboardService) createEntry(ctx context.Context, param createEntryPa
 				}
 				isAnOption := false
 				for _, option := range options {
-					if option.Option == val {
+					if option == val {
 						isAnOption = true
 						break
 					}

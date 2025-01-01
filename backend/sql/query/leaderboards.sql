@@ -30,3 +30,20 @@ GROUP BY l.id,
     l.created_at
 ORDER BY l.created_at DESC
 LIMIT $2;
+-- name: GetLeaderboardFull :many
+SELECT l.*,
+    lf.lid AS field_lid,
+    lf.field_name,
+    lf.field_value,
+    lf.field_order,
+    lf.for_rank AS field_for_rank,
+    lf.hidden AS field_hidden,
+    lf.required AS field_required,
+    lel.id AS link_id,
+    lel.leaderboard_id AS link_lid,
+    lel.display_value AS link_display_value,
+    lel.url AS link_url
+from leaderboards l
+    LEFT JOIN leaderboard_fields lf ON l.id = lf.lid
+    LEFT JOIN leaderboard_external_links lel ON l.id = lel.leaderboard_id
+WHERE l.id = $1;

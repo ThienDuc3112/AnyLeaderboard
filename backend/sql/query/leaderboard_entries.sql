@@ -8,3 +8,12 @@ INSERT INTO leaderboard_entries (
     )
 VALUES ($1, $2, $3, $4, $5)
 RETURNING *;
+-- name: GetEntriesFromLeaderboardId :many
+SELECT *
+FROM leaderboard_entries
+WHERE leaderboard_id = $1 OFFSET $2
+LIMIT $3;
+-- name: GetLeaderboardEntriesCount :one
+SELECT COUNT(*)
+FROM leaderboard_entries
+WHERE leaderboard_id = $1;

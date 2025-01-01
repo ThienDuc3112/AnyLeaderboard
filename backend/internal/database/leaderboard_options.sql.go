@@ -16,7 +16,7 @@ type CreateLeadeboardOptionsParams struct {
 }
 
 const getFieldOptions = `-- name: GetFieldOptions :many
-SELECT lid, field_name, option
+SELECT option
 FROM leaderboard_options
 WHERE lid = $1
     AND field_name = $2
@@ -27,19 +27,19 @@ type GetFieldOptionsParams struct {
 	FieldName string
 }
 
-func (q *Queries) GetFieldOptions(ctx context.Context, arg GetFieldOptionsParams) ([]LeaderboardOption, error) {
+func (q *Queries) GetFieldOptions(ctx context.Context, arg GetFieldOptionsParams) ([]string, error) {
 	rows, err := q.db.Query(ctx, getFieldOptions, arg.Lid, arg.FieldName)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []LeaderboardOption
+	var items []string
 	for rows.Next() {
-		var i LeaderboardOption
-		if err := rows.Scan(&i.Lid, &i.FieldName, &i.Option); err != nil {
+		var option string
+		if err := rows.Scan(&option); err != nil {
 			return nil, err
 		}
-		items = append(items, i)
+		items = append(items, option)
 	}
 	if err := rows.Err(); err != nil {
 		return nil, err

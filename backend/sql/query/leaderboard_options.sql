@@ -6,7 +6,7 @@ INSERT INTO leaderboard_options (
     )
 VALUES ($1, $2, $3);
 -- name: GetFieldOptions :many
-SELECT *
+SELECT option
 FROM leaderboard_options
 WHERE lid = $1
     AND field_name = $2;
