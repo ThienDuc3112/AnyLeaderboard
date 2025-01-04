@@ -515,6 +515,147 @@ func (_c *MockQuerierer_CreateUser_Call) RunAndReturn(run func(context.Context, 
 	return _c
 }
 
+// DeleteEntry provides a mock function with given fields: ctx, id
+func (_m *MockQuerierer) DeleteEntry(ctx context.Context, id int32) error {
+	ret := _m.Called(ctx, id)
+
+	if len(ret) == 0 {
+		panic("no return value specified for DeleteEntry")
+	}
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(context.Context, int32) error); ok {
+		r0 = rf(ctx, id)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
+// MockQuerierer_DeleteEntry_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'DeleteEntry'
+type MockQuerierer_DeleteEntry_Call struct {
+	*mock.Call
+}
+
+// DeleteEntry is a helper method to define mock.On call
+//   - ctx context.Context
+//   - id int32
+func (_e *MockQuerierer_Expecter) DeleteEntry(ctx interface{}, id interface{}) *MockQuerierer_DeleteEntry_Call {
+	return &MockQuerierer_DeleteEntry_Call{Call: _e.mock.On("DeleteEntry", ctx, id)}
+}
+
+func (_c *MockQuerierer_DeleteEntry_Call) Run(run func(ctx context.Context, id int32)) *MockQuerierer_DeleteEntry_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(int32))
+	})
+	return _c
+}
+
+func (_c *MockQuerierer_DeleteEntry_Call) Return(_a0 error) *MockQuerierer_DeleteEntry_Call {
+	_c.Call.Return(_a0)
+	return _c
+}
+
+func (_c *MockQuerierer_DeleteEntry_Call) RunAndReturn(run func(context.Context, int32) error) *MockQuerierer_DeleteEntry_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// DeleteLeaderboard provides a mock function with given fields: ctx, id
+func (_m *MockQuerierer) DeleteLeaderboard(ctx context.Context, id int32) error {
+	ret := _m.Called(ctx, id)
+
+	if len(ret) == 0 {
+		panic("no return value specified for DeleteLeaderboard")
+	}
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(context.Context, int32) error); ok {
+		r0 = rf(ctx, id)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
+// MockQuerierer_DeleteLeaderboard_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'DeleteLeaderboard'
+type MockQuerierer_DeleteLeaderboard_Call struct {
+	*mock.Call
+}
+
+// DeleteLeaderboard is a helper method to define mock.On call
+//   - ctx context.Context
+//   - id int32
+func (_e *MockQuerierer_Expecter) DeleteLeaderboard(ctx interface{}, id interface{}) *MockQuerierer_DeleteLeaderboard_Call {
+	return &MockQuerierer_DeleteLeaderboard_Call{Call: _e.mock.On("DeleteLeaderboard", ctx, id)}
+}
+
+func (_c *MockQuerierer_DeleteLeaderboard_Call) Run(run func(ctx context.Context, id int32)) *MockQuerierer_DeleteLeaderboard_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(int32))
+	})
+	return _c
+}
+
+func (_c *MockQuerierer_DeleteLeaderboard_Call) Return(_a0 error) *MockQuerierer_DeleteLeaderboard_Call {
+	_c.Call.Return(_a0)
+	return _c
+}
+
+func (_c *MockQuerierer_DeleteLeaderboard_Call) RunAndReturn(run func(context.Context, int32) error) *MockQuerierer_DeleteLeaderboard_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// DeleteUser provides a mock function with given fields: ctx, id
+func (_m *MockQuerierer) DeleteUser(ctx context.Context, id int32) error {
+	ret := _m.Called(ctx, id)
+
+	if len(ret) == 0 {
+		panic("no return value specified for DeleteUser")
+	}
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(context.Context, int32) error); ok {
+		r0 = rf(ctx, id)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
+// MockQuerierer_DeleteUser_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'DeleteUser'
+type MockQuerierer_DeleteUser_Call struct {
+	*mock.Call
+}
+
+// DeleteUser is a helper method to define mock.On call
+//   - ctx context.Context
+//   - id int32
+func (_e *MockQuerierer_Expecter) DeleteUser(ctx interface{}, id interface{}) *MockQuerierer_DeleteUser_Call {
+	return &MockQuerierer_DeleteUser_Call{Call: _e.mock.On("DeleteUser", ctx, id)}
+}
+
+func (_c *MockQuerierer_DeleteUser_Call) Run(run func(ctx context.Context, id int32)) *MockQuerierer_DeleteUser_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(int32))
+	})
+	return _c
+}
+
+func (_c *MockQuerierer_DeleteUser_Call) Return(_a0 error) *MockQuerierer_DeleteUser_Call {
+	_c.Call.Return(_a0)
+	return _c
+}
+
+func (_c *MockQuerierer_DeleteUser_Call) RunAndReturn(run func(context.Context, int32) error) *MockQuerierer_DeleteUser_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // DeleteUserByUsername provides a mock function with given fields: ctx, username
 func (_m *MockQuerierer) DeleteUserByUsername(ctx context.Context, username string) error {
 	ret := _m.Called(ctx, username)
@@ -790,6 +931,63 @@ func (_c *MockQuerierer_GetLeaderboardEntriesCount_Call) Return(_a0 int64, _a1 e
 }
 
 func (_c *MockQuerierer_GetLeaderboardEntriesCount_Call) RunAndReturn(run func(context.Context, int32) (int64, error)) *MockQuerierer_GetLeaderboardEntriesCount_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// GetLeaderboardEntryById provides a mock function with given fields: ctx, id
+func (_m *MockQuerierer) GetLeaderboardEntryById(ctx context.Context, id int32) (database.LeaderboardEntry, error) {
+	ret := _m.Called(ctx, id)
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetLeaderboardEntryById")
+	}
+
+	var r0 database.LeaderboardEntry
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context, int32) (database.LeaderboardEntry, error)); ok {
+		return rf(ctx, id)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, int32) database.LeaderboardEntry); ok {
+		r0 = rf(ctx, id)
+	} else {
+		r0 = ret.Get(0).(database.LeaderboardEntry)
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, int32) error); ok {
+		r1 = rf(ctx, id)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// MockQuerierer_GetLeaderboardEntryById_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetLeaderboardEntryById'
+type MockQuerierer_GetLeaderboardEntryById_Call struct {
+	*mock.Call
+}
+
+// GetLeaderboardEntryById is a helper method to define mock.On call
+//   - ctx context.Context
+//   - id int32
+func (_e *MockQuerierer_Expecter) GetLeaderboardEntryById(ctx interface{}, id interface{}) *MockQuerierer_GetLeaderboardEntryById_Call {
+	return &MockQuerierer_GetLeaderboardEntryById_Call{Call: _e.mock.On("GetLeaderboardEntryById", ctx, id)}
+}
+
+func (_c *MockQuerierer_GetLeaderboardEntryById_Call) Run(run func(ctx context.Context, id int32)) *MockQuerierer_GetLeaderboardEntryById_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(int32))
+	})
+	return _c
+}
+
+func (_c *MockQuerierer_GetLeaderboardEntryById_Call) Return(_a0 database.LeaderboardEntry, _a1 error) *MockQuerierer_GetLeaderboardEntryById_Call {
+	_c.Call.Return(_a0, _a1)
+	return _c
+}
+
+func (_c *MockQuerierer_GetLeaderboardEntryById_Call) RunAndReturn(run func(context.Context, int32) (database.LeaderboardEntry, error)) *MockQuerierer_GetLeaderboardEntryById_Call {
 	_c.Call.Return(run)
 	return _c
 }

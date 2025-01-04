@@ -19,6 +19,9 @@ import (
 //   - author
 //   - entries count
 func (s leaderboardService) getLeaderboardsHandler(w http.ResponseWriter, r *http.Request) {
+	var err error
+	defer func() { utils.LogError("getLeaderboardsHandler", err) }()
+
 	cursorStr := r.URL.Query().Get(c.QueryParamCursor)
 	pageSizeStr := r.URL.Query().Get(c.QueryParamPageSize)
 	pageSize := c.DefaultPageSize

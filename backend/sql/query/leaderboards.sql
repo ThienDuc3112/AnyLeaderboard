@@ -47,3 +47,6 @@ from leaderboards l
     LEFT JOIN leaderboard_fields lf ON l.id = lf.lid
     LEFT JOIN leaderboard_external_links lel ON l.id = lel.leaderboard_id
 WHERE l.id = $1;
+-- name: DeleteLeaderboard :exec
+DELETE FROM leaderboards
+WHERE id = $1;

@@ -28,7 +28,7 @@ func Router(db database.Querierer, cache *cache.Cache) http.Handler {
 		s.getLeaderboardHandler,
 	)
 	mux.HandleFunc(
-		fmt.Sprintf("GET /{%s}/entry/{%s}", c.PathValueLeaderboardId, c.PathValueEntryId),
+		fmt.Sprintf("GET /{%s}/entries/{%s}", c.PathValueLeaderboardId, c.PathValueEntryId),
 		s.dummyFunction,
 	)
 
@@ -51,20 +51,20 @@ func Router(db database.Querierer, cache *cache.Cache) http.Handler {
 
 	// CRUD on entry in leaderboard
 	mux.Handle(
-		fmt.Sprintf("POST /{%s}/entry", c.PathValueLeaderboardId),
+		fmt.Sprintf("POST /{%s}/entries", c.PathValueLeaderboardId),
 		middleware.CreateStack(
 			http.HandlerFunc(s.createEntryHandler),
-			m.OptionalAuthAccessToken,
 			m.GetLeaderboard,
+			m.OptionalAuthAccessToken,
 		),
 	)
 	authMux.HandleFunc(
-		fmt.Sprintf("PUT /{%s}/entry/{%s}", c.PathValueLeaderboardId, c.PathValueEntryId),
+		fmt.Sprintf("PUT /{%s}/entries/{%s}", c.PathValueLeaderboardId, c.PathValueEntryId),
 		s.dummyFunction,
 	)
-	authMux.HandleFunc(
-		fmt.Sprintf("DELETE /{%s}/entry/{%s}", c.PathValueLeaderboardId, c.PathValueEntryId),
-		s.dummyFunction,
+	authMux.Handle(
+		fmt.Sprintf("DELETE /{%s}/entries/{%s}", c.PathValueLeaderboardId, c.PathValueEntryId),
+		m.GetLeaderboard(http.HandlerFunc(s.deleteEntryHandler)),
 	)
 
 	return mux

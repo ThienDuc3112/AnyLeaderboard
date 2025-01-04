@@ -53,10 +53,22 @@ func (q *Queries) CreateLeadeboardEntry(ctx context.Context, arg CreateLeadeboar
 	return i, err
 }
 
+const deleteEntry = `-- name: DeleteEntry :exec
+DELETE FROM leaderboard_entries
+WHERE id = $1
+`
+
+func (q *Queries) DeleteEntry(ctx context.Context, id int32) error {
+	_, err := q.db.Exec(ctx, deleteEntry, id)
+	return err
+}
+
 const getEntriesFromLeaderboardId = `-- name: GetEntriesFromLeaderboardId :many
 SELECT id, created_at, updated_at, user_id, username, leaderboard_id, sorted_field, custom_fields
 FROM leaderboard_entries
-WHERE leaderboard_id = $1 OFFSET $2
+WHERE leaderboard_id = $1
+ORDER BY sorted_field DESC,
+    created_at OFFSET $2
 LIMIT $3
 `
 
@@ -106,4 +118,26 @@ func (q *Queries) GetLeaderboardEntriesCount(ctx context.Context, leaderboardID 
 	var count int64
 	err := row.Scan(&count)
 	return count, err
+}
+
+const getLeaderboardEntryById = `-- name: GetLeaderboardEntryById :one
+SELECT id, created_at, updated_at, user_id, username, leaderboard_id, sorted_field, custom_fields
+FROM leaderboard_entries
+WHERE id = $1
+`
+
+func (q *Queries) GetLeaderboardEntryById(ctx context.Context, id int32) (LeaderboardEntry, error) {
+	row := q.db.QueryRow(ctx, getLeaderboardEntryById, id)
+	var i LeaderboardEntry
+	err := row.Scan(
+		&i.ID,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.UserID,
+		&i.Username,
+		&i.LeaderboardID,
+		&i.SortedField,
+		&i.CustomFields,
+	)
+	return i, err
 }

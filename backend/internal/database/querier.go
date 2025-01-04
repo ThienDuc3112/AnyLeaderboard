@@ -16,11 +16,15 @@ type Querier interface {
 	CreateLeaderboardExternalLink(ctx context.Context, arg []CreateLeaderboardExternalLinkParams) (int64, error)
 	CreateNewRefreshToken(ctx context.Context, arg CreateNewRefreshTokenParams) (RefreshToken, error)
 	CreateUser(ctx context.Context, arg CreateUserParams) error
+	DeleteEntry(ctx context.Context, id int32) error
+	DeleteLeaderboard(ctx context.Context, id int32) error
+	DeleteUser(ctx context.Context, id int32) error
 	DeleteUserByUsername(ctx context.Context, username string) error
 	GetEntriesFromLeaderboardId(ctx context.Context, arg GetEntriesFromLeaderboardIdParams) ([]LeaderboardEntry, error)
 	GetFieldOptions(ctx context.Context, arg GetFieldOptionsParams) ([]string, error)
 	GetLeaderboardById(ctx context.Context, id int32) (Leaderboard, error)
 	GetLeaderboardEntriesCount(ctx context.Context, leaderboardID int32) (int64, error)
+	GetLeaderboardEntryById(ctx context.Context, id int32) (LeaderboardEntry, error)
 	GetLeaderboardFieldsByLID(ctx context.Context, lid int32) ([]LeaderboardField, error)
 	GetLeaderboardFull(ctx context.Context, id int32) ([]GetLeaderboardFullRow, error)
 	GetRecentLeaderboards(ctx context.Context, arg GetRecentLeaderboardsParams) ([]GetRecentLeaderboardsRow, error)

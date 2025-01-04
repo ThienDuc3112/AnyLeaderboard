@@ -57,6 +57,16 @@ func (q *Queries) CreateLeaderboard(ctx context.Context, arg CreateLeaderboardPa
 	return i, err
 }
 
+const deleteLeaderboard = `-- name: DeleteLeaderboard :exec
+DELETE FROM leaderboards
+WHERE id = $1
+`
+
+func (q *Queries) DeleteLeaderboard(ctx context.Context, id int32) error {
+	_, err := q.db.Exec(ctx, deleteLeaderboard, id)
+	return err
+}
+
 const getLeaderboardById = `-- name: GetLeaderboardById :one
 SELECT id, name, description, created_at, updated_at, cover_image_url, allow_annonymous, require_verification, creator
 FROM leaderboards

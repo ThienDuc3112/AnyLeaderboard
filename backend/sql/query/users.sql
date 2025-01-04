@@ -32,3 +32,6 @@ WHERE username = $2;
 -- name: DeleteUserByUsername :exec
 DELETE FROM users
 WHERE username = $1;
+-- name: DeleteUser :exec
+DELETE FROM users
+WHERE id = $1;

@@ -66,6 +66,18 @@ type createEntryParam struct {
 	DisplayName string
 }
 
+type deleteEntryParam struct {
+	user        database.User
+	leaderboard database.Leaderboard
+	entryId     int
+}
+
+type getLeaderboardParam struct {
+	id       int
+	pageSize int
+	offset   int
+}
+
 // ============ Service errors ============
 var (
 	errMultipleForRankField     = errors.New("multiple for rank field")
@@ -87,4 +99,7 @@ var (
 	errNoDisplayName           = errors.New("no user or display name found")
 
 	errNoLeaderboard = errors.New("leaderboard don't exist")
+
+	errNoEntry       = errors.New("entry don't exist")
+	errNotAuthorized = errors.New("not authorized to perform such action")
 )

@@ -8,12 +8,6 @@ import (
 	"fmt"
 )
 
-type getLeaderboardParam struct {
-	id       int
-	pageSize int
-	offset   int
-}
-
 func (s leaderboardService) getLeaderboard(ctx context.Context, param getLeaderboardParam) (leaderboardWithEntry, error) {
 	cacheKeyLBFull := fmt.Sprintf("%s-%d", c.CachePrefixLeaderboardFull, param.id)
 	cachedLb, ok := utils.GetCache[leaderboardWithEntry](s.cache, cacheKeyLBFull)

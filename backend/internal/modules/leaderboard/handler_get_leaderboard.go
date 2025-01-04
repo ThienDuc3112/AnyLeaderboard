@@ -8,6 +8,9 @@ import (
 )
 
 func (s leaderboardService) getLeaderboardHandler(w http.ResponseWriter, r *http.Request) {
+	var err error
+	defer func() { utils.LogError("getLeaderboardHandler", err) }()
+
 	lidStr := r.PathValue(c.PathValueLeaderboardId)
 	lid, err := strconv.Atoi(lidStr)
 	if err != nil {

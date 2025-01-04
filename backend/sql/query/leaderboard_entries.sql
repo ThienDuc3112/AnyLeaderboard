@@ -11,10 +11,18 @@ RETURNING *;
 -- name: GetEntriesFromLeaderboardId :many
 SELECT *
 FROM leaderboard_entries
-WHERE leaderboard_id = $1 OFFSET $2
-LIMIT $3
-ORDER BY sorted_field DESC;
+WHERE leaderboard_id = $1
+ORDER BY sorted_field DESC,
+    created_at OFFSET $2
+LIMIT $3;
 -- name: GetLeaderboardEntriesCount :one
 SELECT COUNT(*)
 FROM leaderboard_entries
 WHERE leaderboard_id = $1;
+-- name: GetLeaderboardEntryById :one
+SELECT *
+FROM leaderboard_entries
+WHERE id = $1;
+-- name: DeleteEntry :exec
+DELETE FROM leaderboard_entries
+WHERE id = $1;
