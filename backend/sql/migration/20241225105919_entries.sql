@@ -12,6 +12,7 @@ CREATE TABLE leaderboard_entries (
 );
 CREATE INDEX idx_leaderboard_entries_user_id ON leaderboard_entries(user_id);
 CREATE INDEX idx_leaderboard_entries_leaderboard_id ON leaderboard_entries(leaderboard_id);
+CREATE INDEX idx_leaderboard_entries_sorted_field ON leaderboard_entries(sorted_field DESC);
 -- +goose StatementEnd
 -- +goose Down
 -- +goose StatementBegin

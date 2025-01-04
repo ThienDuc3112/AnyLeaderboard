@@ -65,9 +65,6 @@ func (s leaderboardService) createLeaderboardHandler(w http.ResponseWriter, r *h
 		return
 	}
 
-	// Remove caching if exist
-	s.cache.Delete(fmt.Sprintf("%s-%d", c.CachePrefixNoLeaderboard, leaderboard.ID))
-
 	utils.RespondWithJSON(w, 201, map[string]any{
 		"id": leaderboard.ID,
 	})

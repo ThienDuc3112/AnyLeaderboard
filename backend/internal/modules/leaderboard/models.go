@@ -2,6 +2,7 @@ package leaderboard
 
 import (
 	"anylbapi/internal/database"
+	"encoding/json"
 	"errors"
 	"time"
 )
@@ -31,10 +32,10 @@ type leaderboardWithEntry struct {
 }
 
 type entry struct {
-	Id        int       `json:"id"`
-	CreatedAt time.Time `json:"createdAt"`
-	UpdatedAt time.Time `json:"updatedAt"`
-	Fields    any       `json:"fields"`
+	Id        int             `json:"id"`
+	CreatedAt time.Time       `json:"createdAt"`
+	UpdatedAt time.Time       `json:"updatedAt"`
+	Fields    json.RawMessage `json:"fields"`
 }
 
 type externalLink struct {

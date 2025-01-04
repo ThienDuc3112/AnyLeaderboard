@@ -67,8 +67,9 @@ func (s leaderboardService) createEntry(ctx context.Context, param createEntryPa
 			}
 
 		case database.FieldTypeTIMESTAMP:
-			val, ok := input.(time.Time)
-			if !ok {
+			timeStr, ok := input.(string)
+			val, err := time.Parse(time.RFC3339, timeStr)
+			if !ok || err != nil {
 				if !field.Required {
 					continue
 				}

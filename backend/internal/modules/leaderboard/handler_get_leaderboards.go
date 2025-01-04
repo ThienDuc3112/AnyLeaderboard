@@ -5,7 +5,6 @@ import (
 	"anylbapi/internal/database"
 	"anylbapi/internal/utils"
 	"fmt"
-	"log"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -19,7 +18,7 @@ import (
 // - Add support for sorted by:
 //   - author
 //   - entries count
-func (s leaderboardService) getLeaderboardHandler(w http.ResponseWriter, r *http.Request) {
+func (s leaderboardService) getLeaderboardsHandler(w http.ResponseWriter, r *http.Request) {
 	cursorStr := r.URL.Query().Get(c.QueryParamCursor)
 	pageSizeStr := r.URL.Query().Get(c.QueryParamPageSize)
 	pageSize := c.DefaultPageSize
@@ -68,21 +67,10 @@ func (s leaderboardService) getLeaderboardHandler(w http.ResponseWriter, r *http
 	}
 
 	if len(lbs) > pageSize {
-		// if true {
 		newUrl, _ := url.Parse(r.RequestURI)
 		newQuery := newUrl.Query()
 
-		firstLb := lbs[0]
 		secondLastLb := lbs[len(lbs)-2]
-		log.Printf(
-			"\nQuery cursor: %v\t\tunix: %v\nFirst created: %v\tunix: %v\nTime created: %v\tunix: %v\n",
-			cursor,
-			cursor.UnixMilli(),
-			firstLb.CreatedAt.Time,
-			firstLb.CreatedAt.Time.UnixMilli(),
-			secondLastLb.CreatedAt.Time,
-			secondLastLb.CreatedAt.Time.UnixMilli(),
-		)
 		newQuery.Set(c.QueryParamCursor, fmt.Sprintf("%d", secondLastLb.CreatedAt.Time.UnixMilli()))
 		newUrl.RawQuery = newQuery.Encode()
 		newUrl.Host = r.Host

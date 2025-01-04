@@ -12,7 +12,8 @@ RETURNING *;
 SELECT *
 FROM leaderboard_entries
 WHERE leaderboard_id = $1 OFFSET $2
-LIMIT $3;
+LIMIT $3
+ORDER BY sorted_field DESC;
 -- name: GetLeaderboardEntriesCount :one
 SELECT COUNT(*)
 FROM leaderboard_entries

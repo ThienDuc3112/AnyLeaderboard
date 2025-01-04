@@ -1,8 +1,10 @@
 package leaderboard
 
 import (
+	c "anylbapi/internal/constants"
 	"anylbapi/internal/database"
 	"context"
+	"fmt"
 
 	"github.com/jackc/pgx/v5/pgtype"
 )
@@ -141,5 +143,7 @@ func (s leaderboardService) createLeaderboard(ctx context.Context, param createL
 		return database.Leaderboard{}, err
 	}
 
+	// Remove caching if exist
+	s.cache.Delete(fmt.Sprintf("%s-%d", c.CachePrefixNoLeaderboard, lb.ID))
 	return lb, err
 }

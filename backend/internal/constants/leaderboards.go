@@ -8,5 +8,5 @@ const (
 const (
 	DefaultPageSize = 30
 	MaxPageSize     = 100
-	MinPageSize     = 5
+	MinPageSize     = 1
 )

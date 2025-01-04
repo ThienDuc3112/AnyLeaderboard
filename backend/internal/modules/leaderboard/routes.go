@@ -21,11 +21,11 @@ func Router(db database.Querierer, cache *cache.Cache) http.Handler {
 	// Unauth routes
 	mux.HandleFunc(
 		"GET /",
-		s.getLeaderboardHandler,
+		s.getLeaderboardsHandler,
 	)
 	mux.HandleFunc(
 		fmt.Sprintf("GET /{%s}", c.PathValueLeaderboardId),
-		s.dummyFunction,
+		s.getLeaderboardHandler,
 	)
 	mux.HandleFunc(
 		fmt.Sprintf("GET /{%s}/entry/{%s}", c.PathValueLeaderboardId, c.PathValueEntryId),
