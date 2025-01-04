@@ -5,9 +5,10 @@ INSERT INTO leaderboards(
         cover_image_url,
         allow_annonymous,
         require_verification,
+        unique_submission,
         creator
     )
-VALUES ($1, $2, $3, $4, $5, $6)
+VALUES ($1, $2, $3, $4, $5, $6, $7)
 RETURNING *;
 -- name: GetLeaderboardById :one
 SELECT *

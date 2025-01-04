@@ -67,6 +67,28 @@ func Router(db database.Querierer, cache *cache.Cache) http.Handler {
 		m.GetLeaderboard(http.HandlerFunc(s.deleteEntryHandler)),
 	)
 
+	// View for verifier
+	authMux.HandleFunc(
+		fmt.Sprintf("GET /{%s}/verifyEntries", c.PathValueLeaderboardId),
+		s.dummyFunction,
+	)
+	authMux.HandleFunc(
+		fmt.Sprintf("GET /{%s}/verifyEntries/verified", c.PathValueLeaderboardId),
+		s.dummyFunction,
+	)
+	authMux.HandleFunc(
+		fmt.Sprintf("GET /{%s}/verifyEntries/disqualified", c.PathValueLeaderboardId),
+		s.dummyFunction,
+	)
+	authMux.HandleFunc(
+		fmt.Sprintf("GET /{%s}/verifyEntries/pending", c.PathValueLeaderboardId),
+		s.dummyFunction,
+	)
+	authMux.HandleFunc(
+		fmt.Sprintf("POST /{%s}/verifyEntries/{%s}", c.PathValueLeaderboardId, c.PathValueEntryId),
+		s.dummyFunction,
+	)
+
 	return mux
 }
 

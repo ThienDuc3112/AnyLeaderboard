@@ -8,7 +8,11 @@ CREATE TABLE leaderboard_entries (
     username VARCHAR(64) NOT NULL,
     leaderboard_id INTEGER NOT NULL REFERENCES leaderboards(id) ON DELETE CASCADE,
     sorted_field FLOAT8 NOT NULL DEFAULT 0,
-    custom_fields JSONB NOT NULL
+    custom_fields JSONB NOT NULL,
+    verified_by INTEGER REFERENCES users(id) ON DELETE
+    SET NULL,
+        disqualified_by INTEGER REFERENCES users(id) ON DELETE
+    SET NULL
 );
 CREATE INDEX idx_leaderboard_entries_user_id ON leaderboard_entries(user_id);
 CREATE INDEX idx_leaderboard_entries_leaderboard_id ON leaderboard_entries(leaderboard_id);

@@ -18,10 +18,11 @@ INSERT INTO leaderboards(
         cover_image_url,
         allow_annonymous,
         require_verification,
+        unique_submission,
         creator
     )
-VALUES ($1, $2, $3, $4, $5, $6)
-RETURNING id, name, description, created_at, updated_at, cover_image_url, allow_annonymous, require_verification, creator
+VALUES ($1, $2, $3, $4, $5, $6, $7)
+RETURNING id, name, description, created_at, updated_at, cover_image_url, allow_annonymous, require_verification, unique_submission, creator
 `
 
 type CreateLeaderboardParams struct {
@@ -30,6 +31,7 @@ type CreateLeaderboardParams struct {
 	CoverImageUrl       pgtype.Text
 	AllowAnnonymous     bool
 	RequireVerification bool
+	UniqueSubmission    bool
 	Creator             int32
 }
 
@@ -40,6 +42,7 @@ func (q *Queries) CreateLeaderboard(ctx context.Context, arg CreateLeaderboardPa
 		arg.CoverImageUrl,
 		arg.AllowAnnonymous,
 		arg.RequireVerification,
+		arg.UniqueSubmission,
 		arg.Creator,
 	)
 	var i Leaderboard
@@ -52,6 +55,7 @@ func (q *Queries) CreateLeaderboard(ctx context.Context, arg CreateLeaderboardPa
 		&i.CoverImageUrl,
 		&i.AllowAnnonymous,
 		&i.RequireVerification,
+		&i.UniqueSubmission,
 		&i.Creator,
 	)
 	return i, err
@@ -68,7 +72,7 @@ func (q *Queries) DeleteLeaderboard(ctx context.Context, id int32) error {
 }
 
 const getLeaderboardById = `-- name: GetLeaderboardById :one
-SELECT id, name, description, created_at, updated_at, cover_image_url, allow_annonymous, require_verification, creator
+SELECT id, name, description, created_at, updated_at, cover_image_url, allow_annonymous, require_verification, unique_submission, creator
 FROM leaderboards
 WHERE id = $1
 `
@@ -85,13 +89,14 @@ func (q *Queries) GetLeaderboardById(ctx context.Context, id int32) (Leaderboard
 		&i.CoverImageUrl,
 		&i.AllowAnnonymous,
 		&i.RequireVerification,
+		&i.UniqueSubmission,
 		&i.Creator,
 	)
 	return i, err
 }
 
 const getLeaderboardFull = `-- name: GetLeaderboardFull :many
-SELECT l.id, l.name, l.description, l.created_at, l.updated_at, l.cover_image_url, l.allow_annonymous, l.require_verification, l.creator,
+SELECT l.id, l.name, l.description, l.created_at, l.updated_at, l.cover_image_url, l.allow_annonymous, l.require_verification, l.unique_submission, l.creator,
     lf.lid AS field_lid,
     lf.field_name,
     lf.field_value,
@@ -118,6 +123,7 @@ type GetLeaderboardFullRow struct {
 	CoverImageUrl       pgtype.Text
 	AllowAnnonymous     bool
 	RequireVerification bool
+	UniqueSubmission    bool
 	Creator             int32
 	FieldLid            pgtype.Int4
 	FieldName           pgtype.Text
@@ -150,6 +156,7 @@ func (q *Queries) GetLeaderboardFull(ctx context.Context, id int32) ([]GetLeader
 			&i.CoverImageUrl,
 			&i.AllowAnnonymous,
 			&i.RequireVerification,
+			&i.UniqueSubmission,
 			&i.Creator,
 			&i.FieldLid,
 			&i.FieldName,

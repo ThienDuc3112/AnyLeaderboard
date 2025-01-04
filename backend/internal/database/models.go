@@ -65,18 +65,21 @@ type Leaderboard struct {
 	CoverImageUrl       pgtype.Text
 	AllowAnnonymous     bool
 	RequireVerification bool
+	UniqueSubmission    bool
 	Creator             int32
 }
 
 type LeaderboardEntry struct {
-	ID            int32
-	CreatedAt     pgtype.Timestamptz
-	UpdatedAt     pgtype.Timestamptz
-	UserID        pgtype.Int4
-	Username      string
-	LeaderboardID int32
-	SortedField   float64
-	CustomFields  []byte
+	ID             int32
+	CreatedAt      pgtype.Timestamptz
+	UpdatedAt      pgtype.Timestamptz
+	UserID         pgtype.Int4
+	Username       string
+	LeaderboardID  int32
+	SortedField    float64
+	CustomFields   []byte
+	VerifiedBy     pgtype.Int4
+	DisqualifiedBy pgtype.Int4
 }
 
 type LeaderboardExternalLink struct {

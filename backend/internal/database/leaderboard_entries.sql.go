@@ -20,7 +20,7 @@ INSERT INTO leaderboard_entries (
         custom_fields
     )
 VALUES ($1, $2, $3, $4, $5)
-RETURNING id, created_at, updated_at, user_id, username, leaderboard_id, sorted_field, custom_fields
+RETURNING id, created_at, updated_at, user_id, username, leaderboard_id, sorted_field, custom_fields, verified_by, disqualified_by
 `
 
 type CreateLeadeboardEntryParams struct {
@@ -49,6 +49,8 @@ func (q *Queries) CreateLeadeboardEntry(ctx context.Context, arg CreateLeadeboar
 		&i.LeaderboardID,
 		&i.SortedField,
 		&i.CustomFields,
+		&i.VerifiedBy,
+		&i.DisqualifiedBy,
 	)
 	return i, err
 }
@@ -64,7 +66,7 @@ func (q *Queries) DeleteEntry(ctx context.Context, id int32) error {
 }
 
 const getEntriesFromLeaderboardId = `-- name: GetEntriesFromLeaderboardId :many
-SELECT id, created_at, updated_at, user_id, username, leaderboard_id, sorted_field, custom_fields
+SELECT id, created_at, updated_at, user_id, username, leaderboard_id, sorted_field, custom_fields, verified_by, disqualified_by
 FROM leaderboard_entries
 WHERE leaderboard_id = $1
 ORDER BY sorted_field DESC,
@@ -96,6 +98,8 @@ func (q *Queries) GetEntriesFromLeaderboardId(ctx context.Context, arg GetEntrie
 			&i.LeaderboardID,
 			&i.SortedField,
 			&i.CustomFields,
+			&i.VerifiedBy,
+			&i.DisqualifiedBy,
 		); err != nil {
 			return nil, err
 		}
@@ -121,7 +125,7 @@ func (q *Queries) GetLeaderboardEntriesCount(ctx context.Context, leaderboardID 
 }
 
 const getLeaderboardEntryById = `-- name: GetLeaderboardEntryById :one
-SELECT id, created_at, updated_at, user_id, username, leaderboard_id, sorted_field, custom_fields
+SELECT id, created_at, updated_at, user_id, username, leaderboard_id, sorted_field, custom_fields, verified_by, disqualified_by
 FROM leaderboard_entries
 WHERE id = $1
 `
@@ -138,6 +142,8 @@ func (q *Queries) GetLeaderboardEntryById(ctx context.Context, id int32) (Leader
 		&i.LeaderboardID,
 		&i.SortedField,
 		&i.CustomFields,
+		&i.VerifiedBy,
+		&i.DisqualifiedBy,
 	)
 	return i, err
 }

@@ -9,6 +9,7 @@ CREATE TABLE leaderboards (
     cover_image_url VARCHAR(256),
     allow_annonymous BOOLEAN NOT NULL,
     require_verification BOOLEAN NOT NULL,
+    unique_submission BOOLEAN NOT NULL,
     creator INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE
 );
 CREATE INDEX idx_leaderboards_created_at ON leaderboards(created_at DESC);

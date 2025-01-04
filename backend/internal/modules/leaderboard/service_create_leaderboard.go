@@ -23,6 +23,7 @@ func (s leaderboardService) createLeaderboard(ctx context.Context, param createL
 		Description:         param.Description,
 		AllowAnnonymous:     param.AllowAnonymous,
 		RequireVerification: param.RequiredVerification,
+		UniqueSubmission:    param.UniqueSubmission,
 	}
 	if param.CoverImageURL != "" {
 		lbParam.CoverImageUrl = pgtype.Text{
