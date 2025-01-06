@@ -1,9 +1,11 @@
 package leaderboard
 
 import (
+	c "anylbapi/internal/constants"
 	"anylbapi/internal/database"
 	"context"
 	"encoding/json"
+	"fmt"
 	"time"
 
 	"github.com/jackc/pgx/v5/pgtype"
@@ -28,14 +30,29 @@ func (s leaderboardService) createEntry(ctx context.Context, param createEntryPa
 	options := map[string][]string{}
 	for _, field := range fields {
 		if field.FieldValue == database.FieldTypeOPTION {
-			optionsForFields, err := s.repo.GetFieldOptions(ctx, database.GetFieldOptionsParams{
-				Lid:       param.Leaderboard.ID,
-				FieldName: field.FieldName,
-			})
-
-			if err != nil {
-				return database.LeaderboardEntry{}, "", err
+			cacheOptionKey := fmt.Sprintf("%s-%s", c.CachePrefixOptions, field.FieldName)
+			cached := false
+			var optionsForFields []string
+			if cachedOptions, exist := s.cache.Get(cacheOptionKey); exist {
+				if options, ok := cachedOptions.([]string); ok {
+					optionsForFields = options
+					cached = true
+				} else {
+					s.cache.Delete(cacheOptionKey)
+				}
 			}
+			if !cached {
+				optionsForFields, err = s.repo.GetFieldOptions(ctx, database.GetFieldOptionsParams{
+					Lid:       param.Leaderboard.ID,
+					FieldName: field.FieldName,
+				})
+
+				if err != nil {
+					return database.LeaderboardEntry{}, "", err
+				}
+				s.cache.SetDefault(cacheOptionKey, options)
+			}
+
 			options[field.FieldName] = optionsForFields
 		}
 	}

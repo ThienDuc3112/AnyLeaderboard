@@ -25,7 +25,7 @@ type entry struct {
 	UpdatedAt  time.Time       `json:"updatedAt"`
 	Fields     json.RawMessage `json:"fields"`
 	Verified   bool            `json:"verified"`
-	VerifiedAt time.Time       `json:"verifiedAt,omitempty"`
+	VerifiedAt *time.Time      `json:"verifiedAt,omitempty"`
 	VerifiedBy string          `json:"verifiedBy,omitempty"`
 }
 
