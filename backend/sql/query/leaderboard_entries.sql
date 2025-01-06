@@ -15,10 +15,23 @@ WHERE leaderboard_id = $1
 ORDER BY sorted_field DESC,
     created_at OFFSET $2
 LIMIT $3;
+-- name: GetVerifiedEntriesFromLeaderboardId :many
+SELECT *
+FROM leaderboard_entries
+WHERE leaderboard_id = $1
+    AND verified_at IS NOT NULL
+ORDER BY sorted_field DESC,
+    created_at OFFSET $2
+LIMIT $3;
 -- name: GetLeaderboardEntriesCount :one
 SELECT COUNT(*)
 FROM leaderboard_entries
 WHERE leaderboard_id = $1;
+-- name: GetLeaderboardVerifiedEntriesCount :one
+SELECT COUNT(*)
+FROM leaderboard_entries
+WHERE leaderboard_id = $1
+    AND verified_at IS NOT NULL;
 -- name: GetLeaderboardEntryById :one
 SELECT *
 FROM leaderboard_entries

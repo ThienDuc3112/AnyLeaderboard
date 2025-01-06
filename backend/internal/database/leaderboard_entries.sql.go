@@ -20,7 +20,7 @@ INSERT INTO leaderboard_entries (
         custom_fields
     )
 VALUES ($1, $2, $3, $4, $5)
-RETURNING id, created_at, updated_at, user_id, username, leaderboard_id, sorted_field, custom_fields, verified_by, disqualified_by
+RETURNING id, created_at, updated_at, user_id, username, leaderboard_id, sorted_field, custom_fields, verified, verified_at, verified_by
 `
 
 type CreateLeadeboardEntryParams struct {
@@ -49,8 +49,9 @@ func (q *Queries) CreateLeadeboardEntry(ctx context.Context, arg CreateLeadeboar
 		&i.LeaderboardID,
 		&i.SortedField,
 		&i.CustomFields,
+		&i.Verified,
+		&i.VerifiedAt,
 		&i.VerifiedBy,
-		&i.DisqualifiedBy,
 	)
 	return i, err
 }
@@ -66,7 +67,7 @@ func (q *Queries) DeleteEntry(ctx context.Context, id int32) error {
 }
 
 const getEntriesFromLeaderboardId = `-- name: GetEntriesFromLeaderboardId :many
-SELECT id, created_at, updated_at, user_id, username, leaderboard_id, sorted_field, custom_fields, verified_by, disqualified_by
+SELECT id, created_at, updated_at, user_id, username, leaderboard_id, sorted_field, custom_fields, verified, verified_at, verified_by
 FROM leaderboard_entries
 WHERE leaderboard_id = $1
 ORDER BY sorted_field DESC,
@@ -98,8 +99,9 @@ func (q *Queries) GetEntriesFromLeaderboardId(ctx context.Context, arg GetEntrie
 			&i.LeaderboardID,
 			&i.SortedField,
 			&i.CustomFields,
+			&i.Verified,
+			&i.VerifiedAt,
 			&i.VerifiedBy,
-			&i.DisqualifiedBy,
 		); err != nil {
 			return nil, err
 		}
@@ -125,7 +127,7 @@ func (q *Queries) GetLeaderboardEntriesCount(ctx context.Context, leaderboardID 
 }
 
 const getLeaderboardEntryById = `-- name: GetLeaderboardEntryById :one
-SELECT id, created_at, updated_at, user_id, username, leaderboard_id, sorted_field, custom_fields, verified_by, disqualified_by
+SELECT id, created_at, updated_at, user_id, username, leaderboard_id, sorted_field, custom_fields, verified, verified_at, verified_by
 FROM leaderboard_entries
 WHERE id = $1
 `
@@ -142,8 +144,71 @@ func (q *Queries) GetLeaderboardEntryById(ctx context.Context, id int32) (Leader
 		&i.LeaderboardID,
 		&i.SortedField,
 		&i.CustomFields,
+		&i.Verified,
+		&i.VerifiedAt,
 		&i.VerifiedBy,
-		&i.DisqualifiedBy,
 	)
 	return i, err
+}
+
+const getLeaderboardVerifiedEntriesCount = `-- name: GetLeaderboardVerifiedEntriesCount :one
+SELECT COUNT(*)
+FROM leaderboard_entries
+WHERE leaderboard_id = $1
+    AND verified_at IS NOT NULL
+`
+
+func (q *Queries) GetLeaderboardVerifiedEntriesCount(ctx context.Context, leaderboardID int32) (int64, error) {
+	row := q.db.QueryRow(ctx, getLeaderboardVerifiedEntriesCount, leaderboardID)
+	var count int64
+	err := row.Scan(&count)
+	return count, err
+}
+
+const getVerifiedEntriesFromLeaderboardId = `-- name: GetVerifiedEntriesFromLeaderboardId :many
+SELECT id, created_at, updated_at, user_id, username, leaderboard_id, sorted_field, custom_fields, verified, verified_at, verified_by
+FROM leaderboard_entries
+WHERE leaderboard_id = $1
+    AND verified_at IS NOT NULL
+ORDER BY sorted_field DESC,
+    created_at OFFSET $2
+LIMIT $3
+`
+
+type GetVerifiedEntriesFromLeaderboardIdParams struct {
+	LeaderboardID int32
+	Offset        int32
+	Limit         int32
+}
+
+func (q *Queries) GetVerifiedEntriesFromLeaderboardId(ctx context.Context, arg GetVerifiedEntriesFromLeaderboardIdParams) ([]LeaderboardEntry, error) {
+	rows, err := q.db.Query(ctx, getVerifiedEntriesFromLeaderboardId, arg.LeaderboardID, arg.Offset, arg.Limit)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []LeaderboardEntry
+	for rows.Next() {
+		var i LeaderboardEntry
+		if err := rows.Scan(
+			&i.ID,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+			&i.UserID,
+			&i.Username,
+			&i.LeaderboardID,
+			&i.SortedField,
+			&i.CustomFields,
+			&i.Verified,
+			&i.VerifiedAt,
+			&i.VerifiedBy,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }

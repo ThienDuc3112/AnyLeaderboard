@@ -19,24 +19,14 @@ type createLeaderboardReqBody struct {
 	Fields               []field        `json:"fields" validate:"required,min=1,max=10,unique=Name,unique=FieldOrder,dive"`
 }
 
-type leaderboardWithEntry struct {
-	ID                   int            `json:"id"`
-	Name                 string         `json:"name"`
-	Description          string         `json:"description"`
-	CoverImageUrl        string         `json:"coverImageUrl,omitempty"`
-	EntriesCount         int            `json:"entriesCount"`
-	AllowAnonymous       bool           `json:"allowAnonymous"`
-	RequiredVerification bool           `json:"requiredVerification"`
-	ExternalLink         []externalLink `json:"externalLinks"`
-	Fields               []field        `json:"fields"`
-	Data                 []entry        `json:"data"`
-}
-
 type entry struct {
-	Id        int             `json:"id"`
-	CreatedAt time.Time       `json:"createdAt"`
-	UpdatedAt time.Time       `json:"updatedAt"`
-	Fields    json.RawMessage `json:"fields"`
+	Id         int             `json:"id"`
+	CreatedAt  time.Time       `json:"createdAt"`
+	UpdatedAt  time.Time       `json:"updatedAt"`
+	Fields     json.RawMessage `json:"fields"`
+	Verified   bool            `json:"verified"`
+	VerifiedAt time.Time       `json:"verifiedAt,omitempty"`
+	VerifiedBy string          `json:"verifiedBy,omitempty"`
 }
 
 type externalLink struct {
@@ -77,6 +67,20 @@ type getLeaderboardParam struct {
 	id       int
 	pageSize int
 	offset   int
+}
+
+type leaderboardWithEntry struct {
+	ID                   int            `json:"id"`
+	Name                 string         `json:"name"`
+	Description          string         `json:"description"`
+	CoverImageUrl        string         `json:"coverImageUrl,omitempty"`
+	EntriesCount         int            `json:"entriesCount"`
+	AllowAnonymous       bool           `json:"allowAnonymous"`
+	RequiredVerification bool           `json:"requiredVerification"`
+	UniqueSubmission     bool           `json:"uniqueSubmission"`
+	ExternalLink         []externalLink `json:"externalLinks"`
+	Fields               []field        `json:"fields"`
+	Data                 []entry        `json:"data"`
 }
 
 // ============ Service errors ============

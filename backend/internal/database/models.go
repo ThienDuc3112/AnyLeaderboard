@@ -70,16 +70,17 @@ type Leaderboard struct {
 }
 
 type LeaderboardEntry struct {
-	ID             int32
-	CreatedAt      pgtype.Timestamptz
-	UpdatedAt      pgtype.Timestamptz
-	UserID         pgtype.Int4
-	Username       string
-	LeaderboardID  int32
-	SortedField    float64
-	CustomFields   []byte
-	VerifiedBy     pgtype.Int4
-	DisqualifiedBy pgtype.Int4
+	ID            int32
+	CreatedAt     pgtype.Timestamptz
+	UpdatedAt     pgtype.Timestamptz
+	UserID        pgtype.Int4
+	Username      string
+	LeaderboardID int32
+	SortedField   float64
+	CustomFields  []byte
+	Verified      bool
+	VerifiedAt    pgtype.Timestamp
+	VerifiedBy    pgtype.Int4
 }
 
 type LeaderboardExternalLink struct {
@@ -108,6 +109,11 @@ type LeaderboardOption struct {
 	Lid       int32
 	FieldName string
 	Option    string
+}
+
+type LeaderboardVerifier struct {
+	LeaderboardID int32
+	UserID        int32
 }
 
 type RefreshToken struct {

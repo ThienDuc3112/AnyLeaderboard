@@ -27,11 +27,13 @@ type Querier interface {
 	GetLeaderboardEntryById(ctx context.Context, id int32) (LeaderboardEntry, error)
 	GetLeaderboardFieldsByLID(ctx context.Context, lid int32) ([]LeaderboardField, error)
 	GetLeaderboardFull(ctx context.Context, id int32) ([]GetLeaderboardFullRow, error)
+	GetLeaderboardVerifiedEntriesCount(ctx context.Context, leaderboardID int32) (int64, error)
 	GetRecentLeaderboards(ctx context.Context, arg GetRecentLeaderboardsParams) ([]GetRecentLeaderboardsRow, error)
 	GetRefreshToken(ctx context.Context, id int32) (RefreshToken, error)
 	GetUserByEmail(ctx context.Context, email string) (User, error)
 	GetUserByID(ctx context.Context, id int32) (User, error)
 	GetUserByUsername(ctx context.Context, username string) (User, error)
+	GetVerifiedEntriesFromLeaderboardId(ctx context.Context, arg GetVerifiedEntriesFromLeaderboardIdParams) ([]LeaderboardEntry, error)
 	RevokedAllRefreshToken(ctx context.Context, userID int32) error
 	RevokedRefreshToken(ctx context.Context, id int32) error
 	UpdateRefreshToken(ctx context.Context, arg UpdateRefreshTokenParams) (RefreshToken, error)
