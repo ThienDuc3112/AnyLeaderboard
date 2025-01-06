@@ -122,6 +122,6 @@ var (
 	errNoEntry       = errors.New("entry don't exist")
 	errNotAuthorized = errors.New("not authorized to perform such action")
 
-	errNonExistUser    = errors.New("user don't exist")
+	errNoUser          = errors.New("user don't exist")
 	errAlreadyVerifier = errors.New("user already a verifier")
 )

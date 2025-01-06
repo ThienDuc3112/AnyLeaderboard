@@ -1806,6 +1806,53 @@ func (_c *MockQuerierer_Rollback_Call) RunAndReturn(run func(context.Context) er
 	return _c
 }
 
+// UpdateEntry provides a mock function with given fields: ctx, arg
+func (_m *MockQuerierer) UpdateEntry(ctx context.Context, arg database.UpdateEntryParams) error {
+	ret := _m.Called(ctx, arg)
+
+	if len(ret) == 0 {
+		panic("no return value specified for UpdateEntry")
+	}
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(context.Context, database.UpdateEntryParams) error); ok {
+		r0 = rf(ctx, arg)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
+// MockQuerierer_UpdateEntry_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'UpdateEntry'
+type MockQuerierer_UpdateEntry_Call struct {
+	*mock.Call
+}
+
+// UpdateEntry is a helper method to define mock.On call
+//   - ctx context.Context
+//   - arg database.UpdateEntryParams
+func (_e *MockQuerierer_Expecter) UpdateEntry(ctx interface{}, arg interface{}) *MockQuerierer_UpdateEntry_Call {
+	return &MockQuerierer_UpdateEntry_Call{Call: _e.mock.On("UpdateEntry", ctx, arg)}
+}
+
+func (_c *MockQuerierer_UpdateEntry_Call) Run(run func(ctx context.Context, arg database.UpdateEntryParams)) *MockQuerierer_UpdateEntry_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(database.UpdateEntryParams))
+	})
+	return _c
+}
+
+func (_c *MockQuerierer_UpdateEntry_Call) Return(_a0 error) *MockQuerierer_UpdateEntry_Call {
+	_c.Call.Return(_a0)
+	return _c
+}
+
+func (_c *MockQuerierer_UpdateEntry_Call) RunAndReturn(run func(context.Context, database.UpdateEntryParams) error) *MockQuerierer_UpdateEntry_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // UpdateRefreshToken provides a mock function with given fields: ctx, arg
 func (_m *MockQuerierer) UpdateRefreshToken(ctx context.Context, arg database.UpdateRefreshTokenParams) (database.RefreshToken, error) {
 	ret := _m.Called(ctx, arg)

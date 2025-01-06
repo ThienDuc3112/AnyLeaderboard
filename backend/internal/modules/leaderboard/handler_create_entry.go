@@ -81,6 +81,8 @@ func (s leaderboardService) createEntryHandler(w http.ResponseWriter, r *http.Re
 		case errUnrecognizedField:
 			utils.RespondWithError(w, 500, fmt.Sprintf("Leaderboard have unknown field, contact leaderboard owner to resolve '%s' field", fieldName))
 			err = fmt.Errorf("field '%s' with unknown/unimplemented field type: %v", fieldName, err)
+		case errNoForRankField:
+			utils.RespondWithError(w, 500, "Leaderboard have no 'ranked' field, contact leaderboard owner to resolve this")
 		default:
 			utils.RespondWithError(w, 500, "Internal server error")
 		}

@@ -58,10 +58,6 @@ func Router(db database.Querierer, cache *cache.Cache) http.Handler {
 			m.OptionalAuthAccessToken,
 		),
 	)
-	authMux.HandleFunc(
-		fmt.Sprintf("PUT /{%s}/entries/{%s}", c.PathValueLeaderboardId, c.PathValueEntryId),
-		s.dummyFunction,
-	)
 	authMux.Handle(
 		fmt.Sprintf("DELETE /{%s}/entries/{%s}", c.PathValueLeaderboardId, c.PathValueEntryId),
 		m.GetLeaderboard(http.HandlerFunc(s.deleteEntryHandler)),

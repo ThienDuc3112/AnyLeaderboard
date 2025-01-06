@@ -35,7 +35,7 @@ func (s leaderboardService) getLeaderboardHandler(w http.ResponseWriter, r *http
 		}
 	}
 
-	res, err := s.getLeaderboard(r.Context(), getLeaderboardParam{
+	res, err := s.getLeaderboardWithEntry(r.Context(), getLeaderboardParam{
 		id:       lid,
 		pageSize: pageSize,
 		offset:   offset,

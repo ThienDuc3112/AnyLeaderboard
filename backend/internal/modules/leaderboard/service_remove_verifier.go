@@ -10,7 +10,7 @@ import (
 func (s leaderboardService) removeVerifier(ctx context.Context, param addVerifierParam) error {
 	user, err := s.repo.GetUserByUsername(ctx, param.username)
 	if err == pgx.ErrNoRows {
-		return errNonExistUser
+		return errNoUser
 	} else if err != nil {
 		return err
 	}

@@ -39,6 +39,7 @@ type Querier interface {
 	RemoveVerifier(ctx context.Context, arg RemoveVerifierParams) error
 	RevokedAllRefreshToken(ctx context.Context, userID int32) error
 	RevokedRefreshToken(ctx context.Context, id int32) error
+	UpdateEntry(ctx context.Context, arg UpdateEntryParams) error
 	UpdateRefreshToken(ctx context.Context, arg UpdateRefreshTokenParams) (RefreshToken, error)
 	UpdateUserDescription(ctx context.Context, arg UpdateUserDescriptionParams) error
 	UpdateUserPassword(ctx context.Context, arg UpdateUserPasswordParams) error
