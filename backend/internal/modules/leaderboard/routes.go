@@ -107,9 +107,13 @@ func Router(db database.Querierer, cache *cache.Cache) http.Handler {
 			m.IsLeaderboardCreator,
 		),
 	)
-	authMux.HandleFunc(
+	authMux.Handle(
 		fmt.Sprintf("DELETE /{%s}/verifiers", c.PathValueLeaderboardId),
-		s.dummyFunction,
+		middleware.CreateStack(
+			http.HandlerFunc(s.removeVerifierHandler),
+			m.GetLeaderboard,
+			m.IsLeaderboardCreator,
+		),
 	)
 
 	return mux
