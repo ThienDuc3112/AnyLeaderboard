@@ -22,6 +22,53 @@ func (_m *MockQuerierer) EXPECT() *MockQuerierer_Expecter {
 	return &MockQuerierer_Expecter{mock: &_m.Mock}
 }
 
+// AddVerifier provides a mock function with given fields: ctx, arg
+func (_m *MockQuerierer) AddVerifier(ctx context.Context, arg database.AddVerifierParams) error {
+	ret := _m.Called(ctx, arg)
+
+	if len(ret) == 0 {
+		panic("no return value specified for AddVerifier")
+	}
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(context.Context, database.AddVerifierParams) error); ok {
+		r0 = rf(ctx, arg)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
+// MockQuerierer_AddVerifier_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'AddVerifier'
+type MockQuerierer_AddVerifier_Call struct {
+	*mock.Call
+}
+
+// AddVerifier is a helper method to define mock.On call
+//   - ctx context.Context
+//   - arg database.AddVerifierParams
+func (_e *MockQuerierer_Expecter) AddVerifier(ctx interface{}, arg interface{}) *MockQuerierer_AddVerifier_Call {
+	return &MockQuerierer_AddVerifier_Call{Call: _e.mock.On("AddVerifier", ctx, arg)}
+}
+
+func (_c *MockQuerierer_AddVerifier_Call) Run(run func(ctx context.Context, arg database.AddVerifierParams)) *MockQuerierer_AddVerifier_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(database.AddVerifierParams))
+	})
+	return _c
+}
+
+func (_c *MockQuerierer_AddVerifier_Call) Return(_a0 error) *MockQuerierer_AddVerifier_Call {
+	_c.Call.Return(_a0)
+	return _c
+}
+
+func (_c *MockQuerierer_AddVerifier_Call) RunAndReturn(run func(context.Context, database.AddVerifierParams) error) *MockQuerierer_AddVerifier_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // BeginTx provides a mock function with given fields: ctx
 func (_m *MockQuerierer) BeginTx(ctx context.Context) (database.Querierer, error) {
 	ret := _m.Called(ctx)
@@ -1509,6 +1556,112 @@ func (_c *MockQuerierer_GetVerifiedEntriesFromLeaderboardId_Call) Return(_a0 []d
 }
 
 func (_c *MockQuerierer_GetVerifiedEntriesFromLeaderboardId_Call) RunAndReturn(run func(context.Context, database.GetVerifiedEntriesFromLeaderboardIdParams) ([]database.LeaderboardEntry, error)) *MockQuerierer_GetVerifiedEntriesFromLeaderboardId_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// GetVerifiers provides a mock function with given fields: ctx, leaderboardID
+func (_m *MockQuerierer) GetVerifiers(ctx context.Context, leaderboardID int32) ([]database.User, error) {
+	ret := _m.Called(ctx, leaderboardID)
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetVerifiers")
+	}
+
+	var r0 []database.User
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context, int32) ([]database.User, error)); ok {
+		return rf(ctx, leaderboardID)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, int32) []database.User); ok {
+		r0 = rf(ctx, leaderboardID)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]database.User)
+		}
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, int32) error); ok {
+		r1 = rf(ctx, leaderboardID)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// MockQuerierer_GetVerifiers_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetVerifiers'
+type MockQuerierer_GetVerifiers_Call struct {
+	*mock.Call
+}
+
+// GetVerifiers is a helper method to define mock.On call
+//   - ctx context.Context
+//   - leaderboardID int32
+func (_e *MockQuerierer_Expecter) GetVerifiers(ctx interface{}, leaderboardID interface{}) *MockQuerierer_GetVerifiers_Call {
+	return &MockQuerierer_GetVerifiers_Call{Call: _e.mock.On("GetVerifiers", ctx, leaderboardID)}
+}
+
+func (_c *MockQuerierer_GetVerifiers_Call) Run(run func(ctx context.Context, leaderboardID int32)) *MockQuerierer_GetVerifiers_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(int32))
+	})
+	return _c
+}
+
+func (_c *MockQuerierer_GetVerifiers_Call) Return(_a0 []database.User, _a1 error) *MockQuerierer_GetVerifiers_Call {
+	_c.Call.Return(_a0, _a1)
+	return _c
+}
+
+func (_c *MockQuerierer_GetVerifiers_Call) RunAndReturn(run func(context.Context, int32) ([]database.User, error)) *MockQuerierer_GetVerifiers_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// RemoveVerifier provides a mock function with given fields: ctx, arg
+func (_m *MockQuerierer) RemoveVerifier(ctx context.Context, arg database.RemoveVerifierParams) error {
+	ret := _m.Called(ctx, arg)
+
+	if len(ret) == 0 {
+		panic("no return value specified for RemoveVerifier")
+	}
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(context.Context, database.RemoveVerifierParams) error); ok {
+		r0 = rf(ctx, arg)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
+// MockQuerierer_RemoveVerifier_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'RemoveVerifier'
+type MockQuerierer_RemoveVerifier_Call struct {
+	*mock.Call
+}
+
+// RemoveVerifier is a helper method to define mock.On call
+//   - ctx context.Context
+//   - arg database.RemoveVerifierParams
+func (_e *MockQuerierer_Expecter) RemoveVerifier(ctx interface{}, arg interface{}) *MockQuerierer_RemoveVerifier_Call {
+	return &MockQuerierer_RemoveVerifier_Call{Call: _e.mock.On("RemoveVerifier", ctx, arg)}
+}
+
+func (_c *MockQuerierer_RemoveVerifier_Call) Run(run func(ctx context.Context, arg database.RemoveVerifierParams)) *MockQuerierer_RemoveVerifier_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(database.RemoveVerifierParams))
+	})
+	return _c
+}
+
+func (_c *MockQuerierer_RemoveVerifier_Call) Return(_a0 error) *MockQuerierer_RemoveVerifier_Call {
+	_c.Call.Return(_a0)
+	return _c
+}
+
+func (_c *MockQuerierer_RemoveVerifier_Call) RunAndReturn(run func(context.Context, database.RemoveVerifierParams) error) *MockQuerierer_RemoveVerifier_Call {
 	_c.Call.Return(run)
 	return _c
 }

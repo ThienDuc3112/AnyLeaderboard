@@ -114,6 +114,7 @@ type LeaderboardOption struct {
 type LeaderboardVerifier struct {
 	LeaderboardID int32
 	UserID        int32
+	AddedAt       pgtype.Timestamptz
 }
 
 type RefreshToken struct {

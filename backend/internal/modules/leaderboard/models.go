@@ -44,6 +44,10 @@ type field struct {
 	ForRank    bool     `json:"forRank" validate:"excluded_if=Type OPTION"`
 }
 
+type addVerifierReqBody struct {
+	Username string `json:"username" validate:"required,min=3,max=64,isUsername"`
+}
+
 // ============ Service param and return types ============
 type createLeaderboardParam struct {
 	createLeaderboardReqBody
@@ -69,6 +73,11 @@ type getLeaderboardParam struct {
 	offset   int
 }
 
+type getLeaderboardsParam struct {
+	pageSize int
+	cursor   time.Time
+}
+
 type leaderboardWithEntry struct {
 	ID                   int            `json:"id"`
 	Name                 string         `json:"name"`
@@ -81,6 +90,11 @@ type leaderboardWithEntry struct {
 	ExternalLink         []externalLink `json:"externalLinks"`
 	Fields               []field        `json:"fields"`
 	Data                 []entry        `json:"data"`
+}
+
+type addVerifierParam struct {
+	username string
+	lid      int32
 }
 
 // ============ Service errors ============
@@ -107,4 +121,7 @@ var (
 
 	errNoEntry       = errors.New("entry don't exist")
 	errNotAuthorized = errors.New("not authorized to perform such action")
+
+	errNonExistUser    = errors.New("user don't exist")
+	errAlreadyVerifier = errors.New("user already a verifier")
 )

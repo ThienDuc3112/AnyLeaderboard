@@ -15,6 +15,7 @@ func (s leaderboardService) getLeaderboardHandler(w http.ResponseWriter, r *http
 	lid, err := strconv.Atoi(lidStr)
 	if err != nil {
 		utils.RespondWithError(w, 400, "Invalid leaderboard id")
+		return
 	}
 
 	offsetStr := r.URL.Query().Get("offset")

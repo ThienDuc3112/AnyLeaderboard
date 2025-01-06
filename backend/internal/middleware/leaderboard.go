@@ -49,3 +49,31 @@ func (m Middleware) GetLeaderboard(next http.Handler) http.Handler {
 		next.ServeHTTP(w, r.WithContext(newCtx))
 	})
 }
+
+func (m Middleware) IsLeaderboardCreator(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		var err error
+		defer func() { utils.LogError("IsLeaderboardCreatorMiddleware", err) }()
+
+		user, ok := r.Context().Value(c.MiddlewareKeyUser).(database.User)
+		if !ok {
+			utils.RespondWithError(w, 500, "Internal server error")
+			err = fmt.Errorf("user context is not of type database.User")
+			return
+		}
+
+		lb, ok := r.Context().Value(c.MiddlewareKeyLeaderboard).(database.Leaderboard)
+		if !ok {
+			utils.RespondWithError(w, 500, "Internal server error")
+			err = fmt.Errorf("user context is not of type database.Leaderboard")
+			return
+		}
+
+		if user.ID != lb.Creator {
+			utils.RespondWithError(w, 403, "You're not the creator of this leaderboard")
+			return
+		}
+
+		next.ServeHTTP(w, r)
+	})
+}

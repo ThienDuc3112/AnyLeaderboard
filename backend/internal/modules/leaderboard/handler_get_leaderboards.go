@@ -2,15 +2,12 @@ package leaderboard
 
 import (
 	c "anylbapi/internal/constants"
-	"anylbapi/internal/database"
 	"anylbapi/internal/utils"
 	"fmt"
 	"net/http"
 	"net/url"
 	"strconv"
 	"time"
-
-	"github.com/jackc/pgx/v5/pgtype"
 )
 
 // TODO
@@ -41,9 +38,9 @@ func (s leaderboardService) getLeaderboardsHandler(w http.ResponseWriter, r *htt
 		}
 	}
 
-	lbs, err := s.repo.GetRecentLeaderboards(r.Context(), database.GetRecentLeaderboardsParams{
-		CreatedAt: pgtype.Timestamptz{Time: cursor.UTC(), Valid: true},
-		Limit:     int32(pageSize + 1),
+	lbs, err := s.getRecentLeaderboards(r.Context(), getLeaderboardsParam{
+		pageSize: pageSize + 1,
+		cursor:   cursor,
 	})
 	if err != nil {
 		utils.RespondWithError(w, 500, "Cannot get leaderboards")

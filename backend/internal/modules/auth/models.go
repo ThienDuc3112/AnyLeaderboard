@@ -12,7 +12,7 @@ const (
 
 // ============ Request body type ============
 type loginReqBody struct {
-	Username string `json:"username" validate:"required,isSafeName"`
+	Username string `json:"username" validate:"required,min=3,max=64,isUsername"`
 	Password string `json:"password" validate:"required"`
 }
 

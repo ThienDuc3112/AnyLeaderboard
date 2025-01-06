@@ -23,15 +23,8 @@ func (s leaderboardService) createLeaderboardHandler(w http.ResponseWriter, r *h
 		return
 	}
 
-	userCtx := r.Context().Value(c.MiddlewareKeyUser)
-	var user database.User
-	var ok bool
-	if userCtx == nil {
-		utils.RespondWithError(w, 500, "Internal server error")
-		err = fmt.Errorf("user context don't exist on a Force Auth path")
-		return
-	}
-	if user, ok = userCtx.(database.User); !ok {
+	user, ok := r.Context().Value(c.MiddlewareKeyUser).(database.User)
+	if !ok {
 		utils.RespondWithError(w, 500, "Internal server error")
 		err = fmt.Errorf("user context is not of type database.User")
 		return

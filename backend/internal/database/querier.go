@@ -9,6 +9,7 @@ import (
 )
 
 type Querier interface {
+	AddVerifier(ctx context.Context, arg AddVerifierParams) error
 	CreateLeadeboardEntry(ctx context.Context, arg CreateLeadeboardEntryParams) (LeaderboardEntry, error)
 	CreateLeadeboardFields(ctx context.Context, arg []CreateLeadeboardFieldsParams) (int64, error)
 	CreateLeadeboardOptions(ctx context.Context, arg []CreateLeadeboardOptionsParams) (int64, error)
@@ -34,6 +35,8 @@ type Querier interface {
 	GetUserByID(ctx context.Context, id int32) (User, error)
 	GetUserByUsername(ctx context.Context, username string) (User, error)
 	GetVerifiedEntriesFromLeaderboardId(ctx context.Context, arg GetVerifiedEntriesFromLeaderboardIdParams) ([]LeaderboardEntry, error)
+	GetVerifiers(ctx context.Context, leaderboardID int32) ([]User, error)
+	RemoveVerifier(ctx context.Context, arg RemoveVerifierParams) error
 	RevokedAllRefreshToken(ctx context.Context, userID int32) error
 	RevokedRefreshToken(ctx context.Context, id int32) error
 	UpdateRefreshToken(ctx context.Context, arg UpdateRefreshTokenParams) (RefreshToken, error)

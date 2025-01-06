@@ -89,6 +89,29 @@ func Router(db database.Querierer, cache *cache.Cache) http.Handler {
 		s.dummyFunction,
 	)
 
+	// Manage verifier
+	mux.Handle(
+		fmt.Sprintf("GET /{%s}/verifiers", c.PathValueLeaderboardId),
+		middleware.CreateStack(
+			http.HandlerFunc(s.getVerifiersHandler),
+			m.AuthAccessToken,
+			m.GetLeaderboard,
+			m.IsLeaderboardCreator,
+		),
+	)
+	authMux.Handle(
+		fmt.Sprintf("POST /{%s}/verifiers", c.PathValueLeaderboardId),
+		middleware.CreateStack(
+			http.HandlerFunc(s.addVerifierHandler),
+			m.GetLeaderboard,
+			m.IsLeaderboardCreator,
+		),
+	)
+	authMux.HandleFunc(
+		fmt.Sprintf("DELETE /{%s}/verifiers", c.PathValueLeaderboardId),
+		s.dummyFunction,
+	)
+
 	return mux
 }
 
