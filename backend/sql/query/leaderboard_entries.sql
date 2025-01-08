@@ -8,10 +8,6 @@ INSERT INTO leaderboard_entries (
     )
 VALUES ($1, $2, $3, $4, $5)
 RETURNING *;
--- name: UpdateEntry :exec
-UPDATE leaderboard_entries
-SET custom_fields = $1
-WHERE id = $2;
 -- name: GetEntriesFromLeaderboardId :many
 SELECT *
 FROM leaderboard_entries

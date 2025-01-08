@@ -64,9 +64,14 @@ func Router(db database.Querierer, cache *cache.Cache) http.Handler {
 	)
 
 	// View for verifier
-	authMux.HandleFunc(
+	mux.Handle(
 		fmt.Sprintf("GET /{%s}/verifyEntries", c.PathValueLeaderboardId),
-		s.dummyFunction,
+		middleware.CreateStack(
+			http.HandlerFunc(s.getAllEntriesHandler),
+			m.AuthAccessToken,
+			m.GetLeaderboard,
+			m.IsLeaderboardVerifier,
+		),
 	)
 	authMux.HandleFunc(
 		fmt.Sprintf("GET /{%s}/verifyEntries/verified", c.PathValueLeaderboardId),

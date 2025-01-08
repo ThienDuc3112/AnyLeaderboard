@@ -3,11 +3,23 @@ package leaderboard
 import (
 	c "anylbapi/internal/constants"
 	"anylbapi/internal/database"
+	"anylbapi/internal/utils"
 	"context"
 	"fmt"
 )
 
 func (s leaderboardService) getLeaderboard(ctx context.Context, id int32) (leaderboardWithEntry, error) {
+	// Check cache
+	cacheKeyLBFull := fmt.Sprintf("%s-%d", c.CachePrefixLeaderboardFull, id)
+	cachedLb, ok := utils.GetCache[leaderboardWithEntry](s.cache, cacheKeyLBFull)
+	var res leaderboardWithEntry
+	if ok {
+		res = cachedLb
+		res.Data = make([]entry, 0)
+		return res, nil
+	}
+
+	// Get leaderboard
 	rows, err := s.repo.GetLeaderboardFull(ctx, id)
 	if err != nil {
 		return leaderboardWithEntry{}, err
@@ -17,7 +29,7 @@ func (s leaderboardService) getLeaderboard(ctx context.Context, id int32) (leade
 	}
 	lb := rows[0]
 
-	res := leaderboardWithEntry{
+	res = leaderboardWithEntry{
 		ID:                   int(lb.ID),
 		Name:                 lb.Name,
 		Description:          lb.Description,
@@ -80,5 +92,9 @@ func (s leaderboardService) getLeaderboard(ctx context.Context, id int32) (leade
 			})
 		}
 	}
+
+	// Cache the data
+	s.cache.SetDefault(cacheKeyLBFull, res)
+	res.Data = make([]entry, 0)
 	return res, nil
 }

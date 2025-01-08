@@ -77,3 +77,47 @@ func (m Middleware) IsLeaderboardCreator(next http.Handler) http.Handler {
 		next.ServeHTTP(w, r)
 	})
 }
+
+func (m Middleware) IsLeaderboardVerifier(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		var err error
+		defer func() { utils.LogError("IsLeaderboardVerifier", err) }()
+
+		user, ok := r.Context().Value(c.MiddlewareKeyUser).(database.User)
+		if !ok {
+			utils.RespondWithError(w, 500, "Internal server error")
+			err = fmt.Errorf("user context is not of type database.User")
+			return
+		}
+
+		lb, ok := r.Context().Value(c.MiddlewareKeyLeaderboard).(database.Leaderboard)
+		if !ok {
+			utils.RespondWithError(w, 500, "Internal server error")
+			err = fmt.Errorf("user context is not of type database.Leaderboard")
+			return
+		}
+
+		if user.ID != lb.Creator {
+			var verifiers []database.User
+			verifiers, err = m.db.GetVerifiers(r.Context(), lb.ID)
+			if err != nil {
+				utils.RespondWithError(w, 500, "Internal server error")
+				return
+			}
+			isVerifier := false
+			for _, verifier := range verifiers {
+				if user.ID == verifier.ID {
+					isVerifier = true
+					break
+				}
+			}
+
+			if !isVerifier {
+				utils.RespondWithError(w, 403, "You're not a verifier of this leaderboard")
+				return
+			}
+		}
+
+		next.ServeHTTP(w, r)
+	})
+}

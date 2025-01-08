@@ -10,7 +10,7 @@ import (
 
 func (s leaderboardService) addVerifierHandler(w http.ResponseWriter, r *http.Request) {
 	var err error
-	defer func() { utils.LogError("addVerifiersHandler", err) }()
+	defer func() { utils.LogError("addVerifierHandler", err) }()
 
 	lb, ok := r.Context().Value(c.MiddlewareKeyLeaderboard).(database.Leaderboard)
 	if !ok {

@@ -68,9 +68,11 @@ type deleteEntryParam struct {
 }
 
 type getLeaderboardParam struct {
-	id       int
-	pageSize int
-	offset   int
+	id                   int
+	pageSize             int
+	offset               int
+	uniqueSubmission     *bool
+	requiredVerification *bool
 }
 
 type getLeaderboardsParam struct {
@@ -95,6 +97,19 @@ type leaderboardWithEntry struct {
 type addVerifierParam struct {
 	username string
 	lid      int32
+}
+
+type getEntriesParam struct {
+	lid                  int32
+	RequiredVerification bool
+	UniqueSubmission     bool
+	offset               int32
+	pageSize             int32
+}
+
+type getEntriesReturn struct {
+	entries []database.LeaderboardEntry
+	count   int64
 }
 
 // ============ Service errors ============

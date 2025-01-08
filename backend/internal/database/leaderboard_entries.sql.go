@@ -212,19 +212,3 @@ func (q *Queries) GetVerifiedEntriesFromLeaderboardId(ctx context.Context, arg G
 	}
 	return items, nil
 }
-
-const updateEntry = `-- name: UpdateEntry :exec
-UPDATE leaderboard_entries
-SET custom_fields = $1
-WHERE id = $2
-`
-
-type UpdateEntryParams struct {
-	CustomFields []byte
-	ID           int32
-}
-
-func (q *Queries) UpdateEntry(ctx context.Context, arg UpdateEntryParams) error {
-	_, err := q.db.Exec(ctx, updateEntry, arg.CustomFields, arg.ID)
-	return err
-}
