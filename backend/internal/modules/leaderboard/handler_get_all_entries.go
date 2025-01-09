@@ -36,13 +36,13 @@ func (s leaderboardService) getAllEntriesHandler(w http.ResponseWriter, r *http.
 	}
 
 	// How is this allowed in go???
-	true := true
+	false := false
 
 	lbWithEntries, err := s.getLeaderboardWithEntry(r.Context(), getLeaderboardParam{
 		id:                   lid,
 		pageSize:             pageSize,
 		offset:               offset,
-		requiredVerification: &true,
+		requiredVerification: &false,
 	})
 
 	if err != nil {

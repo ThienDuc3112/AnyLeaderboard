@@ -16,10 +16,16 @@ func (s leaderboardService) getLeaderboardWithEntry(ctx context.Context, param g
 		offset:               int32(param.offset),
 		pageSize:             int32(param.pageSize),
 		UniqueSubmission:     res.UniqueSubmission,
+		VerifyState:          true,
+		ForcedPending:        param.forcedPending,
 	}
 
+	// Overwrite options
 	if param.requiredVerification != nil {
 		entriesParam.RequiredVerification = *param.requiredVerification
+		if param.verifyState != nil {
+			entriesParam.VerifyState = *param.verifyState
+		}
 	}
 	if param.uniqueSubmission != nil {
 		entriesParam.UniqueSubmission = *param.uniqueSubmission

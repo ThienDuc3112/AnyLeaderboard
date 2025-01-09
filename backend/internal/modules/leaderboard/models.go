@@ -73,6 +73,8 @@ type getLeaderboardParam struct {
 	offset               int
 	uniqueSubmission     *bool
 	requiredVerification *bool
+	verifyState          *bool
+	forcedPending        bool
 }
 
 type getLeaderboardsParam struct {
@@ -103,6 +105,8 @@ type getEntriesParam struct {
 	lid                  int32
 	RequiredVerification bool
 	UniqueSubmission     bool
+	VerifyState          bool
+	ForcedPending        bool
 	offset               int32
 	pageSize             int32
 }

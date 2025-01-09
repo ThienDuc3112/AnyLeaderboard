@@ -1157,9 +1157,9 @@ func (_c *MockQuerierer_GetLeaderboardFull_Call) RunAndReturn(run func(context.C
 	return _c
 }
 
-// GetLeaderboardVerifiedEntriesCount provides a mock function with given fields: ctx, leaderboardID
-func (_m *MockQuerierer) GetLeaderboardVerifiedEntriesCount(ctx context.Context, leaderboardID int32) (int64, error) {
-	ret := _m.Called(ctx, leaderboardID)
+// GetLeaderboardVerifiedEntriesCount provides a mock function with given fields: ctx, arg
+func (_m *MockQuerierer) GetLeaderboardVerifiedEntriesCount(ctx context.Context, arg database.GetLeaderboardVerifiedEntriesCountParams) (int64, error) {
+	ret := _m.Called(ctx, arg)
 
 	if len(ret) == 0 {
 		panic("no return value specified for GetLeaderboardVerifiedEntriesCount")
@@ -1167,17 +1167,17 @@ func (_m *MockQuerierer) GetLeaderboardVerifiedEntriesCount(ctx context.Context,
 
 	var r0 int64
 	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, int32) (int64, error)); ok {
-		return rf(ctx, leaderboardID)
+	if rf, ok := ret.Get(0).(func(context.Context, database.GetLeaderboardVerifiedEntriesCountParams) (int64, error)); ok {
+		return rf(ctx, arg)
 	}
-	if rf, ok := ret.Get(0).(func(context.Context, int32) int64); ok {
-		r0 = rf(ctx, leaderboardID)
+	if rf, ok := ret.Get(0).(func(context.Context, database.GetLeaderboardVerifiedEntriesCountParams) int64); ok {
+		r0 = rf(ctx, arg)
 	} else {
 		r0 = ret.Get(0).(int64)
 	}
 
-	if rf, ok := ret.Get(1).(func(context.Context, int32) error); ok {
-		r1 = rf(ctx, leaderboardID)
+	if rf, ok := ret.Get(1).(func(context.Context, database.GetLeaderboardVerifiedEntriesCountParams) error); ok {
+		r1 = rf(ctx, arg)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -1192,14 +1192,14 @@ type MockQuerierer_GetLeaderboardVerifiedEntriesCount_Call struct {
 
 // GetLeaderboardVerifiedEntriesCount is a helper method to define mock.On call
 //   - ctx context.Context
-//   - leaderboardID int32
-func (_e *MockQuerierer_Expecter) GetLeaderboardVerifiedEntriesCount(ctx interface{}, leaderboardID interface{}) *MockQuerierer_GetLeaderboardVerifiedEntriesCount_Call {
-	return &MockQuerierer_GetLeaderboardVerifiedEntriesCount_Call{Call: _e.mock.On("GetLeaderboardVerifiedEntriesCount", ctx, leaderboardID)}
+//   - arg database.GetLeaderboardVerifiedEntriesCountParams
+func (_e *MockQuerierer_Expecter) GetLeaderboardVerifiedEntriesCount(ctx interface{}, arg interface{}) *MockQuerierer_GetLeaderboardVerifiedEntriesCount_Call {
+	return &MockQuerierer_GetLeaderboardVerifiedEntriesCount_Call{Call: _e.mock.On("GetLeaderboardVerifiedEntriesCount", ctx, arg)}
 }
 
-func (_c *MockQuerierer_GetLeaderboardVerifiedEntriesCount_Call) Run(run func(ctx context.Context, leaderboardID int32)) *MockQuerierer_GetLeaderboardVerifiedEntriesCount_Call {
+func (_c *MockQuerierer_GetLeaderboardVerifiedEntriesCount_Call) Run(run func(ctx context.Context, arg database.GetLeaderboardVerifiedEntriesCountParams)) *MockQuerierer_GetLeaderboardVerifiedEntriesCount_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(context.Context), args[1].(int32))
+		run(args[0].(context.Context), args[1].(database.GetLeaderboardVerifiedEntriesCountParams))
 	})
 	return _c
 }
@@ -1209,7 +1209,66 @@ func (_c *MockQuerierer_GetLeaderboardVerifiedEntriesCount_Call) Return(_a0 int6
 	return _c
 }
 
-func (_c *MockQuerierer_GetLeaderboardVerifiedEntriesCount_Call) RunAndReturn(run func(context.Context, int32) (int64, error)) *MockQuerierer_GetLeaderboardVerifiedEntriesCount_Call {
+func (_c *MockQuerierer_GetLeaderboardVerifiedEntriesCount_Call) RunAndReturn(run func(context.Context, database.GetLeaderboardVerifiedEntriesCountParams) (int64, error)) *MockQuerierer_GetLeaderboardVerifiedEntriesCount_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// GetPendingVerifiedEntries provides a mock function with given fields: ctx, arg
+func (_m *MockQuerierer) GetPendingVerifiedEntries(ctx context.Context, arg database.GetPendingVerifiedEntriesParams) ([]database.LeaderboardEntry, error) {
+	ret := _m.Called(ctx, arg)
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetPendingVerifiedEntries")
+	}
+
+	var r0 []database.LeaderboardEntry
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context, database.GetPendingVerifiedEntriesParams) ([]database.LeaderboardEntry, error)); ok {
+		return rf(ctx, arg)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, database.GetPendingVerifiedEntriesParams) []database.LeaderboardEntry); ok {
+		r0 = rf(ctx, arg)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]database.LeaderboardEntry)
+		}
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, database.GetPendingVerifiedEntriesParams) error); ok {
+		r1 = rf(ctx, arg)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// MockQuerierer_GetPendingVerifiedEntries_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetPendingVerifiedEntries'
+type MockQuerierer_GetPendingVerifiedEntries_Call struct {
+	*mock.Call
+}
+
+// GetPendingVerifiedEntries is a helper method to define mock.On call
+//   - ctx context.Context
+//   - arg database.GetPendingVerifiedEntriesParams
+func (_e *MockQuerierer_Expecter) GetPendingVerifiedEntries(ctx interface{}, arg interface{}) *MockQuerierer_GetPendingVerifiedEntries_Call {
+	return &MockQuerierer_GetPendingVerifiedEntries_Call{Call: _e.mock.On("GetPendingVerifiedEntries", ctx, arg)}
+}
+
+func (_c *MockQuerierer_GetPendingVerifiedEntries_Call) Run(run func(ctx context.Context, arg database.GetPendingVerifiedEntriesParams)) *MockQuerierer_GetPendingVerifiedEntries_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(database.GetPendingVerifiedEntriesParams))
+	})
+	return _c
+}
+
+func (_c *MockQuerierer_GetPendingVerifiedEntries_Call) Return(_a0 []database.LeaderboardEntry, _a1 error) *MockQuerierer_GetPendingVerifiedEntries_Call {
+	_c.Call.Return(_a0, _a1)
+	return _c
+}
+
+func (_c *MockQuerierer_GetPendingVerifiedEntries_Call) RunAndReturn(run func(context.Context, database.GetPendingVerifiedEntriesParams) ([]database.LeaderboardEntry, error)) *MockQuerierer_GetPendingVerifiedEntries_Call {
 	_c.Call.Return(run)
 	return _c
 }
