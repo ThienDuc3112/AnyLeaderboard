@@ -35,7 +35,7 @@ func (s leaderboardService) getVerifiedEntriesHandler(w http.ResponseWriter, r *
 		}
 	}
 	optionStr := r.URL.Query().Get("option")
-	requiredVerification, pending, verifiedState := false, false, false
+	requiredVerification, pending, verifiedState, uniqueSubmission := false, false, false, false
 	switch optionStr {
 	case "pending":
 		pending = true
@@ -56,6 +56,7 @@ func (s leaderboardService) getVerifiedEntriesHandler(w http.ResponseWriter, r *
 		requiredVerification: &requiredVerification,
 		forcedPending:        pending,
 		verifyState:          &verifiedState,
+		uniqueSubmission:     &uniqueSubmission,
 	})
 
 	if err != nil {

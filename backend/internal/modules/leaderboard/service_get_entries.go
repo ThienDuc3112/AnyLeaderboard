@@ -6,61 +6,33 @@ import (
 )
 
 func (s leaderboardService) getEntries(ctx context.Context, param getEntriesParam) (getEntriesReturn, error) {
-	// TODO:
-	// - Add fetch with unique submission
+	// TODO: TEST THE HECK OUT OF CUSTOM GET ENTRIES MY GOD IT SO BUGGY
 	var err error
 	var entries []database.LeaderboardEntry
 	var count int64
 
+	getEntriesParam := database.GetEntriesParams{
+		LeaderboardID: param.lid,
+		Offset:        param.offset,
+		Limit:         param.pageSize,
+		Distinct:      param.UniqueSubmission,
+	}
+	false := false
+	true := true
 	if param.ForcedPending {
-		entries, err = s.repo.GetPendingVerifiedEntries(ctx, database.GetPendingVerifiedEntriesParams{
-			LeaderboardID: int32(param.lid),
-			Offset:        int32(param.offset),
-			Limit:         int32(param.pageSize),
-		})
-		if err != nil {
-			return getEntriesReturn{}, err
-		}
-
-		count, err = s.repo.GetLeaderboardVerifiedEntriesCount(ctx, database.GetLeaderboardVerifiedEntriesCountParams{
-			LeaderboardID: param.lid,
-			Verified:      param.VerifyState,
-		})
-		if err != nil {
-			return getEntriesReturn{}, err
-		}
+		getEntriesParam.HasBeenCheck = &false
 	} else if param.RequiredVerification {
-		entries, err = s.repo.GetVerifiedEntriesFromLeaderboardId(ctx, database.GetVerifiedEntriesFromLeaderboardIdParams{
-			LeaderboardID: int32(param.lid),
-			Offset:        int32(param.offset),
-			Limit:         int32(param.pageSize),
-			Verified:      param.VerifyState,
-		})
-		if err != nil {
-			return getEntriesReturn{}, err
-		}
+		getEntriesParam.HasBeenCheck = &true
+		getEntriesParam.VerifyState = &param.VerifyState
+	}
 
-		count, err = s.repo.GetLeaderboardVerifiedEntriesCount(ctx, database.GetLeaderboardVerifiedEntriesCountParams{
-			LeaderboardID: param.lid,
-			Verified:      param.VerifyState,
-		})
-		if err != nil {
-			return getEntriesReturn{}, err
-		}
-	} else {
-		entries, err = s.repo.GetEntriesFromLeaderboardId(ctx, database.GetEntriesFromLeaderboardIdParams{
-			LeaderboardID: int32(param.lid),
-			Offset:        int32(param.offset),
-			Limit:         int32(param.pageSize),
-		})
-		if err != nil {
-			return getEntriesReturn{}, err
-		}
-
-		count, err = s.repo.GetLeaderboardEntriesCount(ctx, int32(param.lid))
-		if err != nil {
-			return getEntriesReturn{}, err
-		}
+	entries, err = s.repo.GetEntries(ctx, getEntriesParam)
+	if err != nil {
+		return getEntriesReturn{}, err
+	}
+	count, err = s.repo.GetEntriesCount(ctx, getEntriesParam)
+	if err != nil {
+		return getEntriesReturn{}, err
 	}
 
 	return getEntriesReturn{

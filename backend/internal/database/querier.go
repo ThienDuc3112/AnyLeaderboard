@@ -21,22 +21,16 @@ type Querier interface {
 	DeleteLeaderboard(ctx context.Context, id int32) error
 	DeleteUser(ctx context.Context, id int32) error
 	DeleteUserByUsername(ctx context.Context, username string) error
-	GetEntriesFromLeaderboardId(ctx context.Context, arg GetEntriesFromLeaderboardIdParams) ([]LeaderboardEntry, error)
 	GetFieldOptions(ctx context.Context, arg GetFieldOptionsParams) ([]string, error)
 	GetLeaderboardById(ctx context.Context, id int32) (Leaderboard, error)
-	GetLeaderboardEntriesCount(ctx context.Context, leaderboardID int32) (int64, error)
 	GetLeaderboardEntryById(ctx context.Context, id int32) (LeaderboardEntry, error)
 	GetLeaderboardFieldsByLID(ctx context.Context, lid int32) ([]LeaderboardField, error)
 	GetLeaderboardFull(ctx context.Context, id int32) ([]GetLeaderboardFullRow, error)
-	GetLeaderboardVerifiedEntriesCount(ctx context.Context, arg GetLeaderboardVerifiedEntriesCountParams) (int64, error)
-	GetPendingEntriesCount(ctx context.Context, leaderboardID int32) (int64, error)
-	GetPendingVerifiedEntries(ctx context.Context, arg GetPendingVerifiedEntriesParams) ([]LeaderboardEntry, error)
 	GetRecentLeaderboards(ctx context.Context, arg GetRecentLeaderboardsParams) ([]GetRecentLeaderboardsRow, error)
 	GetRefreshToken(ctx context.Context, id int32) (RefreshToken, error)
 	GetUserByEmail(ctx context.Context, email string) (User, error)
 	GetUserByID(ctx context.Context, id int32) (User, error)
 	GetUserByUsername(ctx context.Context, username string) (User, error)
-	GetVerifiedEntriesFromLeaderboardId(ctx context.Context, arg GetVerifiedEntriesFromLeaderboardIdParams) ([]LeaderboardEntry, error)
 	GetVerifiers(ctx context.Context, leaderboardID int32) ([]User, error)
 	RemoveVerifier(ctx context.Context, arg RemoveVerifierParams) error
 	RevokedAllRefreshToken(ctx context.Context, userID int32) error
