@@ -171,6 +171,20 @@ func (q *Queries) GetLeaderboardVerifiedEntriesCount(ctx context.Context, arg Ge
 	return count, err
 }
 
+const getPendingEntriesCount = `-- name: GetPendingEntriesCount :one
+SELECT COUNT(*)
+FROM leaderboard_entries
+WHERE leaderboard_id = $1
+    AND verified_at IS NULL
+`
+
+func (q *Queries) GetPendingEntriesCount(ctx context.Context, leaderboardID int32) (int64, error) {
+	row := q.db.QueryRow(ctx, getPendingEntriesCount, leaderboardID)
+	var count int64
+	err := row.Scan(&count)
+	return count, err
+}
+
 const getPendingVerifiedEntries = `-- name: GetPendingVerifiedEntries :many
 SELECT id, created_at, updated_at, user_id, username, leaderboard_id, sorted_field, custom_fields, verified, verified_at, verified_by
 FROM leaderboard_entries
@@ -271,4 +285,23 @@ func (q *Queries) GetVerifiedEntriesFromLeaderboardId(ctx context.Context, arg G
 		return nil, err
 	}
 	return items, nil
+}
+
+const verifyEntry = `-- name: VerifyEntry :exec
+UPDATE leaderboard_entries
+SET verified = $1,
+    verified_at = NOW(),
+    verified_by = $2
+WHERE id = $3
+`
+
+type VerifyEntryParams struct {
+	Verified   bool
+	VerifiedBy pgtype.Int4
+	ID         int32
+}
+
+func (q *Queries) VerifyEntry(ctx context.Context, arg VerifyEntryParams) error {
+	_, err := q.db.Exec(ctx, verifyEntry, arg.Verified, arg.VerifiedBy, arg.ID)
+	return err
 }

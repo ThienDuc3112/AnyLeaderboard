@@ -53,3 +53,9 @@ WHERE id = $1;
 -- name: DeleteEntry :exec
 DELETE FROM leaderboard_entries
 WHERE id = $1;
+-- name: VerifyEntry :exec
+UPDATE leaderboard_entries
+SET verified = $1,
+    verified_at = NOW(),
+    verified_by = $2
+WHERE id = $3;

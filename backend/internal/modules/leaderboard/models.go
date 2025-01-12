@@ -48,6 +48,10 @@ type addVerifierReqBody struct {
 	Username string `json:"username" validate:"required,min=3,max=64,isUsername"`
 }
 
+type verifyEntryReqBody struct {
+	Verify bool `json:"verify"`
+}
+
 // ============ Service param and return types ============
 type createLeaderboardParam struct {
 	createLeaderboardReqBody
@@ -114,6 +118,13 @@ type getEntriesParam struct {
 type getEntriesReturn struct {
 	entries []database.LeaderboardEntry
 	count   int64
+}
+
+type verifyEntryParam struct {
+	leaderboardId int32
+	userId        int32
+	entryId       int32
+	verifyState   bool
 }
 
 // ============ Service errors ============

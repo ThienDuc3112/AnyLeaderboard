@@ -44,6 +44,7 @@ func (s leaderboardService) getLeaderboardWithEntry(ctx context.Context, param g
 			CreatedAt: row.CreatedAt.Time,
 			UpdatedAt: row.UpdatedAt.Time,
 			Fields:    row.CustomFields,
+			Verified:  row.Verified,
 		}
 
 		res.Data = append(res.Data, entry)

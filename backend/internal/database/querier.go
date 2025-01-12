@@ -29,6 +29,7 @@ type Querier interface {
 	GetLeaderboardFieldsByLID(ctx context.Context, lid int32) ([]LeaderboardField, error)
 	GetLeaderboardFull(ctx context.Context, id int32) ([]GetLeaderboardFullRow, error)
 	GetLeaderboardVerifiedEntriesCount(ctx context.Context, arg GetLeaderboardVerifiedEntriesCountParams) (int64, error)
+	GetPendingEntriesCount(ctx context.Context, leaderboardID int32) (int64, error)
 	GetPendingVerifiedEntries(ctx context.Context, arg GetPendingVerifiedEntriesParams) ([]LeaderboardEntry, error)
 	GetRecentLeaderboards(ctx context.Context, arg GetRecentLeaderboardsParams) ([]GetRecentLeaderboardsRow, error)
 	GetRefreshToken(ctx context.Context, id int32) (RefreshToken, error)
@@ -43,6 +44,7 @@ type Querier interface {
 	UpdateRefreshToken(ctx context.Context, arg UpdateRefreshTokenParams) (RefreshToken, error)
 	UpdateUserDescription(ctx context.Context, arg UpdateUserDescriptionParams) error
 	UpdateUserPassword(ctx context.Context, arg UpdateUserPasswordParams) error
+	VerifyEntry(ctx context.Context, arg VerifyEntryParams) error
 }
 
 var _ Querier = (*Queries)(nil)

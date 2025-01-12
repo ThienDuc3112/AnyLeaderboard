@@ -1214,6 +1214,63 @@ func (_c *MockQuerierer_GetLeaderboardVerifiedEntriesCount_Call) RunAndReturn(ru
 	return _c
 }
 
+// GetPendingEntriesCount provides a mock function with given fields: ctx, leaderboardID
+func (_m *MockQuerierer) GetPendingEntriesCount(ctx context.Context, leaderboardID int32) (int64, error) {
+	ret := _m.Called(ctx, leaderboardID)
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetPendingEntriesCount")
+	}
+
+	var r0 int64
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context, int32) (int64, error)); ok {
+		return rf(ctx, leaderboardID)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, int32) int64); ok {
+		r0 = rf(ctx, leaderboardID)
+	} else {
+		r0 = ret.Get(0).(int64)
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, int32) error); ok {
+		r1 = rf(ctx, leaderboardID)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// MockQuerierer_GetPendingEntriesCount_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetPendingEntriesCount'
+type MockQuerierer_GetPendingEntriesCount_Call struct {
+	*mock.Call
+}
+
+// GetPendingEntriesCount is a helper method to define mock.On call
+//   - ctx context.Context
+//   - leaderboardID int32
+func (_e *MockQuerierer_Expecter) GetPendingEntriesCount(ctx interface{}, leaderboardID interface{}) *MockQuerierer_GetPendingEntriesCount_Call {
+	return &MockQuerierer_GetPendingEntriesCount_Call{Call: _e.mock.On("GetPendingEntriesCount", ctx, leaderboardID)}
+}
+
+func (_c *MockQuerierer_GetPendingEntriesCount_Call) Run(run func(ctx context.Context, leaderboardID int32)) *MockQuerierer_GetPendingEntriesCount_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(int32))
+	})
+	return _c
+}
+
+func (_c *MockQuerierer_GetPendingEntriesCount_Call) Return(_a0 int64, _a1 error) *MockQuerierer_GetPendingEntriesCount_Call {
+	_c.Call.Return(_a0, _a1)
+	return _c
+}
+
+func (_c *MockQuerierer_GetPendingEntriesCount_Call) RunAndReturn(run func(context.Context, int32) (int64, error)) *MockQuerierer_GetPendingEntriesCount_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // GetPendingVerifiedEntries provides a mock function with given fields: ctx, arg
 func (_m *MockQuerierer) GetPendingVerifiedEntries(ctx context.Context, arg database.GetPendingVerifiedEntriesParams) ([]database.LeaderboardEntry, error) {
 	ret := _m.Called(ctx, arg)
@@ -2012,6 +2069,53 @@ func (_c *MockQuerierer_UpdateUserPassword_Call) Return(_a0 error) *MockQueriere
 }
 
 func (_c *MockQuerierer_UpdateUserPassword_Call) RunAndReturn(run func(context.Context, database.UpdateUserPasswordParams) error) *MockQuerierer_UpdateUserPassword_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// VerifyEntry provides a mock function with given fields: ctx, arg
+func (_m *MockQuerierer) VerifyEntry(ctx context.Context, arg database.VerifyEntryParams) error {
+	ret := _m.Called(ctx, arg)
+
+	if len(ret) == 0 {
+		panic("no return value specified for VerifyEntry")
+	}
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(context.Context, database.VerifyEntryParams) error); ok {
+		r0 = rf(ctx, arg)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
+// MockQuerierer_VerifyEntry_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'VerifyEntry'
+type MockQuerierer_VerifyEntry_Call struct {
+	*mock.Call
+}
+
+// VerifyEntry is a helper method to define mock.On call
+//   - ctx context.Context
+//   - arg database.VerifyEntryParams
+func (_e *MockQuerierer_Expecter) VerifyEntry(ctx interface{}, arg interface{}) *MockQuerierer_VerifyEntry_Call {
+	return &MockQuerierer_VerifyEntry_Call{Call: _e.mock.On("VerifyEntry", ctx, arg)}
+}
+
+func (_c *MockQuerierer_VerifyEntry_Call) Run(run func(ctx context.Context, arg database.VerifyEntryParams)) *MockQuerierer_VerifyEntry_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(database.VerifyEntryParams))
+	})
+	return _c
+}
+
+func (_c *MockQuerierer_VerifyEntry_Call) Return(_a0 error) *MockQuerierer_VerifyEntry_Call {
+	_c.Call.Return(_a0)
+	return _c
+}
+
+func (_c *MockQuerierer_VerifyEntry_Call) RunAndReturn(run func(context.Context, database.VerifyEntryParams) error) *MockQuerierer_VerifyEntry_Call {
 	_c.Call.Return(run)
 	return _c
 }

@@ -65,44 +65,21 @@ func Router(db database.Querierer, cache *cache.Cache) http.Handler {
 
 	// View for verifier
 	mux.Handle(
-		fmt.Sprintf("GET /{%s}/verifyEntries/all", c.PathValueLeaderboardId),
+		fmt.Sprintf("GET /{%s}/verifyEntries", c.PathValueLeaderboardId),
 		middleware.CreateStack(
-			http.HandlerFunc(s.getAllEntriesHandler),
+			http.HandlerFunc(s.getVerifiedEntriesHandler),
 			m.AuthAccessToken,
 			m.GetLeaderboard,
 			m.IsLeaderboardVerifier,
 		),
 	)
-	mux.Handle(
-		fmt.Sprintf("GET /{%s}/verifyEntries/verified", c.PathValueLeaderboardId),
-		middleware.CreateStack(
-			http.HandlerFunc(s.getVerifiedEntriesHandler(false, true)),
-			m.AuthAccessToken,
-			m.GetLeaderboard,
-			m.IsLeaderboardVerifier,
-		),
-	)
-	mux.Handle(
-		fmt.Sprintf("GET /{%s}/verifyEntries/disqualified", c.PathValueLeaderboardId),
-		middleware.CreateStack(
-			http.HandlerFunc(s.getVerifiedEntriesHandler(false, false)),
-			m.AuthAccessToken,
-			m.GetLeaderboard,
-			m.IsLeaderboardVerifier,
-		),
-	)
-	mux.Handle(
-		fmt.Sprintf("GET /{%s}/verifyEntries/pending", c.PathValueLeaderboardId),
-		middleware.CreateStack(
-			http.HandlerFunc(s.getVerifiedEntriesHandler(true, false)),
-			m.AuthAccessToken,
-			m.GetLeaderboard,
-			m.IsLeaderboardVerifier,
-		),
-	)
-	authMux.HandleFunc(
+	authMux.Handle(
 		fmt.Sprintf("POST /{%s}/verifyEntries/{%s}", c.PathValueLeaderboardId, c.PathValueEntryId),
-		s.dummyFunction,
+		middleware.CreateStack(
+			http.HandlerFunc(s.verifyEntryHandler),
+			m.GetLeaderboard,
+			m.IsLeaderboardVerifier,
+		),
 	)
 
 	// Manage verifier
