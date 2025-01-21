@@ -9,6 +9,42 @@ import (
 	"context"
 )
 
+const createLeadeboardField = `-- name: CreateLeadeboardField :exec
+INSERT INTO leaderboard_fields (
+        lid,
+        field_name,
+        field_value,
+        field_order,
+        for_rank,
+        required,
+        hidden
+    )
+VALUES ($1, $2, $3, $4, $5, $6, $7)
+`
+
+type CreateLeadeboardFieldParams struct {
+	Lid        int32
+	FieldName  string
+	FieldValue FieldType
+	FieldOrder int32
+	ForRank    bool
+	Required   bool
+	Hidden     bool
+}
+
+func (q *Queries) CreateLeadeboardField(ctx context.Context, arg CreateLeadeboardFieldParams) error {
+	_, err := q.db.Exec(ctx, createLeadeboardField,
+		arg.Lid,
+		arg.FieldName,
+		arg.FieldValue,
+		arg.FieldOrder,
+		arg.ForRank,
+		arg.Required,
+		arg.Hidden,
+	)
+	return err
+}
+
 type CreateLeadeboardFieldsParams struct {
 	Lid        int32
 	FieldName  string

@@ -91,6 +91,29 @@ func (q *Queries) GetLeaderboardEntryById(ctx context.Context, id int32) (Leader
 	return i, err
 }
 
+const updateEntryByLeaderboardId = `-- name: UpdateEntryByLeaderboardId :exec
+UPDATE leaderboard_entries
+SET custom_fields = jsonb_set(custom_fields, $1, $4::jsonb, $2)
+WHERE leaderboard_id = $3
+`
+
+type UpdateEntryByLeaderboardIdParams struct {
+	Path            interface{}
+	CreateIfMissing bool
+	LeaderboardID   int32
+	Value           []byte
+}
+
+func (q *Queries) UpdateEntryByLeaderboardId(ctx context.Context, arg UpdateEntryByLeaderboardIdParams) error {
+	_, err := q.db.Exec(ctx, updateEntryByLeaderboardId,
+		arg.Path,
+		arg.CreateIfMissing,
+		arg.LeaderboardID,
+		arg.Value,
+	)
+	return err
+}
+
 const verifyEntry = `-- name: VerifyEntry :exec
 UPDATE leaderboard_entries
 SET verified = $1,

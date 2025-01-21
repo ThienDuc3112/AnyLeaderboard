@@ -16,6 +16,31 @@ func (s leaderboardService) getLeaderboard(ctx context.Context, id int32) (leade
 	if ok {
 		res = cachedLb
 		res.Data = make([]entry, 0)
+
+		for i := range res.Fields {
+			field := res.Fields[i]
+			if field.Type == string(database.FieldTypeOPTION) {
+				// Check options cache
+				cacheOptionKey := fmt.Sprintf("%s-%s", c.CachePrefixOptions, field.Name)
+				cachedOptions, ok := utils.GetCache[[]string](s.cache, cacheOptionKey)
+				if ok {
+					field.Options = cachedOptions
+					res.Fields[i] = field
+					continue
+				}
+
+				// Get options
+				options, err := s.repo.GetFieldOptions(ctx, database.GetFieldOptionsParams{
+					Lid:       id,
+					FieldName: field.Name,
+				})
+				if err != nil {
+					return leaderboardWithEntry{}, err
+				}
+				field.Options = options
+				s.cache.SetDefault(cacheOptionKey, options)
+			}
+		}
 		return res, nil
 	}
 

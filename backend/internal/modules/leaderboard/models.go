@@ -154,4 +154,8 @@ var (
 
 	errNoUser          = errors.New("user don't exist")
 	errAlreadyVerifier = errors.New("user already a verifier")
+
+	errInvalidAction    = errors.New("action is invalid")
+	errCannotAddForRank = errors.New("cannot add for rank field")
+	errConflictType     = errors.New("default value not of correct type to field type")
 )

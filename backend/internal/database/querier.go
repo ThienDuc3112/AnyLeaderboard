@@ -11,6 +11,7 @@ import (
 type Querier interface {
 	AddVerifier(ctx context.Context, arg AddVerifierParams) error
 	CreateLeadeboardEntry(ctx context.Context, arg CreateLeadeboardEntryParams) (LeaderboardEntry, error)
+	CreateLeadeboardField(ctx context.Context, arg CreateLeadeboardFieldParams) error
 	CreateLeadeboardFields(ctx context.Context, arg []CreateLeadeboardFieldsParams) (int64, error)
 	CreateLeadeboardOptions(ctx context.Context, arg []CreateLeadeboardOptionsParams) (int64, error)
 	CreateLeaderboard(ctx context.Context, arg CreateLeaderboardParams) (Leaderboard, error)
@@ -35,6 +36,7 @@ type Querier interface {
 	RemoveVerifier(ctx context.Context, arg RemoveVerifierParams) error
 	RevokedAllRefreshToken(ctx context.Context, userID int32) error
 	RevokedRefreshToken(ctx context.Context, id int32) error
+	UpdateEntryByLeaderboardId(ctx context.Context, arg UpdateEntryByLeaderboardIdParams) error
 	UpdateRefreshToken(ctx context.Context, arg UpdateRefreshTokenParams) (RefreshToken, error)
 	UpdateUserDescription(ctx context.Context, arg UpdateUserDescriptionParams) error
 	UpdateUserPassword(ctx context.Context, arg UpdateUserPasswordParams) error
