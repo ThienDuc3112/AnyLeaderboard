@@ -9,6 +9,7 @@ import (
 )
 
 type Querier interface {
+	AddFieldToEntriesByLeaderboardId(ctx context.Context, arg AddFieldToEntriesByLeaderboardIdParams) error
 	AddVerifier(ctx context.Context, arg AddVerifierParams) error
 	CreateLeadeboardEntry(ctx context.Context, arg CreateLeadeboardEntryParams) (LeaderboardEntry, error)
 	CreateLeadeboardField(ctx context.Context, arg CreateLeadeboardFieldParams) error
@@ -34,9 +35,10 @@ type Querier interface {
 	GetUserByUsername(ctx context.Context, username string) (User, error)
 	GetVerifiers(ctx context.Context, leaderboardID int32) ([]User, error)
 	RemoveVerifier(ctx context.Context, arg RemoveVerifierParams) error
+	RenameFieldOnEntriesByLeaderboardId(ctx context.Context, arg RenameFieldOnEntriesByLeaderboardIdParams) error
 	RevokedAllRefreshToken(ctx context.Context, userID int32) error
 	RevokedRefreshToken(ctx context.Context, id int32) error
-	UpdateEntryByLeaderboardId(ctx context.Context, arg UpdateEntryByLeaderboardIdParams) error
+	UpdateFieldsName(ctx context.Context, arg UpdateFieldsNameParams) error
 	UpdateRefreshToken(ctx context.Context, arg UpdateRefreshTokenParams) (RefreshToken, error)
 	UpdateUserDescription(ctx context.Context, arg UpdateUserDescriptionParams) error
 	UpdateUserPassword(ctx context.Context, arg UpdateUserPasswordParams) error

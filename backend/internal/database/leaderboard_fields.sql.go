@@ -88,3 +88,18 @@ func (q *Queries) GetLeaderboardFieldsByLID(ctx context.Context, lid int32) ([]L
 	}
 	return items, nil
 }
+
+const updateFieldsName = `-- name: UpdateFieldsName :exec
+UPDATE leaderboard_fields SET field_name = $3 WHERE lid = $1 AND field_name = $2
+`
+
+type UpdateFieldsNameParams struct {
+	Lid          int32
+	FieldName    string
+	NewFieldName string
+}
+
+func (q *Queries) UpdateFieldsName(ctx context.Context, arg UpdateFieldsNameParams) error {
+	_, err := q.db.Exec(ctx, updateFieldsName, arg.Lid, arg.FieldName, arg.NewFieldName)
+	return err
+}

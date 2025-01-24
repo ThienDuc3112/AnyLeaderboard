@@ -1,9 +1,11 @@
 package leaderboard
 
 import (
+	c "anylbapi/internal/constants"
 	"anylbapi/internal/database"
 	"context"
 	"encoding/json"
+	"fmt"
 	"time"
 )
 
@@ -106,7 +108,7 @@ func (s leaderboardService) addField(ctx context.Context, param addFieldParam) e
 		if err != nil {
 			return err
 		}
-		err = tx.UpdateEntryByLeaderboardId(ctx, database.UpdateEntryByLeaderboardIdParams{
+		err = tx.AddFieldToEntriesByLeaderboardId(ctx, database.AddFieldToEntriesByLeaderboardIdParams{
 			Path:            []string{field.FieldName},
 			CreateIfMissing: true,
 			LeaderboardID:   field.Lid,
@@ -116,6 +118,13 @@ func (s leaderboardService) addField(ctx context.Context, param addFieldParam) e
 			return err
 		}
 	}
+
+	err = tx.Commit(ctx)
+	if err != nil {
+		return err
+	}
+	cacheKeyLeaderboard := fmt.Sprintf("%s-%d", c.CachePrefixLeaderboardFull, param.Lid)
+	s.cache.Delete(cacheKeyLeaderboard)
 
 	return nil
 }

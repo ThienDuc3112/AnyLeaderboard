@@ -11,6 +11,29 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
+const addFieldToEntriesByLeaderboardId = `-- name: AddFieldToEntriesByLeaderboardId :exec
+UPDATE leaderboard_entries
+SET custom_fields = jsonb_set(custom_fields, $1, $4::jsonb, $2)
+WHERE leaderboard_id = $3
+`
+
+type AddFieldToEntriesByLeaderboardIdParams struct {
+	Path            interface{}
+	CreateIfMissing bool
+	LeaderboardID   int32
+	Value           []byte
+}
+
+func (q *Queries) AddFieldToEntriesByLeaderboardId(ctx context.Context, arg AddFieldToEntriesByLeaderboardIdParams) error {
+	_, err := q.db.Exec(ctx, addFieldToEntriesByLeaderboardId,
+		arg.Path,
+		arg.CreateIfMissing,
+		arg.LeaderboardID,
+		arg.Value,
+	)
+	return err
+}
+
 const createLeadeboardEntry = `-- name: CreateLeadeboardEntry :one
 INSERT INTO leaderboard_entries (
         user_id,
@@ -91,26 +114,20 @@ func (q *Queries) GetLeaderboardEntryById(ctx context.Context, id int32) (Leader
 	return i, err
 }
 
-const updateEntryByLeaderboardId = `-- name: UpdateEntryByLeaderboardId :exec
+const renameFieldOnEntriesByLeaderboardId = `-- name: RenameFieldOnEntriesByLeaderboardId :exec
 UPDATE leaderboard_entries
-SET custom_fields = jsonb_set(custom_fields, $1, $4::jsonb, $2)
-WHERE leaderboard_id = $3
+SET custom_fields = jsonb_set(custom_fields #- $2, $3, data#>@old_key, TRUE)
+WHERE leaderboard_id = $1
 `
 
-type UpdateEntryByLeaderboardIdParams struct {
-	Path            interface{}
-	CreateIfMissing bool
-	LeaderboardID   int32
-	Value           []byte
+type RenameFieldOnEntriesByLeaderboardIdParams struct {
+	LeaderboardID int32
+	OldKey        []byte
+	NewKey        interface{}
 }
 
-func (q *Queries) UpdateEntryByLeaderboardId(ctx context.Context, arg UpdateEntryByLeaderboardIdParams) error {
-	_, err := q.db.Exec(ctx, updateEntryByLeaderboardId,
-		arg.Path,
-		arg.CreateIfMissing,
-		arg.LeaderboardID,
-		arg.Value,
-	)
+func (q *Queries) RenameFieldOnEntriesByLeaderboardId(ctx context.Context, arg RenameFieldOnEntriesByLeaderboardIdParams) error {
+	_, err := q.db.Exec(ctx, renameFieldOnEntriesByLeaderboardId, arg.LeaderboardID, arg.OldKey, arg.NewKey)
 	return err
 }
 

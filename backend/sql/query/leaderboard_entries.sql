@@ -21,7 +21,11 @@ SET verified = $1,
     verified_at = NOW(),
     verified_by = $2
 WHERE id = $3;
--- name: UpdateEntryByLeaderboardId :exec
+-- name: AddFieldToEntriesByLeaderboardId :exec
 UPDATE leaderboard_entries
 SET custom_fields = jsonb_set(custom_fields, $1, @value::jsonb, $2)
 WHERE leaderboard_id = $3;
+-- name: RenameFieldOnEntriesByLeaderboardId :exec
+UPDATE leaderboard_entries
+SET custom_fields = jsonb_set(custom_fields #- @old_key, @new_key, data#>@old_key, TRUE)
+WHERE leaderboard_id = $1;

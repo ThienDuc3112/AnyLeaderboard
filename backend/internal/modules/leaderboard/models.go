@@ -158,4 +158,6 @@ var (
 	errInvalidAction    = errors.New("action is invalid")
 	errCannotAddForRank = errors.New("cannot add for rank field")
 	errConflictType     = errors.New("default value not of correct type to field type")
+
+	errNoField = errors.New("field don't exist")
 )

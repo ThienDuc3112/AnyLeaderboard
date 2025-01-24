@@ -24,3 +24,5 @@ VALUES ($1, $2, $3, $4, $5, $6, $7);
 SELECT *
 FROM leaderboard_fields
 WHERE lid = $1;
+-- name: UpdateFieldsName :exec
+UPDATE leaderboard_fields SET field_name = @new_field_name WHERE lid = $1 AND field_name = $2;
