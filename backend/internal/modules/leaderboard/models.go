@@ -160,4 +160,6 @@ var (
 	errConflictType     = errors.New("default value not of correct type to field type")
 
 	errNoField = errors.New("field don't exist")
+
+	errCannotDeleteForRank = errors.New("cannot delete for rank field")
 )

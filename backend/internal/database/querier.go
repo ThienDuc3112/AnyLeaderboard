@@ -10,6 +10,7 @@ import (
 
 type Querier interface {
 	AddFieldToEntriesByLeaderboardId(ctx context.Context, arg AddFieldToEntriesByLeaderboardIdParams) error
+	AddLeaderboardOption(ctx context.Context, arg AddLeaderboardOptionParams) error
 	AddVerifier(ctx context.Context, arg AddVerifierParams) error
 	CreateLeadeboardEntry(ctx context.Context, arg CreateLeadeboardEntryParams) (LeaderboardEntry, error)
 	CreateLeadeboardField(ctx context.Context, arg CreateLeadeboardFieldParams) error
@@ -22,9 +23,11 @@ type Querier interface {
 	DeleteEntry(ctx context.Context, id int32) error
 	DeleteField(ctx context.Context, arg DeleteFieldParams) error
 	DeleteFieldOnEntriesByLeaderboardId(ctx context.Context, arg DeleteFieldOnEntriesByLeaderboardIdParams) error
+	DeleteLeadeboardOptions(ctx context.Context, arg DeleteLeadeboardOptionsParams) error
 	DeleteLeaderboard(ctx context.Context, id int32) error
 	DeleteUser(ctx context.Context, id int32) error
 	DeleteUserByUsername(ctx context.Context, username string) error
+	GetFieldByLID(ctx context.Context, arg GetFieldByLIDParams) (LeaderboardField, error)
 	GetFieldOptions(ctx context.Context, arg GetFieldOptionsParams) ([]string, error)
 	GetLeaderboardById(ctx context.Context, id int32) (Leaderboard, error)
 	GetLeaderboardEntryById(ctx context.Context, id int32) (LeaderboardEntry, error)

@@ -70,6 +70,32 @@ func (q *Queries) DeleteField(ctx context.Context, arg DeleteFieldParams) error 
 	return err
 }
 
+const getFieldByLID = `-- name: GetFieldByLID :one
+SELECT lid, field_name, field_value, field_order, for_rank, hidden, required
+FROM leaderboard_fields
+WHERE lid = $1 AND field_name = $2
+`
+
+type GetFieldByLIDParams struct {
+	Lid       int32
+	FieldName string
+}
+
+func (q *Queries) GetFieldByLID(ctx context.Context, arg GetFieldByLIDParams) (LeaderboardField, error) {
+	row := q.db.QueryRow(ctx, getFieldByLID, arg.Lid, arg.FieldName)
+	var i LeaderboardField
+	err := row.Scan(
+		&i.Lid,
+		&i.FieldName,
+		&i.FieldValue,
+		&i.FieldOrder,
+		&i.ForRank,
+		&i.Hidden,
+		&i.Required,
+	)
+	return i, err
+}
+
 const getLeaderboardFieldsByLID = `-- name: GetLeaderboardFieldsByLID :many
 SELECT lid, field_name, field_value, field_order, for_rank, hidden, required
 FROM leaderboard_fields

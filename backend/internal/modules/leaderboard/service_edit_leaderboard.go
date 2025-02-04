@@ -24,7 +24,8 @@ type editLeaderboardParam struct {
 		field
 		defaultValue any
 	}
-	Action editLeaderboardAction `validate:"oneof=RENAME ADD DELETE REPLACE ADD_OPTION DELETE_OPTION REPLACE_OPTION"`
+	NewOption string
+	Action    editLeaderboardAction `validate:"oneof=RENAME ADD DELETE REPLACE ADD_OPTION DELETE_OPTION REPLACE_OPTION"`
 }
 
 func (s leaderboardService) editLeaderboard(ctx context.Context, param editLeaderboardParam) error {
@@ -39,14 +40,49 @@ func (s leaderboardService) editLeaderboard(ctx context.Context, param editLeade
 			NewField: param.NewField,
 		})
 	case renameField:
+		_, err := s.getField(ctx, getFieldParam{
+			Lid:       param.Lid,
+			FieldName: param.OldFieldName,
+		})
+		if err != nil {
+			return err
+		}
+
 		return s.renameField(ctx, renameFieldParams{
 			fieldName: param.OldFieldName,
 			newName:   param.NewField.Name,
 			lid:       param.Lid,
 		})
 	case deleteField:
-	case replaceField:
+		field, err := s.getField(ctx, getFieldParam{
+			Lid:       param.Lid,
+			FieldName: param.OldFieldName,
+		})
+		if err != nil {
+			return err
+		}
+		if field.ForRank {
+			return errCannotDeleteForRank
+		}
+
+		return s.deleteField(ctx, deleteFieldParam{
+			Lid:          param.Lid,
+			OldFieldName: param.OldFieldName,
+		})
 	case addOptionsField:
+		_, err := s.getField(ctx, getFieldParam{
+			Lid:       param.Lid,
+			FieldName: param.OldFieldName,
+		})
+		if err != nil {
+			return err
+		}
+
+		return s.addOptionToField(ctx, addOptionToFieldParam{
+			FieldName: param.OldFieldName,
+			Lid:       param.Lid,
+			NewOption: param.NewOption,
+		})
 	case deleteOptionsField:
 	case replaceOptionsField:
 	default:

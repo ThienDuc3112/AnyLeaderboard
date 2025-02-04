@@ -3,7 +3,6 @@ package leaderboard
 import (
 	c "anylbapi/internal/constants"
 	"anylbapi/internal/database"
-	"anylbapi/internal/utils"
 	"context"
 	"fmt"
 )
@@ -11,6 +10,7 @@ import (
 type deleteFieldParam struct {
 	Lid          int32
 	OldFieldName string
+	IsOption     bool
 }
 
 func (s leaderboardService) deleteField(ctx context.Context, param deleteFieldParam) error {
@@ -20,34 +20,13 @@ func (s leaderboardService) deleteField(ctx context.Context, param deleteFieldPa
 	}
 	defer tx.Rollback(ctx)
 
-	cacheKeyLBFull := fmt.Sprintf("%s-%d", c.CachePrefixLeaderboardFull, param.Lid)
-	cachedLb, ok := utils.GetCache[leaderboardWithEntry](s.cache, cacheKeyLBFull)
-	if ok {
-		matched := false
-		for _, field := range cachedLb.Fields {
-			if param.OldFieldName == field.Name {
-				matched = true
-				break
-			}
-		}
-		if !matched {
-			return errNoField
-		}
-	} else {
-		fields, err := s.repo.GetLeaderboardFieldsByLID(ctx, param.Lid)
+	if param.IsOption {
+		err = tx.DeleteLeadeboardOptions(ctx, database.DeleteLeadeboardOptionsParams{
+			Lid:       param.Lid,
+			FieldName: param.OldFieldName,
+		})
 		if err != nil {
 			return err
-		}
-
-		matched := false
-		for _, field := range fields {
-			if param.OldFieldName == field.FieldName {
-				matched = true
-				break
-			}
-		}
-		if !matched {
-			return errNoField
 		}
 	}
 
@@ -72,6 +51,7 @@ func (s leaderboardService) deleteField(ctx context.Context, param deleteFieldPa
 		return err
 	}
 
+	cacheKeyLBFull := fmt.Sprintf("%s-%d", c.CachePrefixLeaderboardFull, param.Lid)
 	s.cache.Delete(cacheKeyLBFull)
 	return nil
 }
