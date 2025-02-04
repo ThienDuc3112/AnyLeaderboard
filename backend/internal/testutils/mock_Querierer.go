@@ -703,6 +703,100 @@ func (_c *MockQuerierer_DeleteEntry_Call) RunAndReturn(run func(context.Context,
 	return _c
 }
 
+// DeleteField provides a mock function with given fields: ctx, arg
+func (_m *MockQuerierer) DeleteField(ctx context.Context, arg database.DeleteFieldParams) error {
+	ret := _m.Called(ctx, arg)
+
+	if len(ret) == 0 {
+		panic("no return value specified for DeleteField")
+	}
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(context.Context, database.DeleteFieldParams) error); ok {
+		r0 = rf(ctx, arg)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
+// MockQuerierer_DeleteField_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'DeleteField'
+type MockQuerierer_DeleteField_Call struct {
+	*mock.Call
+}
+
+// DeleteField is a helper method to define mock.On call
+//   - ctx context.Context
+//   - arg database.DeleteFieldParams
+func (_e *MockQuerierer_Expecter) DeleteField(ctx interface{}, arg interface{}) *MockQuerierer_DeleteField_Call {
+	return &MockQuerierer_DeleteField_Call{Call: _e.mock.On("DeleteField", ctx, arg)}
+}
+
+func (_c *MockQuerierer_DeleteField_Call) Run(run func(ctx context.Context, arg database.DeleteFieldParams)) *MockQuerierer_DeleteField_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(database.DeleteFieldParams))
+	})
+	return _c
+}
+
+func (_c *MockQuerierer_DeleteField_Call) Return(_a0 error) *MockQuerierer_DeleteField_Call {
+	_c.Call.Return(_a0)
+	return _c
+}
+
+func (_c *MockQuerierer_DeleteField_Call) RunAndReturn(run func(context.Context, database.DeleteFieldParams) error) *MockQuerierer_DeleteField_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// DeleteFieldOnEntriesByLeaderboardId provides a mock function with given fields: ctx, arg
+func (_m *MockQuerierer) DeleteFieldOnEntriesByLeaderboardId(ctx context.Context, arg database.DeleteFieldOnEntriesByLeaderboardIdParams) error {
+	ret := _m.Called(ctx, arg)
+
+	if len(ret) == 0 {
+		panic("no return value specified for DeleteFieldOnEntriesByLeaderboardId")
+	}
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(context.Context, database.DeleteFieldOnEntriesByLeaderboardIdParams) error); ok {
+		r0 = rf(ctx, arg)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
+// MockQuerierer_DeleteFieldOnEntriesByLeaderboardId_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'DeleteFieldOnEntriesByLeaderboardId'
+type MockQuerierer_DeleteFieldOnEntriesByLeaderboardId_Call struct {
+	*mock.Call
+}
+
+// DeleteFieldOnEntriesByLeaderboardId is a helper method to define mock.On call
+//   - ctx context.Context
+//   - arg database.DeleteFieldOnEntriesByLeaderboardIdParams
+func (_e *MockQuerierer_Expecter) DeleteFieldOnEntriesByLeaderboardId(ctx interface{}, arg interface{}) *MockQuerierer_DeleteFieldOnEntriesByLeaderboardId_Call {
+	return &MockQuerierer_DeleteFieldOnEntriesByLeaderboardId_Call{Call: _e.mock.On("DeleteFieldOnEntriesByLeaderboardId", ctx, arg)}
+}
+
+func (_c *MockQuerierer_DeleteFieldOnEntriesByLeaderboardId_Call) Run(run func(ctx context.Context, arg database.DeleteFieldOnEntriesByLeaderboardIdParams)) *MockQuerierer_DeleteFieldOnEntriesByLeaderboardId_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(database.DeleteFieldOnEntriesByLeaderboardIdParams))
+	})
+	return _c
+}
+
+func (_c *MockQuerierer_DeleteFieldOnEntriesByLeaderboardId_Call) Return(_a0 error) *MockQuerierer_DeleteFieldOnEntriesByLeaderboardId_Call {
+	_c.Call.Return(_a0)
+	return _c
+}
+
+func (_c *MockQuerierer_DeleteFieldOnEntriesByLeaderboardId_Call) RunAndReturn(run func(context.Context, database.DeleteFieldOnEntriesByLeaderboardIdParams) error) *MockQuerierer_DeleteFieldOnEntriesByLeaderboardId_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // DeleteLeaderboard provides a mock function with given fields: ctx, id
 func (_m *MockQuerierer) DeleteLeaderboard(ctx context.Context, id int32) error {
 	ret := _m.Called(ctx, id)

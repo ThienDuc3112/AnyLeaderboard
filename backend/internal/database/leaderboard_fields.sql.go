@@ -55,6 +55,21 @@ type CreateLeadeboardFieldsParams struct {
 	Hidden     bool
 }
 
+const deleteField = `-- name: DeleteField :exec
+DELETE FROM leaderboard_fields
+  WHERE lid = $1 AND field_name = $2
+`
+
+type DeleteFieldParams struct {
+	Lid       int32
+	FieldName string
+}
+
+func (q *Queries) DeleteField(ctx context.Context, arg DeleteFieldParams) error {
+	_, err := q.db.Exec(ctx, deleteField, arg.Lid, arg.FieldName)
+	return err
+}
+
 const getLeaderboardFieldsByLID = `-- name: GetLeaderboardFieldsByLID :many
 SELECT lid, field_name, field_value, field_order, for_rank, hidden, required
 FROM leaderboard_fields

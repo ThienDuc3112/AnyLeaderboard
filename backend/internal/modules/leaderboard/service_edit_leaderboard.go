@@ -18,9 +18,9 @@ const (
 )
 
 type editLeaderboardParam struct {
-	Lid        int32
-	OldFieldId int32
-	NewField   struct {
+	Lid          int32
+	OldFieldName string
+	NewField     struct {
 		field
 		defaultValue any
 	}
@@ -32,12 +32,26 @@ func (s leaderboardService) editLeaderboard(ctx context.Context, param editLeade
 		return errInvalidAction
 	}
 
-	if param.Action == addField {
+	switch param.Action {
+	case addField:
 		return s.addField(ctx, addFieldParam{
 			Lid:      param.Lid,
 			NewField: param.NewField,
 		})
+	case renameField:
+		return s.renameField(ctx, renameFieldParams{
+			fieldName: param.OldFieldName,
+			newName:   param.NewField.Name,
+			lid:       param.Lid,
+		})
+	case deleteField:
+	case replaceField:
+	case addOptionsField:
+	case deleteOptionsField:
+	case replaceOptionsField:
+	default:
+		// return fmt.Errorf("unknown action")
+		return errInvalidAction
 	}
-
 	return fmt.Errorf("unimplemented")
 }

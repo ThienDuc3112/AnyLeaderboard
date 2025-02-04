@@ -29,3 +29,7 @@ WHERE leaderboard_id = $3;
 UPDATE leaderboard_entries
 SET custom_fields = jsonb_set(custom_fields #- @old_key, @new_key, data#>@old_key, TRUE)
 WHERE leaderboard_id = $1;
+-- name: DeleteFieldOnEntriesByLeaderboardId :exec
+UPDATE leaderboard_entries
+SET custom_fields = custom_fields - @field_name
+WHERE leaderboard_id = $1;

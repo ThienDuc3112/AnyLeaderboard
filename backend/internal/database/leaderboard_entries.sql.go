@@ -89,6 +89,22 @@ func (q *Queries) DeleteEntry(ctx context.Context, id int32) error {
 	return err
 }
 
+const deleteFieldOnEntriesByLeaderboardId = `-- name: DeleteFieldOnEntriesByLeaderboardId :exec
+UPDATE leaderboard_entries
+SET custom_fields = custom_fields - $2
+WHERE leaderboard_id = $1
+`
+
+type DeleteFieldOnEntriesByLeaderboardIdParams struct {
+	LeaderboardID int32
+	FieldName     []byte
+}
+
+func (q *Queries) DeleteFieldOnEntriesByLeaderboardId(ctx context.Context, arg DeleteFieldOnEntriesByLeaderboardIdParams) error {
+	_, err := q.db.Exec(ctx, deleteFieldOnEntriesByLeaderboardId, arg.LeaderboardID, arg.FieldName)
+	return err
+}
+
 const getLeaderboardEntryById = `-- name: GetLeaderboardEntryById :one
 SELECT id, created_at, updated_at, user_id, username, leaderboard_id, sorted_field, custom_fields, verified, verified_at, verified_by
 FROM leaderboard_entries

@@ -26,3 +26,6 @@ FROM leaderboard_fields
 WHERE lid = $1;
 -- name: UpdateFieldsName :exec
 UPDATE leaderboard_fields SET field_name = @new_field_name WHERE lid = $1 AND field_name = $2;
+-- name: DeleteField :exec
+DELETE FROM leaderboard_fields
+  WHERE lid = $1 AND field_name = $2;

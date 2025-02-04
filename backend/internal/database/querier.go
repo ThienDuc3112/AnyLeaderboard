@@ -20,6 +20,8 @@ type Querier interface {
 	CreateNewRefreshToken(ctx context.Context, arg CreateNewRefreshTokenParams) (RefreshToken, error)
 	CreateUser(ctx context.Context, arg CreateUserParams) error
 	DeleteEntry(ctx context.Context, id int32) error
+	DeleteField(ctx context.Context, arg DeleteFieldParams) error
+	DeleteFieldOnEntriesByLeaderboardId(ctx context.Context, arg DeleteFieldOnEntriesByLeaderboardIdParams) error
 	DeleteLeaderboard(ctx context.Context, id int32) error
 	DeleteUser(ctx context.Context, id int32) error
 	DeleteUserByUsername(ctx context.Context, username string) error
