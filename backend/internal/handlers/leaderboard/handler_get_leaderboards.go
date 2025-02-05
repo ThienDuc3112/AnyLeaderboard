@@ -2,6 +2,7 @@ package leaderboard
 
 import (
 	c "anylbapi/internal/constants"
+	"anylbapi/internal/modules/leaderboard"
 	"anylbapi/internal/utils"
 	"fmt"
 	"net/http"
@@ -15,7 +16,7 @@ import (
 // - Add support for sorted by:
 //   - author
 //   - entries count
-func (s LeaderboardService) getLeaderboardsHandler(w http.ResponseWriter, r *http.Request) {
+func (h LeaderboardHandler) getLeaderboardsHandler(w http.ResponseWriter, r *http.Request) {
 	var err error
 	defer func() { utils.LogError("getLeaderboardsHandler", err) }()
 
@@ -38,9 +39,9 @@ func (s LeaderboardService) getLeaderboardsHandler(w http.ResponseWriter, r *htt
 		}
 	}
 
-	lbs, err := s.getRecentLeaderboards(r.Context(), getLeaderboardsParam{
-		pageSize: pageSize + 1,
-		cursor:   cursor,
+	lbs, err := h.s.GetRecentLeaderboards(r.Context(), leaderboard.GetLeaderboardsParam{
+		PageSize: pageSize + 1,
+		Cursor:   cursor,
 	})
 	if err != nil {
 		utils.RespondWithError(w, 500, "Cannot get leaderboards")

@@ -8,7 +8,7 @@ import (
 	"net/http"
 )
 
-func (s LeaderboardService) getVerifiersHandler(w http.ResponseWriter, r *http.Request) {
+func (h LeaderboardHandler) getVerifiersHandler(w http.ResponseWriter, r *http.Request) {
 	var err error
 	defer func() { utils.LogError("getVerifiersHandler", err) }()
 
@@ -19,7 +19,7 @@ func (s LeaderboardService) getVerifiersHandler(w http.ResponseWriter, r *http.R
 		return
 	}
 
-	verifiers, err := s.getVerifiers(r.Context(), lb.ID)
+	verifiers, err := h.s.GetVerifiers(r.Context(), lb.ID)
 	if err != nil {
 		utils.RespondWithError(w, 500, "Internal server error")
 		return

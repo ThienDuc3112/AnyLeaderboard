@@ -8,9 +8,6 @@ import (
 )
 
 // ============ Request body type ============
-type verifyEntryReqBody struct {
-	Verify bool `json:"verify"`
-}
 
 // ============ Service param and return types ============
 type CreateLeaderboardParam struct {

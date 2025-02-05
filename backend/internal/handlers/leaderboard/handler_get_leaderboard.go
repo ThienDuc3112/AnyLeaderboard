@@ -2,12 +2,13 @@ package leaderboard
 
 import (
 	c "anylbapi/internal/constants"
+	"anylbapi/internal/modules/leaderboard"
 	"anylbapi/internal/utils"
 	"net/http"
 	"strconv"
 )
 
-func (s LeaderboardService) getLeaderboardHandler(w http.ResponseWriter, r *http.Request) {
+func (h LeaderboardHandler) getLeaderboardHandler(w http.ResponseWriter, r *http.Request) {
 	var err error
 	defer func() { utils.LogError("getLeaderboardHandler", err) }()
 
@@ -35,14 +36,14 @@ func (s LeaderboardService) getLeaderboardHandler(w http.ResponseWriter, r *http
 		}
 	}
 
-	res, err := s.getLeaderboardWithEntry(r.Context(), getLeaderboardParam{
-		id:       lid,
-		pageSize: pageSize,
-		offset:   offset,
+	res, err := h.s.GetLeaderboardWithEntry(r.Context(), leaderboard.GetLeaderboardParam{
+		Id:       lid,
+		PageSize: pageSize,
+		Offset:   offset,
 	})
 	if err != nil {
 		switch err {
-		case ErrNoLeaderboard:
+		case leaderboard.ErrNoLeaderboard:
 			utils.RespondWithError(w, 404, "Leaderboard not found")
 			err = nil
 		default:

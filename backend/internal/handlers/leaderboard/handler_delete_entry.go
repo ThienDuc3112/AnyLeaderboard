@@ -3,13 +3,14 @@ package leaderboard
 import (
 	c "anylbapi/internal/constants"
 	"anylbapi/internal/database"
+	"anylbapi/internal/modules/leaderboard"
 	"anylbapi/internal/utils"
 	"fmt"
 	"net/http"
 	"strconv"
 )
 
-func (s LeaderboardService) deleteEntryHandler(w http.ResponseWriter, r *http.Request) {
+func (h LeaderboardHandler) deleteEntryHandler(w http.ResponseWriter, r *http.Request) {
 	var err error
 	defer func() { utils.LogError("deleteEntryHandler", err) }()
 
@@ -33,14 +34,14 @@ func (s LeaderboardService) deleteEntryHandler(w http.ResponseWriter, r *http.Re
 		return
 	}
 
-	err = s.deleteEntry(r.Context(), deleteEntryParam{user: user, leaderboard: lb, entryId: eid})
+	err = h.s.DeleteEntry(r.Context(), leaderboard.DeleteEntryParam{User: user, Leaderboard: lb, EntryId: eid})
 
 	if err != nil {
 		switch err {
-		case ErrNoEntry:
+		case leaderboard.ErrNoEntry:
 			utils.RespondWithError(w, 404, "Entry not found")
 			err = nil
-		case ErrNotAuthorized:
+		case leaderboard.ErrNotAuthorized:
 			utils.RespondWithError(w, 403, "No permission to delete this")
 			err = nil
 		default:

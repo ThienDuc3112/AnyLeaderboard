@@ -3,13 +3,14 @@ package leaderboard
 import (
 	c "anylbapi/internal/constants"
 	"anylbapi/internal/database"
+	"anylbapi/internal/modules/leaderboard"
 	"anylbapi/internal/utils"
 	"fmt"
 	"net/http"
 	"strconv"
 )
 
-func (s LeaderboardService) verifyEntryHandler(w http.ResponseWriter, r *http.Request) {
+func (h LeaderboardHandler) verifyEntryHandler(w http.ResponseWriter, r *http.Request) {
 	var err error
 	defer func() { utils.LogError("verifyEntryHandler", err) }()
 
@@ -33,19 +34,23 @@ func (s LeaderboardService) verifyEntryHandler(w http.ResponseWriter, r *http.Re
 		return
 	}
 
+	type verifyEntryReqBody struct {
+		Verify bool `json:"verify"`
+	}
+
 	body, err := utils.ExtractBody[verifyEntryReqBody](r.Body)
 	if err != nil {
 		utils.RespondWithError(w, 400, "Unable to decode body")
 		return
 	}
 
-	err = s.verifyEntry(r.Context(), verifyEntryParam{
-		leaderboardId: lb.ID,
-		userId:        user.ID,
-		entryId:       int32(eid),
-		verifyState:   body.Verify,
+	err = h.s.VerifyEntry(r.Context(), leaderboard.VerifyEntryParam{
+		LeaderboardId: lb.ID,
+		UserId:        user.ID,
+		EntryId:       int32(eid),
+		VerifyState:   body.Verify,
 	})
-	if err == ErrNoEntry {
+	if err == leaderboard.ErrNoEntry {
 		utils.RespondWithError(w, 404, "Leaderboard don't have such entry id")
 		return
 	} else if err != nil {

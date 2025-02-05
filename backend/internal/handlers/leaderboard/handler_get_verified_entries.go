@@ -2,12 +2,13 @@ package leaderboard
 
 import (
 	c "anylbapi/internal/constants"
+	"anylbapi/internal/modules/leaderboard"
 	"anylbapi/internal/utils"
 	"net/http"
 	"strconv"
 )
 
-func (s LeaderboardService) getVerifiedEntriesHandler(w http.ResponseWriter, r *http.Request) {
+func (h LeaderboardHandler) getVerifiedEntriesHandler(w http.ResponseWriter, r *http.Request) {
 	var err error
 	defer func() { utils.LogError("getVerifiedEntriesHandler", err) }()
 
@@ -49,19 +50,19 @@ func (s LeaderboardService) getVerifiedEntriesHandler(w http.ResponseWriter, r *
 		requiredVerification = false
 	}
 
-	lbWithEntries, err := s.getLeaderboardWithEntry(r.Context(), getLeaderboardParam{
-		id:                   lid,
-		pageSize:             pageSize,
-		offset:               offset,
-		requiredVerification: &requiredVerification,
-		forcedPending:        pending,
-		verifyState:          &verifiedState,
-		uniqueSubmission:     &uniqueSubmission,
+	lbWithEntries, err := h.s.GetLeaderboardWithEntry(r.Context(), leaderboard.GetLeaderboardParam{
+		Id:                   lid,
+		PageSize:             pageSize,
+		Offset:               offset,
+		RequiredVerification: &requiredVerification,
+		ForcedPending:        pending,
+		VerifyState:          &verifiedState,
+		UniqueSubmission:     &uniqueSubmission,
 	})
 
 	if err != nil {
 		switch err {
-		case ErrNoLeaderboard:
+		case leaderboard.ErrNoLeaderboard:
 			utils.RespondWithError(w, 404, "Leaderboard not found")
 			err = nil
 		default:
