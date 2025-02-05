@@ -23,6 +23,7 @@ type Querier interface {
 	DeleteEntry(ctx context.Context, id int32) error
 	DeleteField(ctx context.Context, arg DeleteFieldParams) error
 	DeleteFieldOnEntriesByLeaderboardId(ctx context.Context, arg DeleteFieldOnEntriesByLeaderboardIdParams) error
+	DeleteLeadeboardOption(ctx context.Context, arg DeleteLeadeboardOptionParams) error
 	DeleteLeadeboardOptions(ctx context.Context, arg DeleteLeadeboardOptionsParams) error
 	DeleteLeaderboard(ctx context.Context, id int32) error
 	DeleteUser(ctx context.Context, id int32) error
@@ -41,6 +42,7 @@ type Querier interface {
 	GetVerifiers(ctx context.Context, leaderboardID int32) ([]User, error)
 	RemoveVerifier(ctx context.Context, arg RemoveVerifierParams) error
 	RenameFieldOnEntriesByLeaderboardId(ctx context.Context, arg RenameFieldOnEntriesByLeaderboardIdParams) error
+	RenameLeadeboardOption(ctx context.Context, arg RenameLeadeboardOptionParams) error
 	RevokedAllRefreshToken(ctx context.Context, userID int32) error
 	RevokedRefreshToken(ctx context.Context, id int32) error
 	UpdateFieldsName(ctx context.Context, arg UpdateFieldsNameParams) error

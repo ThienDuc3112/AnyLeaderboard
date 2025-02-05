@@ -20,3 +20,10 @@ WHERE lid = $1
 -- name: DeleteLeadeboardOptions :exec
 DELETE FROM leaderboard_options
   WHERE lid = $1 AND field_name = $2;
+-- name: DeleteLeadeboardOption :exec
+DELETE FROM leaderboard_options
+  WHERE lid = $1 AND field_name = $2 AND option = $3;
+-- name: RenameLeadeboardOption :exec
+UPDATE leaderboard_options
+  SET option = @new_option
+  WHERE lid = $1 AND field_name = $2 AND option = $3;

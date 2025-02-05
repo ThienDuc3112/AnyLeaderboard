@@ -35,6 +35,22 @@ type CreateLeadeboardOptionsParams struct {
 	Option    string
 }
 
+const deleteLeadeboardOption = `-- name: DeleteLeadeboardOption :exec
+DELETE FROM leaderboard_options
+  WHERE lid = $1 AND field_name = $2 AND option = $3
+`
+
+type DeleteLeadeboardOptionParams struct {
+	Lid       int32
+	FieldName string
+	Option    string
+}
+
+func (q *Queries) DeleteLeadeboardOption(ctx context.Context, arg DeleteLeadeboardOptionParams) error {
+	_, err := q.db.Exec(ctx, deleteLeadeboardOption, arg.Lid, arg.FieldName, arg.Option)
+	return err
+}
+
 const deleteLeadeboardOptions = `-- name: DeleteLeadeboardOptions :exec
 DELETE FROM leaderboard_options
   WHERE lid = $1 AND field_name = $2
@@ -80,4 +96,27 @@ func (q *Queries) GetFieldOptions(ctx context.Context, arg GetFieldOptionsParams
 		return nil, err
 	}
 	return items, nil
+}
+
+const renameLeadeboardOption = `-- name: RenameLeadeboardOption :exec
+UPDATE leaderboard_options
+  SET option = $4
+  WHERE lid = $1 AND field_name = $2 AND option = $3
+`
+
+type RenameLeadeboardOptionParams struct {
+	Lid       int32
+	FieldName string
+	Option    string
+	NewOption string
+}
+
+func (q *Queries) RenameLeadeboardOption(ctx context.Context, arg RenameLeadeboardOptionParams) error {
+	_, err := q.db.Exec(ctx, renameLeadeboardOption,
+		arg.Lid,
+		arg.FieldName,
+		arg.Option,
+		arg.NewOption,
+	)
+	return err
 }

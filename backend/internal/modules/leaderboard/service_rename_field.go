@@ -1,7 +1,6 @@
 package leaderboard
 
 import (
-	c "anylbapi/internal/constants"
 	"anylbapi/internal/database"
 	"context"
 )

@@ -844,6 +844,53 @@ func (_c *MockQuerierer_DeleteFieldOnEntriesByLeaderboardId_Call) RunAndReturn(r
 	return _c
 }
 
+// DeleteLeadeboardOption provides a mock function with given fields: ctx, arg
+func (_m *MockQuerierer) DeleteLeadeboardOption(ctx context.Context, arg database.DeleteLeadeboardOptionParams) error {
+	ret := _m.Called(ctx, arg)
+
+	if len(ret) == 0 {
+		panic("no return value specified for DeleteLeadeboardOption")
+	}
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(context.Context, database.DeleteLeadeboardOptionParams) error); ok {
+		r0 = rf(ctx, arg)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
+// MockQuerierer_DeleteLeadeboardOption_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'DeleteLeadeboardOption'
+type MockQuerierer_DeleteLeadeboardOption_Call struct {
+	*mock.Call
+}
+
+// DeleteLeadeboardOption is a helper method to define mock.On call
+//   - ctx context.Context
+//   - arg database.DeleteLeadeboardOptionParams
+func (_e *MockQuerierer_Expecter) DeleteLeadeboardOption(ctx interface{}, arg interface{}) *MockQuerierer_DeleteLeadeboardOption_Call {
+	return &MockQuerierer_DeleteLeadeboardOption_Call{Call: _e.mock.On("DeleteLeadeboardOption", ctx, arg)}
+}
+
+func (_c *MockQuerierer_DeleteLeadeboardOption_Call) Run(run func(ctx context.Context, arg database.DeleteLeadeboardOptionParams)) *MockQuerierer_DeleteLeadeboardOption_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(database.DeleteLeadeboardOptionParams))
+	})
+	return _c
+}
+
+func (_c *MockQuerierer_DeleteLeadeboardOption_Call) Return(_a0 error) *MockQuerierer_DeleteLeadeboardOption_Call {
+	_c.Call.Return(_a0)
+	return _c
+}
+
+func (_c *MockQuerierer_DeleteLeadeboardOption_Call) RunAndReturn(run func(context.Context, database.DeleteLeadeboardOptionParams) error) *MockQuerierer_DeleteLeadeboardOption_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // DeleteLeadeboardOptions provides a mock function with given fields: ctx, arg
 func (_m *MockQuerierer) DeleteLeadeboardOptions(ctx context.Context, arg database.DeleteLeadeboardOptionsParams) error {
 	ret := _m.Called(ctx, arg)
@@ -1932,6 +1979,53 @@ func (_c *MockQuerierer_RenameFieldOnEntriesByLeaderboardId_Call) Return(_a0 err
 }
 
 func (_c *MockQuerierer_RenameFieldOnEntriesByLeaderboardId_Call) RunAndReturn(run func(context.Context, database.RenameFieldOnEntriesByLeaderboardIdParams) error) *MockQuerierer_RenameFieldOnEntriesByLeaderboardId_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// RenameLeadeboardOption provides a mock function with given fields: ctx, arg
+func (_m *MockQuerierer) RenameLeadeboardOption(ctx context.Context, arg database.RenameLeadeboardOptionParams) error {
+	ret := _m.Called(ctx, arg)
+
+	if len(ret) == 0 {
+		panic("no return value specified for RenameLeadeboardOption")
+	}
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(context.Context, database.RenameLeadeboardOptionParams) error); ok {
+		r0 = rf(ctx, arg)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
+// MockQuerierer_RenameLeadeboardOption_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'RenameLeadeboardOption'
+type MockQuerierer_RenameLeadeboardOption_Call struct {
+	*mock.Call
+}
+
+// RenameLeadeboardOption is a helper method to define mock.On call
+//   - ctx context.Context
+//   - arg database.RenameLeadeboardOptionParams
+func (_e *MockQuerierer_Expecter) RenameLeadeboardOption(ctx interface{}, arg interface{}) *MockQuerierer_RenameLeadeboardOption_Call {
+	return &MockQuerierer_RenameLeadeboardOption_Call{Call: _e.mock.On("RenameLeadeboardOption", ctx, arg)}
+}
+
+func (_c *MockQuerierer_RenameLeadeboardOption_Call) Run(run func(ctx context.Context, arg database.RenameLeadeboardOptionParams)) *MockQuerierer_RenameLeadeboardOption_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(database.RenameLeadeboardOptionParams))
+	})
+	return _c
+}
+
+func (_c *MockQuerierer_RenameLeadeboardOption_Call) Return(_a0 error) *MockQuerierer_RenameLeadeboardOption_Call {
+	_c.Call.Return(_a0)
+	return _c
+}
+
+func (_c *MockQuerierer_RenameLeadeboardOption_Call) RunAndReturn(run func(context.Context, database.RenameLeadeboardOptionParams) error) *MockQuerierer_RenameLeadeboardOption_Call {
 	_c.Call.Return(run)
 	return _c
 }
