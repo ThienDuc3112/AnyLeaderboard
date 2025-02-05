@@ -30,7 +30,7 @@ type editLeaderboardParam struct {
 
 func (s leaderboardService) editLeaderboard(ctx context.Context, param editLeaderboardParam) error {
 	if err := validate.Struct(param); err != nil {
-		return errInvalidAction
+		return ErrInvalidAction
 	}
 
 	// The only action that doesn't need old field
@@ -58,7 +58,7 @@ func (s leaderboardService) editLeaderboard(ctx context.Context, param editLeade
 		})
 	case deleteField:
 		if field.ForRank {
-			return errCannotDeleteForRank
+			return ErrCannotDeleteForRank
 		}
 
 		return s.deleteField(ctx, deleteFieldParam{
@@ -85,6 +85,6 @@ func (s leaderboardService) editLeaderboard(ctx context.Context, param editLeade
 			NewOption: param.NewOption,
 		})
 	default:
-		return errInvalidAction
+		return ErrInvalidAction
 	}
 }

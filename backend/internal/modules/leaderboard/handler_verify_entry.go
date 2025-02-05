@@ -45,7 +45,7 @@ func (s leaderboardService) verifyEntryHandler(w http.ResponseWriter, r *http.Re
 		entryId:       int32(eid),
 		verifyState:   body.Verify,
 	})
-	if err == errNoEntry {
+	if err == ErrNoEntry {
 		utils.RespondWithError(w, 404, "Leaderboard don't have such entry id")
 		return
 	} else if err != nil {

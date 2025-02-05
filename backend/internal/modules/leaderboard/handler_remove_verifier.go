@@ -35,7 +35,7 @@ func (s leaderboardService) removeVerifierHandler(w http.ResponseWriter, r *http
 		lid:      lb.ID,
 	})
 
-	if err == errNoUser {
+	if err == ErrNoUser {
 		utils.RespondWithError(w, 400, "User don't exist")
 		return
 	} else if err != nil {

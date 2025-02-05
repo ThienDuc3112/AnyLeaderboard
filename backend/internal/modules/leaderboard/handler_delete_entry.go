@@ -37,10 +37,10 @@ func (s leaderboardService) deleteEntryHandler(w http.ResponseWriter, r *http.Re
 
 	if err != nil {
 		switch err {
-		case errNoEntry:
+		case ErrNoEntry:
 			utils.RespondWithError(w, 404, "Entry not found")
 			err = nil
-		case errNotAuthorized:
+		case ErrNotAuthorized:
 			utils.RespondWithError(w, 403, "No permission to delete this")
 			err = nil
 		default:

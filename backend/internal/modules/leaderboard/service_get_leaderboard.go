@@ -50,7 +50,7 @@ func (s leaderboardService) getLeaderboard(ctx context.Context, id int32) (leade
 		return leaderboardWithEntry{}, err
 	}
 	if len(rows) == 0 {
-		return leaderboardWithEntry{}, errNoLeaderboard
+		return leaderboardWithEntry{}, ErrNoLeaderboard
 	}
 	lb := rows[0]
 

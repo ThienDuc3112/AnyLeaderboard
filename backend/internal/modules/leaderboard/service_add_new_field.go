@@ -35,7 +35,7 @@ func (s leaderboardService) addField(ctx context.Context, param addFieldParam) e
 	}
 
 	if field.ForRank {
-		return errCannotAddForRank
+		return ErrCannotAddForRank
 	}
 
 	var val any
@@ -46,20 +46,20 @@ func (s leaderboardService) addField(ctx context.Context, param addFieldParam) e
 		case database.FieldTypeDURATION, database.FieldTypeNUMBER:
 			val, ok = input.(float64)
 			if !ok {
-				return errConflictType
+				return ErrConflictType
 			}
 
 		case database.FieldTypeTIMESTAMP:
 			timeStr, ok := input.(string)
 			val, err = time.Parse(time.RFC3339, timeStr)
 			if !ok || err != nil {
-				return errConflictType
+				return ErrConflictType
 			}
 
 		case database.FieldTypeTEXT, database.FieldTypeOPTION:
 			val, ok = input.(string)
 			if !ok {
-				return errConflictType
+				return ErrConflictType
 			}
 			if field.FieldValue == database.FieldTypeOPTION {
 				matched := false
@@ -71,11 +71,11 @@ func (s leaderboardService) addField(ctx context.Context, param addFieldParam) e
 				}
 
 				if !matched {
-					return errConflictType
+					return ErrConflictType
 				}
 			}
 		default:
-			return errUnrecognizedField
+			return ErrUnrecognizedField
 		}
 	}
 
@@ -99,7 +99,7 @@ func (s leaderboardService) addField(ctx context.Context, param addFieldParam) e
 			return err
 		}
 		if int(n) != len(options) {
-			return errUnableToInsertAllOptions
+			return ErrUnableToInsertAllOptions
 		}
 	}
 

@@ -16,9 +16,9 @@ func (s leaderboardService) createEntry(ctx context.Context, param createEntryPa
 	entryData := make(map[string]any)
 
 	if !param.Leaderboard.AllowAnnonymous && param.User == nil {
-		return database.LeaderboardEntry{}, "", errNonAnonymousLeaderboard
+		return database.LeaderboardEntry{}, "", ErrNonAnonymousLeaderboard
 	} else if param.DisplayName == "" && param.User == nil {
-		return database.LeaderboardEntry{}, "", errNoDisplayName
+		return database.LeaderboardEntry{}, "", ErrNoDisplayName
 	}
 
 	// Get LB fields
@@ -53,12 +53,12 @@ func (s leaderboardService) createEntry(ctx context.Context, param createEntryPa
 				if !field.Required {
 					continue
 				}
-				return database.LeaderboardEntry{}, field.Name, errRequiredFieldNotExist
+				return database.LeaderboardEntry{}, field.Name, ErrRequiredFieldNotExist
 			}
 			entryData[field.Name] = val
 
 			if foundForRankField && field.ForRank {
-				return database.LeaderboardEntry{}, field.Name, errConflictForRankField
+				return database.LeaderboardEntry{}, field.Name, ErrConflictForRankField
 			}
 			if field.ForRank {
 				sortedValue = val
@@ -72,12 +72,12 @@ func (s leaderboardService) createEntry(ctx context.Context, param createEntryPa
 				if !field.Required {
 					continue
 				}
-				return database.LeaderboardEntry{}, field.Name, errRequiredFieldNotExist
+				return database.LeaderboardEntry{}, field.Name, ErrRequiredFieldNotExist
 			}
 			entryData[field.Name] = val.UnixMilli()
 
 			if foundForRankField && field.ForRank {
-				return database.LeaderboardEntry{}, field.Name, errConflictForRankField
+				return database.LeaderboardEntry{}, field.Name, ErrConflictForRankField
 			}
 			if field.ForRank {
 				sortedValue = float64(val.UnixMilli())
@@ -90,12 +90,12 @@ func (s leaderboardService) createEntry(ctx context.Context, param createEntryPa
 				if !field.Required {
 					continue
 				}
-				return database.LeaderboardEntry{}, field.Name, errRequiredFieldNotExist
+				return database.LeaderboardEntry{}, field.Name, ErrRequiredFieldNotExist
 			}
 			if database.FieldType(field.Type) == database.FieldTypeOPTION {
 				options := field.Options
 				if len(options) == 0 {
-					return database.LeaderboardEntry{}, field.Name, errOptionFieldNoOptions
+					return database.LeaderboardEntry{}, field.Name, ErrOptionFieldNoOptions
 				}
 				isAnOption := false
 				for _, option := range options {
@@ -105,22 +105,22 @@ func (s leaderboardService) createEntry(ctx context.Context, param createEntryPa
 					}
 				}
 				if !isAnOption {
-					return database.LeaderboardEntry{}, field.Name, errNotAnOption
+					return database.LeaderboardEntry{}, field.Name, ErrNotAnOption
 				}
 			}
 			entryData[field.Name] = val
 
 			if field.ForRank {
-				return database.LeaderboardEntry{}, field.Name, errUnrankableFieldType
+				return database.LeaderboardEntry{}, field.Name, ErrUnrankableFieldType
 			}
 		default:
-			return database.LeaderboardEntry{}, field.Name, errUnrecognizedField
+			return database.LeaderboardEntry{}, field.Name, ErrUnrecognizedField
 		}
 	}
 
 	// Sanity check
 	if !foundForRankField {
-		return database.LeaderboardEntry{}, "", errNoForRankField
+		return database.LeaderboardEntry{}, "", ErrNoForRankField
 	}
 
 	entryJson, err := json.Marshal(entryData)

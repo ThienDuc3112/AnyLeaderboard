@@ -11,13 +11,13 @@ import (
 func (s leaderboardService) verifyEntry(ctx context.Context, param verifyEntryParam) error {
 	entry, err := s.repo.GetLeaderboardEntryById(ctx, param.entryId)
 	if err == pgx.ErrNoRows {
-		return errNoEntry
+		return ErrNoEntry
 	} else if err != nil {
 		return err
 	}
 
 	if entry.LeaderboardID != param.leaderboardId {
-		return errNoEntry
+		return ErrNoEntry
 	}
 
 	return s.repo.VerifyEntry(ctx, database.VerifyEntryParams{

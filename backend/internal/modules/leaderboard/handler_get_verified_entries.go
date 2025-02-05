@@ -61,7 +61,7 @@ func (s leaderboardService) getVerifiedEntriesHandler(w http.ResponseWriter, r *
 
 	if err != nil {
 		switch err {
-		case errNoLeaderboard:
+		case ErrNoLeaderboard:
 			utils.RespondWithError(w, 404, "Leaderboard not found")
 			err = nil
 		default:

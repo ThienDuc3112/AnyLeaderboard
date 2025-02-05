@@ -55,7 +55,7 @@ func (s leaderboardService) createLeaderboard(ctx context.Context, param createL
 			return database.Leaderboard{}, err
 		}
 		if n != int64(len(links)) {
-			return database.Leaderboard{}, errUnableToInsertAllLinks
+			return database.Leaderboard{}, ErrUnableToInsertAllLinks
 		}
 	}
 
@@ -72,10 +72,10 @@ func (s leaderboardService) createLeaderboard(ctx context.Context, param createL
 
 	for _, field := range param.Fields {
 		if forRankExist && field.ForRank {
-			return database.Leaderboard{}, errMultipleForRankField
+			return database.Leaderboard{}, ErrMultipleForRankField
 		}
 		if field.ForRank && !field.Required {
-			return database.Leaderboard{}, errForRankNotRequired
+			return database.Leaderboard{}, ErrForRankNotRequired
 		}
 		forRankExist = forRankExist || field.ForRank
 		nonHiddenFieldExist = nonHiddenFieldExist || !field.Hidden
@@ -91,7 +91,7 @@ func (s leaderboardService) createLeaderboard(ctx context.Context, param createL
 
 		if field.Type == string(database.FieldTypeOPTION) {
 			if len(field.Options) == 0 {
-				return database.Leaderboard{}, errNoOptions
+				return database.Leaderboard{}, ErrNoOptions
 			}
 			opts = append(opts, optionsToInsert{
 				fieldName: field.Name,
@@ -102,10 +102,10 @@ func (s leaderboardService) createLeaderboard(ctx context.Context, param createL
 	}
 
 	if !forRankExist {
-		return database.Leaderboard{}, errNoForRankField
+		return database.Leaderboard{}, ErrNoForRankField
 	}
 	if !nonHiddenFieldExist {
-		return database.Leaderboard{}, errNoPublicField
+		return database.Leaderboard{}, ErrNoPublicField
 	}
 
 	// ================== Inserting leaderboard fields ==================
@@ -114,7 +114,7 @@ func (s leaderboardService) createLeaderboard(ctx context.Context, param createL
 		return database.Leaderboard{}, err
 	}
 	if n != int64(len(fields)) {
-		return database.Leaderboard{}, errUnableToInsertAllFields
+		return database.Leaderboard{}, ErrUnableToInsertAllFields
 	}
 
 	for _, opt := range opts {
@@ -134,7 +134,7 @@ func (s leaderboardService) createLeaderboard(ctx context.Context, param createL
 			return database.Leaderboard{}, err
 		}
 		if n != int64(len(optParam)) {
-			return database.Leaderboard{}, errUnableToInsertAllOptions
+			return database.Leaderboard{}, ErrUnableToInsertAllOptions
 		}
 	}
 

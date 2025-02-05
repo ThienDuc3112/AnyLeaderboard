@@ -35,10 +35,10 @@ func (s leaderboardService) addVerifierHandler(w http.ResponseWriter, r *http.Re
 		lid:      lb.ID,
 	})
 
-	if err == errNoUser {
+	if err == ErrNoUser {
 		utils.RespondWithError(w, 400, "User don't exist")
 		return
-	} else if err == errAlreadyVerifier {
+	} else if err == ErrAlreadyVerifier {
 		utils.RespondWithError(w, 400, "User already a verifier")
 		return
 	} else if err != nil {

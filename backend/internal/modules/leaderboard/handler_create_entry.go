@@ -57,31 +57,31 @@ func (s leaderboardService) createEntryHandler(w http.ResponseWriter, r *http.Re
 	if err != nil {
 		// Error handling here
 		switch err {
-		case errNonAnonymousLeaderboard:
+		case ErrNonAnonymousLeaderboard:
 			utils.RespondWithError(w, 500, "Internal server error")
 			err = fmt.Errorf("no user on nonAnon lb, should've been blocked by middleware")
-		case errNoDisplayName:
+		case ErrNoDisplayName:
 			utils.RespondWithError(w, 400, "No display name in request or user token found")
 			err = nil
-		case errRequiredFieldNotExist:
+		case ErrRequiredFieldNotExist:
 			utils.RespondWithError(w, 400, fmt.Sprintf("field '%s' missing", fieldName))
 			err = nil
-		case errConflictForRankField:
+		case ErrConflictForRankField:
 			utils.RespondWithError(w, 500, fmt.Sprintf("Leaderboard have conflicting field, contact leaderboard owner to resolve '%s' field", fieldName))
 			err = fmt.Errorf("field '%s' conflicting for rank: %v", fieldName, err)
-		case errOptionFieldNoOptions:
+		case ErrOptionFieldNoOptions:
 			utils.RespondWithError(w, 500, fmt.Sprintf("Leaderboard have emtpy option field, contact leaderboard owner to resolve '%s' field", fieldName))
 			err = fmt.Errorf("field '%s' have no options: %v", fieldName, err)
-		case errNotAnOption:
+		case ErrNotAnOption:
 			utils.RespondWithError(w, 400, fmt.Sprintf("field '%s' is not a valid option", fieldName))
 			err = nil
-		case errUnrankableFieldType:
+		case ErrUnrankableFieldType:
 			utils.RespondWithError(w, 500, fmt.Sprintf("Leaderboard have unrankable field ranked, contact leaderboard owner to resolve '%s' field", fieldName))
 			err = fmt.Errorf("field '%s' ranked despite unrankable: %v", fieldName, err)
-		case errUnrecognizedField:
+		case ErrUnrecognizedField:
 			utils.RespondWithError(w, 500, fmt.Sprintf("Leaderboard have unknown field, contact leaderboard owner to resolve '%s' field", fieldName))
 			err = fmt.Errorf("field '%s' with unknown/unimplemented field type: %v", fieldName, err)
-		case errNoForRankField:
+		case ErrNoForRankField:
 			utils.RespondWithError(w, 500, "Leaderboard have no 'ranked' field, contact leaderboard owner to resolve this")
 		default:
 			utils.RespondWithError(w, 500, "Internal server error")

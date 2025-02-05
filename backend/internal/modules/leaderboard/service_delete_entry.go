@@ -9,11 +9,11 @@ import (
 func (s leaderboardService) deleteEntry(ctx context.Context, param deleteEntryParam) error {
 	entry, err := s.repo.GetLeaderboardEntryById(ctx, int32(param.entryId))
 	if err == pgx.ErrNoRows {
-		return errNoEntry
+		return ErrNoEntry
 	}
 
 	if entry.LeaderboardID != param.leaderboard.ID {
-		return errNoEntry
+		return ErrNoEntry
 	}
 
 	if param.user.ID == param.leaderboard.Creator {
@@ -24,5 +24,5 @@ func (s leaderboardService) deleteEntry(ctx context.Context, param deleteEntryPa
 		return s.repo.DeleteEntry(ctx, int32(param.entryId))
 	}
 
-	return errNotAuthorized
+	return ErrNotAuthorized
 }

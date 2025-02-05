@@ -26,14 +26,14 @@ func (s leaderboardService) getField(ctx context.Context, param getFieldParam) (
 			}
 		}
 
-		return field{}, errNoField
+		return field{}, ErrNoField
 	} else {
 		curField, err := s.repo.GetFieldByLID(ctx, database.GetFieldByLIDParams{
 			Lid:       param.Lid,
 			FieldName: param.FieldName,
 		})
 		if errors.Is(err, pgx.ErrNoRows) {
-			return field{}, errNoField
+			return field{}, ErrNoField
 		}
 		if err != nil {
 			return field{}, err
