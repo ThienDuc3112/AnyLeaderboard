@@ -9,7 +9,7 @@ import (
 	"net/http"
 )
 
-func (h LeaderboardHandler) addVerifierHandler(w http.ResponseWriter, r *http.Request) {
+func (h LeaderboardHandler) addVerifier(w http.ResponseWriter, r *http.Request) {
 	var err error
 	defer func() { utils.LogError("addVerifierHandler", err) }()
 

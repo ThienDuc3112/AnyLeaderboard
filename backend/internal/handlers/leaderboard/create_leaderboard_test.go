@@ -51,7 +51,7 @@ func TestCreateLeaderboardHandler_Success(t *testing.T) {
 	// Run test
 	w, r, _, err := testutils.SetupPostJSONTestWithUser("/leaderboard", mockBody)
 	assert.NoError(t, err)
-	handler.createLeaderboardHandler(w, r)
+	handler.createLeaderboard(w, r)
 
 	// Assertion
 	res := w.Result()
@@ -76,7 +76,7 @@ func TestCreateLeaderboardHandler_RequestBodyDecodeError(t *testing.T) {
 	// Run test
 	w, r, _, err := testutils.SetupPostJSONTestWithUser("/leaderboard", "Invalid_json_body")
 	assert.NoError(t, err)
-	handler.createLeaderboardHandler(w, r)
+	handler.createLeaderboard(w, r)
 
 	// Assertion
 	res := w.Result()
@@ -104,7 +104,7 @@ func TestCreateLeaderboardHandler_NoFields(t *testing.T) {
 	body.ExternalLinks = []models.ExternalLink{}
 	w, r, _, err := testutils.SetupPostJSONTestWithUser("/leaderboard", body)
 	assert.NoError(t, err)
-	handler.createLeaderboardHandler(w, r)
+	handler.createLeaderboard(w, r)
 
 	// Assertion
 	res := w.Result()
@@ -126,7 +126,7 @@ func TestCreateLeaderboardHandler_NoUserContext(t *testing.T) {
 	// Simulating the absence of a user context
 	w, r, err := testutils.SetupPostJSONTest("/leaderboard", mockBody)
 	assert.NoError(t, err)
-	handler.createLeaderboardHandler(w, r)
+	handler.createLeaderboard(w, r)
 
 	// Assertion
 	res := w.Result()
@@ -206,7 +206,7 @@ func TestCreateLeaderboardHandler_CreateLeaderboardError(t *testing.T) {
 			// Run the test
 			w, r, _, err := testutils.SetupPostJSONTestWithUser("/leaderboard", mockBody)
 			assert.NoError(t, err)
-			handler.createLeaderboardHandler(w, r)
+			handler.createLeaderboard(w, r)
 
 			// Assertion
 			res := w.Result()
@@ -299,7 +299,7 @@ func TestCreateLeaderboardHandler_Validation(t *testing.T) {
 			// Run the test
 			w, r, _, err := testutils.SetupPostJSONTestWithUser("/leaderboard", body)
 			assert.NoError(t, err)
-			handler.createLeaderboardHandler(w, r)
+			handler.createLeaderboard(w, r)
 
 			// Assertion
 			res := w.Result()

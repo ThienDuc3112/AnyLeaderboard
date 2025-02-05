@@ -8,7 +8,7 @@ import (
 	"strconv"
 )
 
-func (h LeaderboardHandler) getVerifiedEntriesHandler(w http.ResponseWriter, r *http.Request) {
+func (h LeaderboardHandler) getVerifiedEntries(w http.ResponseWriter, r *http.Request) {
 	var err error
 	defer func() { utils.LogError("getVerifiedEntriesHandler", err) }()
 

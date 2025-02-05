@@ -10,7 +10,7 @@ import (
 	"strconv"
 )
 
-func (h LeaderboardHandler) deleteEntryHandler(w http.ResponseWriter, r *http.Request) {
+func (h LeaderboardHandler) deleteEntry(w http.ResponseWriter, r *http.Request) {
 	var err error
 	defer func() { utils.LogError("deleteEntryHandler", err) }()
 
