@@ -16,7 +16,7 @@ import (
 // - Add support for sorted by:
 //   - author
 //   - entries count
-func (h LeaderboardHandler) getLeaderboards(w http.ResponseWriter, r *http.Request) {
+func (h LeaderboardHandler) GetLeaderboards(w http.ResponseWriter, r *http.Request) {
 	var err error
 	defer func() { utils.LogError("getLeaderboardsHandler", err) }()
 

@@ -10,7 +10,7 @@ import (
 	"strconv"
 )
 
-func (h LeaderboardHandler) verifyEntry(w http.ResponseWriter, r *http.Request) {
+func (h LeaderboardHandler) VerifyEntry(w http.ResponseWriter, r *http.Request) {
 	var err error
 	defer func() { utils.LogError("verifyEntryHandler", err) }()
 

@@ -9,7 +9,7 @@ import (
 	"net/http"
 )
 
-func (h LeaderboardHandler) removeVerifier(w http.ResponseWriter, r *http.Request) {
+func (h LeaderboardHandler) RemoveVerifier(w http.ResponseWriter, r *http.Request) {
 	var err error
 	defer func() { utils.LogError("removeVerifiersHandler", err) }()
 

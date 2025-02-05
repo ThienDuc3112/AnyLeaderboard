@@ -10,7 +10,7 @@ import (
 	"net/http"
 )
 
-func (h LeaderboardHandler) createLeaderboard(w http.ResponseWriter, r *http.Request) {
+func (h LeaderboardHandler) CreateLeaderboard(w http.ResponseWriter, r *http.Request) {
 	var err error
 	defer func() { utils.LogError("createLeaderboardHandler", err) }()
 
