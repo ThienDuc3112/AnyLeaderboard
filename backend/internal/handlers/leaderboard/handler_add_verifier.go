@@ -3,20 +3,25 @@ package leaderboard
 import (
 	c "anylbapi/internal/constants"
 	"anylbapi/internal/database"
+	"anylbapi/internal/modules/leaderboard"
 	"anylbapi/internal/utils"
 	"fmt"
 	"net/http"
 )
 
-func (s leaderboardService) removeVerifierHandler(w http.ResponseWriter, r *http.Request) {
+func (h LeaderboardHandler) addVerifierHandler(w http.ResponseWriter, r *http.Request) {
 	var err error
-	defer func() { utils.LogError("removeVerifiersHandler", err) }()
+	defer func() { utils.LogError("addVerifierHandler", err) }()
 
 	lb, ok := r.Context().Value(c.MiddlewareKeyLeaderboard).(database.Leaderboard)
 	if !ok {
 		utils.RespondWithError(w, 500, "Internal server error")
 		err = fmt.Errorf("user context is not of type database.Leaderboard")
 		return
+	}
+
+	type addVerifierReqBody struct {
+		Username string `json:"username" validate:"required,min=3,max=64,isUsername"`
 	}
 
 	body, err := utils.ExtractBody[addVerifierReqBody](r.Body)
@@ -30,13 +35,16 @@ func (s leaderboardService) removeVerifierHandler(w http.ResponseWriter, r *http
 		return
 	}
 
-	err = s.removeVerifier(r.Context(), addVerifierParam{
-		username: body.Username,
-		lid:      lb.ID,
+	err = h.s.AddVerifier(r.Context(), leaderboard.AddVerifierParam{
+		Username: body.Username,
+		Lid:      lb.ID,
 	})
 
-	if err == ErrNoUser {
+	if err == leaderboard.ErrNoUser {
 		utils.RespondWithError(w, 400, "User don't exist")
+		return
+	} else if err == leaderboard.ErrAlreadyVerifier {
+		utils.RespondWithError(w, 400, "User already a verifier")
 		return
 	} else if err != nil {
 		utils.RespondWithError(w, 500, "Internal server error")

@@ -3,12 +3,13 @@ package leaderboard
 import (
 	c "anylbapi/internal/constants"
 	"anylbapi/internal/database"
+	"anylbapi/internal/modules/leaderboard"
 	"anylbapi/internal/utils"
 	"fmt"
 	"net/http"
 )
 
-func (s leaderboardService) createEntryHandler(w http.ResponseWriter, r *http.Request) {
+func (h LeaderboardHandler) createEntryHandler(w http.ResponseWriter, r *http.Request) {
 	var err error
 	defer func() { utils.LogError("createEntryHandler", err) }()
 
@@ -47,7 +48,7 @@ func (s leaderboardService) createEntryHandler(w http.ResponseWriter, r *http.Re
 		}
 	}
 
-	eid, fieldName, err := s.createEntry(r.Context(), createEntryParam{
+	eid, fieldName, err := h.s.CreateEntry(r.Context(), leaderboard.CreateEntryParam{
 		Leaderboard: lb,
 		User:        user,
 		Entry:       body,
@@ -57,31 +58,31 @@ func (s leaderboardService) createEntryHandler(w http.ResponseWriter, r *http.Re
 	if err != nil {
 		// Error handling here
 		switch err {
-		case ErrNonAnonymousLeaderboard:
+		case leaderboard.ErrNonAnonymousLeaderboard:
 			utils.RespondWithError(w, 500, "Internal server error")
 			err = fmt.Errorf("no user on nonAnon lb, should've been blocked by middleware")
-		case ErrNoDisplayName:
+		case leaderboard.ErrNoDisplayName:
 			utils.RespondWithError(w, 400, "No display name in request or user token found")
 			err = nil
-		case ErrRequiredFieldNotExist:
+		case leaderboard.ErrRequiredFieldNotExist:
 			utils.RespondWithError(w, 400, fmt.Sprintf("field '%s' missing", fieldName))
 			err = nil
-		case ErrConflictForRankField:
+		case leaderboard.ErrConflictForRankField:
 			utils.RespondWithError(w, 500, fmt.Sprintf("Leaderboard have conflicting field, contact leaderboard owner to resolve '%s' field", fieldName))
 			err = fmt.Errorf("field '%s' conflicting for rank: %v", fieldName, err)
-		case ErrOptionFieldNoOptions:
+		case leaderboard.ErrOptionFieldNoOptions:
 			utils.RespondWithError(w, 500, fmt.Sprintf("Leaderboard have emtpy option field, contact leaderboard owner to resolve '%s' field", fieldName))
 			err = fmt.Errorf("field '%s' have no options: %v", fieldName, err)
-		case ErrNotAnOption:
+		case leaderboard.ErrNotAnOption:
 			utils.RespondWithError(w, 400, fmt.Sprintf("field '%s' is not a valid option", fieldName))
 			err = nil
-		case ErrUnrankableFieldType:
+		case leaderboard.ErrUnrankableFieldType:
 			utils.RespondWithError(w, 500, fmt.Sprintf("Leaderboard have unrankable field ranked, contact leaderboard owner to resolve '%s' field", fieldName))
 			err = fmt.Errorf("field '%s' ranked despite unrankable: %v", fieldName, err)
-		case ErrUnrecognizedField:
+		case leaderboard.ErrUnrecognizedField:
 			utils.RespondWithError(w, 500, fmt.Sprintf("Leaderboard have unknown field, contact leaderboard owner to resolve '%s' field", fieldName))
 			err = fmt.Errorf("field '%s' with unknown/unimplemented field type: %v", fieldName, err)
-		case ErrNoForRankField:
+		case leaderboard.ErrNoForRankField:
 			utils.RespondWithError(w, 500, "Leaderboard have no 'ranked' field, contact leaderboard owner to resolve this")
 		default:
 			utils.RespondWithError(w, 500, "Internal server error")

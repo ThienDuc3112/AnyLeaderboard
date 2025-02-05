@@ -1,6 +1,7 @@
 package leaderboard
 
 import (
+	"anylbapi/internal/models"
 	"context"
 )
 
@@ -16,11 +17,11 @@ const (
 	renameOptionsField editLeaderboardAction = "RENAME_OPTION"
 )
 
-type editLeaderboardParam struct {
+type EditLeaderboardParam struct {
 	Lid          int32
 	OldFieldName string
 	NewField     struct {
-		field
+		models.Field
 		defaultValue any
 	}
 	OldOption string
@@ -28,20 +29,20 @@ type editLeaderboardParam struct {
 	Action    editLeaderboardAction `validate:"oneof=RENAME ADD DELETE REPLACE ADD_OPTION DELETE_OPTION RENAME_OPTION"`
 }
 
-func (s leaderboardService) editLeaderboard(ctx context.Context, param editLeaderboardParam) error {
+func (s LeaderboardService) EditLeaderboard(ctx context.Context, param EditLeaderboardParam) error {
 	if err := validate.Struct(param); err != nil {
 		return ErrInvalidAction
 	}
 
 	// The only action that doesn't need old field
 	if param.Action == addField {
-		return s.addField(ctx, addFieldParam{
+		return s.AddField(ctx, AddFieldParam{
 			Lid:      param.Lid,
 			NewField: param.NewField,
 		})
 	}
 
-	field, err := s.getField(ctx, getFieldParam{
+	field, err := s.GetField(ctx, GetFieldParam{
 		Lid:       param.Lid,
 		FieldName: param.OldFieldName,
 	})
@@ -51,7 +52,7 @@ func (s leaderboardService) editLeaderboard(ctx context.Context, param editLeade
 
 	switch param.Action {
 	case renameField:
-		return s.renameField(ctx, renameFieldParams{
+		return s.RenameField(ctx, RenameFieldParams{
 			fieldName: param.OldFieldName,
 			newName:   param.NewField.Name,
 			lid:       param.Lid,
@@ -61,24 +62,24 @@ func (s leaderboardService) editLeaderboard(ctx context.Context, param editLeade
 			return ErrCannotDeleteForRank
 		}
 
-		return s.deleteField(ctx, deleteFieldParam{
+		return s.DeleteField(ctx, DeleteFieldParam{
 			Lid:          param.Lid,
 			OldFieldName: param.OldFieldName,
 		})
 	case addOptionsField:
-		return s.addOptionToField(ctx, addOptionToFieldParam{
+		return s.AddOptionToField(ctx, AddOptionToFieldParam{
 			FieldName: param.OldFieldName,
 			Lid:       param.Lid,
 			NewOption: param.NewOption,
 		})
 	case deleteOptionsField:
-		return s.deleteOption(ctx, deleteOptionParam{
+		return s.DeleteOption(ctx, DeleteOptionParam{
 			Lid:       param.Lid,
 			FieldName: param.OldFieldName,
 			Option:    param.OldOption,
 		})
 	case renameOptionsField:
-		return s.renameOption(ctx, renameOptionParam{
+		return s.RenameOption(ctx, RenameOptionParam{
 			Lid:       param.Lid,
 			FieldName: param.OldFieldName,
 			OldOption: param.OldOption,

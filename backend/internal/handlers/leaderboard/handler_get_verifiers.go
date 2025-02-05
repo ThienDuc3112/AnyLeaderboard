@@ -8,7 +8,7 @@ import (
 	"net/http"
 )
 
-func (s leaderboardService) getVerifiersHandler(w http.ResponseWriter, r *http.Request) {
+func (s LeaderboardService) getVerifiersHandler(w http.ResponseWriter, r *http.Request) {
 	var err error
 	defer func() { utils.LogError("getVerifiersHandler", err) }()
 

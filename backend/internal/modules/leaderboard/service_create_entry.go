@@ -3,6 +3,7 @@ package leaderboard
 import (
 	c "anylbapi/internal/constants"
 	"anylbapi/internal/database"
+	"anylbapi/internal/models"
 	"anylbapi/internal/utils"
 	"context"
 	"encoding/json"
@@ -12,7 +13,7 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
-func (s leaderboardService) createEntry(ctx context.Context, param createEntryParam) (database.LeaderboardEntry, string, error) {
+func (s LeaderboardService) CreateEntry(ctx context.Context, param CreateEntryParam) (database.LeaderboardEntry, string, error) {
 	entryData := make(map[string]any)
 
 	if !param.Leaderboard.AllowAnnonymous && param.User == nil {
@@ -23,20 +24,20 @@ func (s leaderboardService) createEntry(ctx context.Context, param createEntryPa
 
 	// Get LB fields
 	cacheKeyLBFull := fmt.Sprintf("%s-%d", c.CachePrefixLeaderboardFull, param.Leaderboard.ID)
-	cachedLb, ok := utils.GetCache[leaderboardWithEntry](s.cache, cacheKeyLBFull)
-	var lb leaderboardWithEntry
+	cachedLb, ok := utils.GetCache[models.LeaderboardFull](s.cache, cacheKeyLBFull)
+	var lb models.LeaderboardFull
 	if ok {
 		lb = cachedLb
-		lb.Data = make([]entry, 0)
+		lb.Data = make([]models.Entry, 0)
 	} else {
 		var err error
-		lb, err = s.getLeaderboard(ctx, param.Leaderboard.ID)
+		lb, err = s.GetLeaderboard(ctx, param.Leaderboard.ID)
 		if err != nil {
 			return database.LeaderboardEntry{}, "", err
 		}
 
 		s.cache.SetDefault(cacheKeyLBFull, lb)
-		lb.Data = make([]entry, 0)
+		lb.Data = make([]models.Entry, 0)
 	}
 
 	foundForRankField := false

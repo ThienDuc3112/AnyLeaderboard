@@ -5,14 +5,14 @@ import (
 	"context"
 )
 
-type renameOptionParam struct {
+type RenameOptionParam struct {
 	Lid       int32
 	FieldName string
 	OldOption string
 	NewOption string
 }
 
-func (s leaderboardService) renameOption(ctx context.Context, param renameOptionParam) error {
+func (s LeaderboardService) RenameOption(ctx context.Context, param RenameOptionParam) error {
 	return s.repo.RenameLeadeboardOption(ctx, database.RenameLeadeboardOptionParams{
 		Lid:       param.Lid,
 		FieldName: param.FieldName,

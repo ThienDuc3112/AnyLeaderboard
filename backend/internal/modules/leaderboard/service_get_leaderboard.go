@@ -3,19 +3,20 @@ package leaderboard
 import (
 	c "anylbapi/internal/constants"
 	"anylbapi/internal/database"
+	"anylbapi/internal/models"
 	"anylbapi/internal/utils"
 	"context"
 	"fmt"
 )
 
-func (s leaderboardService) getLeaderboard(ctx context.Context, id int32) (leaderboardWithEntry, error) {
+func (s LeaderboardService) GetLeaderboard(ctx context.Context, id int32) (models.LeaderboardFull, error) {
 	// Check cache
 	cacheKeyLBFull := fmt.Sprintf("%s-%d", c.CachePrefixLeaderboardFull, id)
-	cachedLb, ok := utils.GetCache[leaderboardWithEntry](s.cache, cacheKeyLBFull)
-	var res leaderboardWithEntry
+	cachedLb, ok := utils.GetCache[models.LeaderboardFull](s.cache, cacheKeyLBFull)
+	var res models.LeaderboardFull
 	if ok {
 		res = cachedLb
-		res.Data = make([]entry, 0)
+		res.Data = make([]models.Entry, 0)
 
 		for i := range res.Fields {
 			field := res.Fields[i]
@@ -35,7 +36,7 @@ func (s leaderboardService) getLeaderboard(ctx context.Context, id int32) (leade
 					FieldName: field.Name,
 				})
 				if err != nil {
-					return leaderboardWithEntry{}, err
+					return models.LeaderboardFull{}, err
 				}
 				field.Options = options
 				s.cache.SetDefault(cacheOptionKey, options)
@@ -47,14 +48,14 @@ func (s leaderboardService) getLeaderboard(ctx context.Context, id int32) (leade
 	// Get leaderboard
 	rows, err := s.repo.GetLeaderboardFull(ctx, id)
 	if err != nil {
-		return leaderboardWithEntry{}, err
+		return models.LeaderboardFull{}, err
 	}
 	if len(rows) == 0 {
-		return leaderboardWithEntry{}, ErrNoLeaderboard
+		return models.LeaderboardFull{}, ErrNoLeaderboard
 	}
 	lb := rows[0]
 
-	res = leaderboardWithEntry{
+	res = models.LeaderboardFull{
 		ID:                   int(lb.ID),
 		Name:                 lb.Name,
 		Description:          lb.Description,
@@ -62,8 +63,8 @@ func (s leaderboardService) getLeaderboard(ctx context.Context, id int32) (leade
 		AllowAnonymous:       lb.AllowAnnonymous,
 		RequiredVerification: lb.RequireVerification,
 		UniqueSubmission:     lb.UniqueSubmission,
-		ExternalLink:         make([]externalLink, 0),
-		Fields:               make([]field, 0),
+		ExternalLink:         make([]models.ExternalLink, 0),
+		Fields:               make([]models.Field, 0),
 	}
 
 	fieldSet := make(map[string]bool)
@@ -72,7 +73,7 @@ func (s leaderboardService) getLeaderboard(ctx context.Context, id int32) (leade
 	for _, row := range rows {
 		if row.FieldName.Valid && !fieldSet[row.FieldName.String] {
 			fieldSet[row.FieldName.String] = true
-			field := field{
+			field := models.Field{
 				Name:       row.FieldName.String,
 				Type:       string(row.FieldValue.FieldType),
 				Required:   row.FieldRequired.Bool,
@@ -99,7 +100,7 @@ func (s leaderboardService) getLeaderboard(ctx context.Context, id int32) (leade
 						FieldName: field.Name,
 					})
 					if err != nil {
-						return leaderboardWithEntry{}, err
+						return models.LeaderboardFull{}, err
 					}
 					field.Options = options
 					s.cache.SetDefault(cacheOptionKey, options)
@@ -111,7 +112,7 @@ func (s leaderboardService) getLeaderboard(ctx context.Context, id int32) (leade
 
 		if row.LinkID.Valid && !linkSet[int(row.LinkID.Int32)] {
 			linkSet[int(row.LinkID.Int32)] = true
-			res.ExternalLink = append(res.ExternalLink, externalLink{
+			res.ExternalLink = append(res.ExternalLink, models.ExternalLink{
 				DisplayValue: row.LinkDisplayValue.String,
 				URL:          row.LinkUrl.String,
 			})
@@ -120,6 +121,6 @@ func (s leaderboardService) getLeaderboard(ctx context.Context, id int32) (leade
 
 	// Cache the data
 	s.cache.SetDefault(cacheKeyLBFull, res)
-	res.Data = make([]entry, 0)
+	res.Data = make([]models.Entry, 0)
 	return res, nil
 }

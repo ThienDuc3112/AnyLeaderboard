@@ -7,7 +7,7 @@ import (
 	"strconv"
 )
 
-func (s leaderboardService) getVerifiedEntriesHandler(w http.ResponseWriter, r *http.Request) {
+func (s LeaderboardService) getVerifiedEntriesHandler(w http.ResponseWriter, r *http.Request) {
 	var err error
 	defer func() { utils.LogError("getVerifiedEntriesHandler", err) }()
 

@@ -7,13 +7,13 @@ import (
 	"fmt"
 )
 
-type deleteFieldParam struct {
+type DeleteFieldParam struct {
 	Lid          int32
 	OldFieldName string
 	IsOption     bool
 }
 
-func (s leaderboardService) deleteField(ctx context.Context, param deleteFieldParam) error {
+func (s LeaderboardService) DeleteField(ctx context.Context, param DeleteFieldParam) error {
 	tx, err := s.repo.BeginTx(ctx)
 	if err != nil {
 		return err

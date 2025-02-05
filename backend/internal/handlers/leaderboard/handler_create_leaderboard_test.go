@@ -3,6 +3,8 @@ package leaderboard
 import (
 	c "anylbapi/internal/constants"
 	"anylbapi/internal/database"
+	"anylbapi/internal/models"
+	"anylbapi/internal/modules/leaderboard"
 	"anylbapi/internal/testutils"
 	"anylbapi/internal/utils"
 	"fmt"
@@ -15,14 +17,14 @@ import (
 
 // Mock successful input
 var mockOptions = []string{"v1.0", "v1.1", "v1.2", "v2.0"}
-var mockBody = createLeaderboardReqBody{
+var mockBody = models.LeaderboardStructure{
 	Name: "Test Leaderboard",
-	Fields: []field{
+	Fields: []models.Field{
 		{Name: "Score", Type: "NUMBER", FieldOrder: 1, ForRank: true, Required: true},
 		{Name: "IGT", Type: "DURATION", FieldOrder: 2, Required: true},
 		{Name: "Version", Type: "OPTION", FieldOrder: 3, Options: mockOptions, Required: true},
 	},
-	ExternalLinks: []externalLink{
+	ExternalLinks: []models.ExternalLink{
 		{DisplayValue: "Discord", URL: "https://discord.gg/testServer"},
 		{DisplayValue: "Test 2", URL: "https://test.com"},
 	},
@@ -32,7 +34,8 @@ func TestCreateLeaderboardHandler_Success(t *testing.T) {
 	t.Parallel()
 	m := testutils.NewMockQuerierer(t)
 	mc := testutils.NewMockCache(t)
-	service := newLeaderboardService(m, mc)
+	service := leaderboard.New(m, mc)
+	handler := New(&service)
 
 	// Mock behaviors
 	m.EXPECT().BeginTx(mock.Anything).Return(m, nil)
@@ -48,7 +51,7 @@ func TestCreateLeaderboardHandler_Success(t *testing.T) {
 	// Run test
 	w, r, _, err := testutils.SetupPostJSONTestWithUser("/leaderboard", mockBody)
 	assert.NoError(t, err)
-	service.createLeaderboardHandler(w, r)
+	handler.createLeaderboardHandler(w, r)
 
 	// Assertion
 	res := w.Result()
@@ -67,12 +70,13 @@ func TestCreateLeaderboardHandler_RequestBodyDecodeError(t *testing.T) {
 	t.Parallel()
 	m := testutils.NewMockQuerierer(t)
 	mc := testutils.NewMockCache(t)
-	service := newLeaderboardService(m, mc)
+	service := leaderboard.New(m, mc)
+	handler := New(&service)
 
 	// Run test
 	w, r, _, err := testutils.SetupPostJSONTestWithUser("/leaderboard", "Invalid_json_body")
 	assert.NoError(t, err)
-	service.createLeaderboardHandler(w, r)
+	handler.createLeaderboardHandler(w, r)
 
 	// Assertion
 	res := w.Result()
@@ -91,15 +95,16 @@ func TestCreateLeaderboardHandler_NoFields(t *testing.T) {
 	t.Parallel()
 	m := testutils.NewMockQuerierer(t)
 	mc := testutils.NewMockCache(t)
-	service := newLeaderboardService(m, mc)
+	service := leaderboard.New(m, mc)
+	handler := New(&service)
 
 	// Test inputs (no fields in body)
 	body := mockBody
-	body.Fields = []field{}
-	body.ExternalLinks = []externalLink{}
+	body.Fields = []models.Field{}
+	body.ExternalLinks = []models.ExternalLink{}
 	w, r, _, err := testutils.SetupPostJSONTestWithUser("/leaderboard", body)
 	assert.NoError(t, err)
-	service.createLeaderboardHandler(w, r)
+	handler.createLeaderboardHandler(w, r)
 
 	// Assertion
 	res := w.Result()
@@ -115,12 +120,13 @@ func TestCreateLeaderboardHandler_NoUserContext(t *testing.T) {
 	t.Parallel()
 	m := testutils.NewMockQuerierer(t)
 	mc := testutils.NewMockCache(t)
-	service := newLeaderboardService(m, mc)
+	service := leaderboard.New(m, mc)
+	handler := New(&service)
 
 	// Simulating the absence of a user context
 	w, r, err := testutils.SetupPostJSONTest("/leaderboard", mockBody)
 	assert.NoError(t, err)
-	service.createLeaderboardHandler(w, r)
+	handler.createLeaderboardHandler(w, r)
 
 	// Assertion
 	res := w.Result()
@@ -191,7 +197,8 @@ func TestCreateLeaderboardHandler_CreateLeaderboardError(t *testing.T) {
 			// Mock Querier and Cache
 			m := testutils.NewMockQuerierer(t)
 			mc := testutils.NewMockCache(t)
-			service := newLeaderboardService(m, mc)
+			service := leaderboard.New(m, mc)
+			handler := New(&service)
 
 			// Set up mocks for the current test case
 			tt.setupMocks(m, mc)
@@ -199,7 +206,7 @@ func TestCreateLeaderboardHandler_CreateLeaderboardError(t *testing.T) {
 			// Run the test
 			w, r, _, err := testutils.SetupPostJSONTestWithUser("/leaderboard", mockBody)
 			assert.NoError(t, err)
-			service.createLeaderboardHandler(w, r)
+			handler.createLeaderboardHandler(w, r)
 
 			// Assertion
 			res := w.Result()
@@ -221,13 +228,13 @@ func TestCreateLeaderboardHandler_Validation(t *testing.T) {
 	// Define the table of test cases
 	tests := []struct {
 		name               string
-		setupBody          func() createLeaderboardReqBody
+		setupBody          func() models.LeaderboardStructure
 		expectedStatus     int
 		expectedErrorField string
 	}{
 		{
 			name: "MissingName",
-			setupBody: func() createLeaderboardReqBody {
+			setupBody: func() models.LeaderboardStructure {
 				body := copyMockBody()
 				body.Name = "" // Missing name
 				return body
@@ -237,7 +244,7 @@ func TestCreateLeaderboardHandler_Validation(t *testing.T) {
 		},
 		{
 			name: "InvalidLBName",
-			setupBody: func() createLeaderboardReqBody {
+			setupBody: func() models.LeaderboardStructure {
 				body := copyMockBody()
 				body.Name = "Invalid Name!" // Invalid LBName due to special character "!"
 				return body
@@ -247,9 +254,9 @@ func TestCreateLeaderboardHandler_Validation(t *testing.T) {
 		},
 		{
 			name: "MissingFields",
-			setupBody: func() createLeaderboardReqBody {
+			setupBody: func() models.LeaderboardStructure {
 				body := copyMockBody()
-				body.Fields = []field{} // No fields
+				body.Fields = []models.Field{} // No fields
 				return body
 			},
 			expectedStatus:     http.StatusBadRequest,
@@ -257,7 +264,7 @@ func TestCreateLeaderboardHandler_Validation(t *testing.T) {
 		},
 		{
 			name: "InvalidFieldName",
-			setupBody: func() createLeaderboardReqBody {
+			setupBody: func() models.LeaderboardStructure {
 				body := copyMockBody()
 				body.Fields[0].Name = "\"Invalid Name!\"" // Invalid field name
 				return body
@@ -267,7 +274,7 @@ func TestCreateLeaderboardHandler_Validation(t *testing.T) {
 		},
 		{
 			name: "InvalidExternalLinkURL",
-			setupBody: func() createLeaderboardReqBody {
+			setupBody: func() models.LeaderboardStructure {
 				body := copyMockBody()
 				body.ExternalLinks[0].URL = "invalid-url" // Invalid URL
 				return body
@@ -286,12 +293,13 @@ func TestCreateLeaderboardHandler_Validation(t *testing.T) {
 			// Mock Querier and Cache
 			m := testutils.NewMockQuerierer(t)
 			mc := testutils.NewMockCache(t)
-			service := newLeaderboardService(m, mc)
+			service := leaderboard.New(m, mc)
+			handler := New(&service)
 
 			// Run the test
 			w, r, _, err := testutils.SetupPostJSONTestWithUser("/leaderboard", body)
 			assert.NoError(t, err)
-			service.createLeaderboardHandler(w, r)
+			handler.createLeaderboardHandler(w, r)
 
 			// Assertion
 			res := w.Result()
@@ -308,10 +316,10 @@ func TestCreateLeaderboardHandler_Validation(t *testing.T) {
 	}
 }
 
-func copyMockBody() createLeaderboardReqBody {
+func copyMockBody() models.LeaderboardStructure {
 	res := mockBody
-	res.ExternalLinks = make([]externalLink, 0)
-	res.Fields = make([]field, 0)
+	res.ExternalLinks = make([]models.ExternalLink, 0)
+	res.Fields = make([]models.Field, 0)
 	res.ExternalLinks = append(res.ExternalLinks, mockBody.ExternalLinks...)
 	for _, field := range mockBody.Fields {
 		newField := field

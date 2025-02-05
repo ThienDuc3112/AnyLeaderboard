@@ -7,13 +7,13 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
-func (s leaderboardService) removeVerifier(ctx context.Context, param addVerifierParam) error {
-	user, err := s.repo.GetUserByUsername(ctx, param.username)
+func (s LeaderboardService) RemoveVerifier(ctx context.Context, param AddVerifierParam) error {
+	user, err := s.repo.GetUserByUsername(ctx, param.Username)
 	if err == pgx.ErrNoRows {
 		return ErrNoUser
 	} else if err != nil {
 		return err
 	}
 
-	return s.repo.RemoveVerifier(ctx, database.RemoveVerifierParams{LeaderboardID: param.lid, UserID: user.ID})
+	return s.repo.RemoveVerifier(ctx, database.RemoveVerifierParams{LeaderboardID: param.Lid, UserID: user.ID})
 }

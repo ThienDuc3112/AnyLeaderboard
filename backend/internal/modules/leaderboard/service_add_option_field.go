@@ -5,13 +5,13 @@ import (
 	"context"
 )
 
-type addOptionToFieldParam struct {
+type AddOptionToFieldParam struct {
 	FieldName string
 	Lid       int32
 	NewOption string
 }
 
-func (s leaderboardService) addOptionToField(ctx context.Context, param addOptionToFieldParam) error {
+func (s LeaderboardService) AddOptionToField(ctx context.Context, param AddOptionToFieldParam) error {
 	return s.repo.AddLeaderboardOption(ctx, database.AddLeaderboardOptionParams{
 		Lid:       param.Lid,
 		FieldName: param.FieldName,

@@ -1,11 +1,11 @@
 package leaderboard
 
 import (
-	c "anylbapi/internal/constants"
+	// 	c "anylbapi/internal/constants"
 	"anylbapi/internal/database"
-	"anylbapi/internal/middleware"
+	// 	"anylbapi/internal/middleware"
 	"anylbapi/internal/utils"
-	"fmt"
+	// 	"fmt"
 	"net/http"
 
 	"github.com/patrickmn/go-cache"
@@ -13,105 +13,104 @@ import (
 
 func Router(db database.Querierer, cache *cache.Cache) http.Handler {
 	mux := http.NewServeMux()
-	authMux := http.NewServeMux()
-
-	s := newLeaderboardService(db, cache)
-	m := middleware.New(db, cache)
-
-	// Unauth routes
-	mux.HandleFunc(
-		"GET /",
-		s.getLeaderboardsHandler,
-	)
-	mux.HandleFunc(
-		fmt.Sprintf("GET /{%s}", c.PathValueLeaderboardId),
-		s.getLeaderboardHandler,
-	)
-	mux.HandleFunc(
-		fmt.Sprintf("GET /{%s}/entries/{%s}", c.PathValueLeaderboardId, c.PathValueEntryId),
-		s.dummyFunction,
-	)
-
-	// Auth routes
-	mux.Handle("/", m.AuthAccessToken(authMux))
-
-	// CRUD on leaderboard
-	authMux.HandleFunc(
-		"POST /",
-		s.createLeaderboardHandler,
-	)
-	authMux.HandleFunc(
-		fmt.Sprintf("PUT /{%s}", c.PathValueLeaderboardId),
-		s.dummyFunction,
-	)
-	authMux.HandleFunc(
-		fmt.Sprintf("DELETE /{%s}", c.PathValueLeaderboardId),
-		s.dummyFunction,
-	)
-
-	// CRUD on entry in leaderboard
-	mux.Handle(
-		fmt.Sprintf("POST /{%s}/entries", c.PathValueLeaderboardId),
-		middleware.CreateStack(
-			http.HandlerFunc(s.createEntryHandler),
-			m.GetLeaderboard,
-			m.OptionalAuthAccessToken,
-		),
-	)
-	authMux.Handle(
-		fmt.Sprintf("DELETE /{%s}/entries/{%s}", c.PathValueLeaderboardId, c.PathValueEntryId),
-		m.GetLeaderboard(http.HandlerFunc(s.deleteEntryHandler)),
-	)
-
-	// View for verifier
-	mux.Handle(
-		fmt.Sprintf("GET /{%s}/verifyEntries", c.PathValueLeaderboardId),
-		middleware.CreateStack(
-			http.HandlerFunc(s.getVerifiedEntriesHandler),
-			m.AuthAccessToken,
-			m.GetLeaderboard,
-			m.IsLeaderboardVerifier,
-		),
-	)
-	authMux.Handle(
-		fmt.Sprintf("POST /{%s}/verifyEntries/{%s}", c.PathValueLeaderboardId, c.PathValueEntryId),
-		middleware.CreateStack(
-			http.HandlerFunc(s.verifyEntryHandler),
-			m.GetLeaderboard,
-			m.IsLeaderboardVerifier,
-		),
-	)
-
-	// Manage verifier
-	mux.Handle(
-		fmt.Sprintf("GET /{%s}/verifiers", c.PathValueLeaderboardId),
-		middleware.CreateStack(
-			http.HandlerFunc(s.getVerifiersHandler),
-			m.AuthAccessToken,
-			m.GetLeaderboard,
-			m.IsLeaderboardCreator,
-		),
-	)
-	authMux.Handle(
-		fmt.Sprintf("POST /{%s}/verifiers", c.PathValueLeaderboardId),
-		middleware.CreateStack(
-			http.HandlerFunc(s.addVerifierHandler),
-			m.GetLeaderboard,
-			m.IsLeaderboardCreator,
-		),
-	)
-	authMux.Handle(
-		fmt.Sprintf("DELETE /{%s}/verifiers", c.PathValueLeaderboardId),
-		middleware.CreateStack(
-			http.HandlerFunc(s.removeVerifierHandler),
-			m.GetLeaderboard,
-			m.IsLeaderboardCreator,
-		),
-	)
-
+	//		authMux := http.NewServeMux()
+	//
+	//		s := New(db, cache)
+	//		m := middleware.New(db, cache)
+	//
+	//		// Unauth routes
+	//		mux.HandleFunc(
+	//			"GET /",
+	//			s.getLeaderboardsHandler,
+	//		)
+	//		mux.HandleFunc(
+	//			fmt.Sprintf("GET /{%s}", c.PathValueLeaderboardId),
+	//			s.getLeaderboardHandler,
+	//		)
+	//		mux.HandleFunc(
+	//			fmt.Sprintf("GET /{%s}/entries/{%s}", c.PathValueLeaderboardId, c.PathValueEntryId),
+	//			s.dummyFunction,
+	//		)
+	//
+	//		// Auth routes
+	//		mux.Handle("/", m.AuthAccessToken(authMux))
+	//
+	//		// CRUD on leaderboard
+	//		authMux.HandleFunc(
+	//			"POST /",
+	//			s.createLeaderboardHandler,
+	//		)
+	//		authMux.HandleFunc(
+	//			fmt.Sprintf("PUT /{%s}", c.PathValueLeaderboardId),
+	//			s.dummyFunction,
+	//		)
+	//		authMux.HandleFunc(
+	//			fmt.Sprintf("DELETE /{%s}", c.PathValueLeaderboardId),
+	//			s.dummyFunction,
+	//		)
+	//
+	//		// CRUD on entry in leaderboard
+	//		mux.Handle(
+	//			fmt.Sprintf("POST /{%s}/entries", c.PathValueLeaderboardId),
+	//			middleware.CreateStack(
+	//				http.HandlerFunc(s.createEntryHandler),
+	//				m.GetLeaderboard,
+	//				m.OptionalAuthAccessToken,
+	//			),
+	//		)
+	//		authMux.Handle(
+	//			fmt.Sprintf("DELETE /{%s}/entries/{%s}", c.PathValueLeaderboardId, c.PathValueEntryId),
+	//			m.GetLeaderboard(http.HandlerFunc(s.deleteEntryHandler)),
+	//		)
+	//
+	//		// View for verifier
+	//		mux.Handle(
+	//			fmt.Sprintf("GET /{%s}/verifyEntries", c.PathValueLeaderboardId),
+	//			middleware.CreateStack(
+	//				http.HandlerFunc(s.getVerifiedEntriesHandler),
+	//				m.AuthAccessToken,
+	//				m.GetLeaderboard,
+	//				m.IsLeaderboardVerifier,
+	//			),
+	//		)
+	//		authMux.Handle(
+	//			fmt.Sprintf("POST /{%s}/verifyEntries/{%s}", c.PathValueLeaderboardId, c.PathValueEntryId),
+	//			middleware.CreateStack(
+	//				http.HandlerFunc(s.verifyEntryHandler),
+	//				m.GetLeaderboard,
+	//				m.IsLeaderboardVerifier,
+	//			),
+	//		)
+	//
+	//		// Manage verifier
+	//		mux.Handle(
+	//			fmt.Sprintf("GET /{%s}/verifiers", c.PathValueLeaderboardId),
+	//			middleware.CreateStack(
+	//				http.HandlerFunc(s.getVerifiersHandler),
+	//				m.AuthAccessToken,
+	//				m.GetLeaderboard,
+	//				m.IsLeaderboardCreator,
+	//			),
+	//		)
+	//		authMux.Handle(
+	//			fmt.Sprintf("POST /{%s}/verifiers", c.PathValueLeaderboardId),
+	//			middleware.CreateStack(
+	//				http.HandlerFunc(s.addVerifierHandler),
+	//				m.GetLeaderboard,
+	//				m.IsLeaderboardCreator,
+	//			),
+	//		)
+	//		authMux.Handle(
+	//			fmt.Sprintf("DELETE /{%s}/verifiers", c.PathValueLeaderboardId),
+	//			middleware.CreateStack(
+	//				http.HandlerFunc(s.removeVerifierHandler),
+	//				m.GetLeaderboard,
+	//				m.IsLeaderboardCreator,
+	//			),
+	//		)
+	//
 	return mux
 }
-
-func (leaderboardService) dummyFunction(w http.ResponseWriter, r *http.Request) {
+func (LeaderboardService) dummyFunction(w http.ResponseWriter, _ *http.Request) {
 	utils.RespondWithError(w, http.StatusNotImplemented, "Route not implemented yet")
 }

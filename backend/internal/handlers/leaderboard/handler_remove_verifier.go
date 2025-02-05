@@ -8,9 +8,9 @@ import (
 	"net/http"
 )
 
-func (s leaderboardService) addVerifierHandler(w http.ResponseWriter, r *http.Request) {
+func (s LeaderboardService) removeVerifierHandler(w http.ResponseWriter, r *http.Request) {
 	var err error
-	defer func() { utils.LogError("addVerifierHandler", err) }()
+	defer func() { utils.LogError("removeVerifiersHandler", err) }()
 
 	lb, ok := r.Context().Value(c.MiddlewareKeyLeaderboard).(database.Leaderboard)
 	if !ok {
@@ -30,16 +30,13 @@ func (s leaderboardService) addVerifierHandler(w http.ResponseWriter, r *http.Re
 		return
 	}
 
-	err = s.addVerifier(r.Context(), addVerifierParam{
+	err = s.removeVerifier(r.Context(), addVerifierParam{
 		username: body.Username,
 		lid:      lb.ID,
 	})
 
 	if err == ErrNoUser {
 		utils.RespondWithError(w, 400, "User don't exist")
-		return
-	} else if err == ErrAlreadyVerifier {
-		utils.RespondWithError(w, 400, "User already a verifier")
 		return
 	} else if err != nil {
 		utils.RespondWithError(w, 500, "Internal server error")

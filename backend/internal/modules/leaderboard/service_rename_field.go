@@ -5,13 +5,13 @@ import (
 	"context"
 )
 
-type renameFieldParams struct {
+type RenameFieldParams struct {
 	fieldName string
 	lid       int32
 	newName   string
 }
 
-func (s leaderboardService) renameField(ctx context.Context, param renameFieldParams) error {
+func (s LeaderboardService) RenameField(ctx context.Context, param RenameFieldParams) error {
 	tx, err := s.repo.BeginTx(ctx)
 	if err != nil {
 		return err

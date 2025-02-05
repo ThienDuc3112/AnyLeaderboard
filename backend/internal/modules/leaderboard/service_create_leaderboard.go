@@ -9,7 +9,7 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
-func (s leaderboardService) createLeaderboard(ctx context.Context, param createLeaderboardParam) (database.Leaderboard, error) {
+func (s LeaderboardService) CreateLeaderboard(ctx context.Context, param CreateLeaderboardParam) (database.Leaderboard, error) {
 	tx, err := s.repo.BeginTx(ctx)
 	if err != nil {
 		return database.Leaderboard{}, nil

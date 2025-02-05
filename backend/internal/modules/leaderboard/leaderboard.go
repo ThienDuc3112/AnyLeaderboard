@@ -5,14 +5,14 @@ import (
 	"anylbapi/internal/utils"
 )
 
-func newLeaderboardService(repo database.Querierer, cache utils.Cache) leaderboardService {
-	return leaderboardService{
+func New(repo database.Querierer, cache utils.Cache) LeaderboardService {
+	return LeaderboardService{
 		repo:  repo,
 		cache: cache,
 	}
 }
 
-type leaderboardService struct {
+type LeaderboardService struct {
 	repo  database.Querierer
 	cache utils.Cache
 }

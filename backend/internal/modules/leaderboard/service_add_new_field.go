@@ -3,21 +3,22 @@ package leaderboard
 import (
 	c "anylbapi/internal/constants"
 	"anylbapi/internal/database"
+	"anylbapi/internal/models"
 	"context"
 	"encoding/json"
 	"fmt"
 	"time"
 )
 
-type addFieldParam struct {
+type AddFieldParam struct {
 	Lid      int32
 	NewField struct {
-		field
+		models.Field
 		defaultValue any
 	}
 }
 
-func (s leaderboardService) addField(ctx context.Context, param addFieldParam) error {
+func (s LeaderboardService) AddField(ctx context.Context, param AddFieldParam) error {
 	tx, err := s.repo.BeginTx(ctx)
 	if err != nil {
 		return err

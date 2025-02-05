@@ -5,16 +5,16 @@ import (
 	"context"
 )
 
-func (s leaderboardService) getEntries(ctx context.Context, param getEntriesParam) (getEntriesReturn, error) {
+func (s LeaderboardService) GetEntries(ctx context.Context, param GetEntriesParam) (GetEntriesReturn, error) {
 	// TODO: TEST THE HECK OUT OF CUSTOM GET ENTRIES MY GOD IT SO BUGGY
 	var err error
 	var entries []database.LeaderboardEntry
 	var count int64
 
 	getEntriesParam := database.GetEntriesParams{
-		LeaderboardID: param.lid,
-		Offset:        param.offset,
-		Limit:         param.pageSize,
+		LeaderboardID: param.Lid,
+		Offset:        param.Offset,
+		Limit:         param.PageSize,
 		Distinct:      param.UniqueSubmission,
 	}
 	false := false
@@ -28,15 +28,15 @@ func (s leaderboardService) getEntries(ctx context.Context, param getEntriesPara
 
 	entries, err = s.repo.GetEntries(ctx, getEntriesParam)
 	if err != nil {
-		return getEntriesReturn{}, err
+		return GetEntriesReturn{}, err
 	}
 	count, err = s.repo.GetEntriesCount(ctx, getEntriesParam)
 	if err != nil {
-		return getEntriesReturn{}, err
+		return GetEntriesReturn{}, err
 	}
 
-	return getEntriesReturn{
-		entries: entries,
-		count:   count,
+	return GetEntriesReturn{
+		Entries: entries,
+		Count:   count,
 	}, nil
 }

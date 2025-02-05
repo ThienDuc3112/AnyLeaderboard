@@ -5,13 +5,13 @@ import (
 	"context"
 )
 
-type deleteOptionParam struct {
+type DeleteOptionParam struct {
 	Lid       int32
 	FieldName string
 	Option    string
 }
 
-func (s leaderboardService) deleteOption(ctx context.Context, param deleteOptionParam) error {
+func (s LeaderboardService) DeleteOption(ctx context.Context, param DeleteOptionParam) error {
 	return s.repo.DeleteLeadeboardOption(ctx, database.DeleteLeadeboardOptionParams{
 		Lid:       param.Lid,
 		FieldName: param.FieldName,

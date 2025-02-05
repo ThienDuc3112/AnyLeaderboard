@@ -7,12 +7,12 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
-func (s leaderboardService) getRecentLeaderboards(ctx context.Context, param getLeaderboardsParam) ([]database.GetRecentLeaderboardsRow, error) {
+func (s LeaderboardService) GetRecentLeaderboards(ctx context.Context, param GetLeaderboardsParam) ([]database.GetRecentLeaderboardsRow, error) {
 	return s.repo.GetRecentLeaderboards(ctx, database.GetRecentLeaderboardsParams{
 		CreatedAt: pgtype.Timestamptz{
-			Time:  param.cursor,
+			Time:  param.Cursor,
 			Valid: true,
 		},
-		Limit: int32(param.pageSize),
+		Limit: int32(param.PageSize),
 	})
 }

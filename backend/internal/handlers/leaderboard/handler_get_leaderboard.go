@@ -7,7 +7,7 @@ import (
 	"strconv"
 )
 
-func (s leaderboardService) getLeaderboardHandler(w http.ResponseWriter, r *http.Request) {
+func (s LeaderboardService) getLeaderboardHandler(w http.ResponseWriter, r *http.Request) {
 	var err error
 	defer func() { utils.LogError("getLeaderboardHandler", err) }()
 

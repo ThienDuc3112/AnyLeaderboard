@@ -8,24 +8,24 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
-func (s leaderboardService) verifyEntry(ctx context.Context, param verifyEntryParam) error {
-	entry, err := s.repo.GetLeaderboardEntryById(ctx, param.entryId)
+func (s LeaderboardService) VerifyEntry(ctx context.Context, param VerifyEntryParam) error {
+	entry, err := s.repo.GetLeaderboardEntryById(ctx, param.EntryId)
 	if err == pgx.ErrNoRows {
 		return ErrNoEntry
 	} else if err != nil {
 		return err
 	}
 
-	if entry.LeaderboardID != param.leaderboardId {
+	if entry.LeaderboardID != param.LeaderboardId {
 		return ErrNoEntry
 	}
 
 	return s.repo.VerifyEntry(ctx, database.VerifyEntryParams{
-		Verified: param.verifyState,
+		Verified: param.VerifyState,
 		VerifiedBy: pgtype.Int4{
-			Int32: param.userId,
+			Int32: param.UserId,
 			Valid: true,
 		},
-		ID: param.entryId,
+		ID: param.EntryId,
 	})
 }

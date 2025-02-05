@@ -1,45 +1,46 @@
 package leaderboard
 
 import (
+	"anylbapi/internal/models"
 	"context"
 )
 
-func (s leaderboardService) getLeaderboardWithEntry(ctx context.Context, param getLeaderboardParam) (leaderboardWithEntry, error) {
-	res, err := s.getLeaderboard(ctx, int32(param.id))
+func (s LeaderboardService) GetLeaderboardWithEntry(ctx context.Context, param GetLeaderboardParam) (models.LeaderboardFull, error) {
+	res, err := s.GetLeaderboard(ctx, int32(param.Id))
 	if err != nil {
-		return leaderboardWithEntry{}, err
+		return models.LeaderboardFull{}, err
 	}
 
-	entriesParam := getEntriesParam{
-		lid:                  int32(res.ID),
+	entriesParam := GetEntriesParam{
+		Lid:                  int32(res.ID),
 		RequiredVerification: res.RequiredVerification,
-		offset:               int32(param.offset),
-		pageSize:             int32(param.pageSize),
+		Offset:               int32(param.Offset),
+		PageSize:             int32(param.PageSize),
 		UniqueSubmission:     res.UniqueSubmission,
 		VerifyState:          true,
-		ForcedPending:        param.forcedPending,
+		ForcedPending:        param.ForcedPending,
 	}
 
 	// Overwrite options
-	if param.requiredVerification != nil {
-		entriesParam.RequiredVerification = *param.requiredVerification
-		if param.verifyState != nil {
-			entriesParam.VerifyState = *param.verifyState
+	if param.RequiredVerification != nil {
+		entriesParam.RequiredVerification = *param.RequiredVerification
+		if param.VerifyState != nil {
+			entriesParam.VerifyState = *param.VerifyState
 		}
 	}
-	if param.uniqueSubmission != nil {
-		entriesParam.UniqueSubmission = *param.uniqueSubmission
+	if param.UniqueSubmission != nil {
+		entriesParam.UniqueSubmission = *param.UniqueSubmission
 	}
 
-	entries, err := s.getEntries(ctx, entriesParam)
+	entries, err := s.GetEntries(ctx, entriesParam)
 	if err != nil {
-		return leaderboardWithEntry{}, err
+		return models.LeaderboardFull{}, err
 	}
 
-	res.EntriesCount = int(entries.count)
+	res.EntriesCount = int(entries.Count)
 
-	for _, row := range entries.entries {
-		entry := entry{
+	for _, row := range entries.Entries {
+		entry := models.Entry{
 			Id:        int(row.ID),
 			CreatedAt: row.CreatedAt.Time,
 			UpdatedAt: row.UpdatedAt.Time,
