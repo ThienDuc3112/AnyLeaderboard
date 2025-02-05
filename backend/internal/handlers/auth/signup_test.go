@@ -2,6 +2,7 @@ package auth
 
 import (
 	"anylbapi/internal/database"
+	"anylbapi/internal/modules/auth"
 	tu "anylbapi/internal/testutils"
 	"anylbapi/internal/utils"
 	"io"
@@ -16,7 +17,8 @@ import (
 func TestSignUpHandler_Success(t *testing.T) {
 	t.Parallel()
 	m := tu.NewMockQuerierer(t)
-	service := newAuthService(m)
+	service := auth.New(m)
+	handler := New(&service)
 
 	// Mock behaviours
 	m.EXPECT().GetUserByUsername(mock.Anything, mock.Anything).Return(database.User{}, pgx.ErrNoRows)
@@ -36,7 +38,7 @@ func TestSignUpHandler_Success(t *testing.T) {
 	if err != nil {
 		assert.Failf(t, "Setup failed", "Unable to setup the test: %v", err)
 	}
-	service.signUpHandler(w, r)
+	handler.SignUp(w, r)
 
 	// ================ Assertion ================
 	res := w.Result()
@@ -54,8 +56,8 @@ func TestSignUpHandler_Success(t *testing.T) {
 func TestSignUpHandler_MissingFields(t *testing.T) {
 	t.Parallel()
 	m := tu.NewMockQuerierer(t)
-	service := newAuthService(m)
-
+	service := auth.New(m)
+	handler := New(&service)
 	// Mock behaviours
 
 	// Test inputs
@@ -66,7 +68,7 @@ func TestSignUpHandler_MissingFields(t *testing.T) {
 	if err != nil {
 		assert.Failf(t, "Setup failed", "Unable to setup the test: %v", err)
 	}
-	service.signUpHandler(w, r)
+	handler.SignUp(w, r)
 
 	// ================ Assertion ================
 	res := w.Result()
@@ -88,7 +90,8 @@ func TestSignUpHandler_MissingFields(t *testing.T) {
 func TestSignUpHandler_DuplicateUsername(t *testing.T) {
 	t.Parallel()
 	m := tu.NewMockQuerierer(t)
-	service := newAuthService(m)
+	service := auth.New(m)
+	handler := New(&service)
 
 	// Mock behaviours
 	m.EXPECT().GetUserByUsername(mock.Anything, "test_user").Return(database.User{}, nil) // Username exists
@@ -104,7 +107,7 @@ func TestSignUpHandler_DuplicateUsername(t *testing.T) {
 	// Run test
 	w, r, err := tu.SetupPostJSONTest("/signup", body)
 	assert.NoError(t, err)
-	service.signUpHandler(w, r)
+	handler.SignUp(w, r)
 
 	// ================ Assertion ================
 	res := w.Result()
@@ -121,7 +124,8 @@ func TestSignUpHandler_DuplicateUsername(t *testing.T) {
 func TestSignUpHandler_DuplicateEmail(t *testing.T) {
 	t.Parallel()
 	m := tu.NewMockQuerierer(t)
-	service := newAuthService(m)
+	service := auth.New(m)
+	handler := New(&service)
 
 	// Mock behaviours
 	m.EXPECT().GetUserByUsername(mock.Anything, mock.Anything).Return(database.User{}, pgx.ErrNoRows) // Username does not exist
@@ -138,7 +142,7 @@ func TestSignUpHandler_DuplicateEmail(t *testing.T) {
 	// Run test
 	w, r, err := tu.SetupPostJSONTest("/signup", body)
 	assert.NoError(t, err)
-	service.signUpHandler(w, r)
+	handler.SignUp(w, r)
 
 	// ================ Assertion ================
 	res := w.Result()
@@ -155,7 +159,8 @@ func TestSignUpHandler_DuplicateEmail(t *testing.T) {
 func TestSignUpHandler_DatabaseFailureOnUsername(t *testing.T) {
 	t.Parallel()
 	m := tu.NewMockQuerierer(t)
-	service := newAuthService(m)
+	service := auth.New(m)
+	handler := New(&service)
 
 	// Mock behaviours
 	m.EXPECT().GetUserByUsername(mock.Anything, "test_user").Return(database.User{}, assert.AnError) // Simulate DB connection error
@@ -171,7 +176,7 @@ func TestSignUpHandler_DatabaseFailureOnUsername(t *testing.T) {
 	// Run test
 	w, r, err := tu.SetupPostJSONTest("/signup", body)
 	assert.NoError(t, err)
-	service.signUpHandler(w, r)
+	handler.SignUp(w, r)
 
 	// ================ Assertion ================
 	res := w.Result()
@@ -183,7 +188,8 @@ func TestSignUpHandler_DatabaseFailureOnUsername(t *testing.T) {
 func TestSignUpHandler_UserCreationFailure(t *testing.T) {
 	t.Parallel()
 	m := tu.NewMockQuerierer(t)
-	service := newAuthService(m)
+	service := auth.New(m)
+	handler := New(&service)
 
 	// Mock behaviours
 	m.EXPECT().GetUserByUsername(mock.Anything, mock.Anything).Return(database.User{}, pgx.ErrNoRows)
@@ -201,7 +207,7 @@ func TestSignUpHandler_UserCreationFailure(t *testing.T) {
 	// Run test
 	w, r, err := tu.SetupPostJSONTest("/signup", body)
 	assert.NoError(t, err)
-	service.signUpHandler(w, r)
+	handler.SignUp(w, r)
 
 	// ================ Assertion ================
 	res := w.Result()

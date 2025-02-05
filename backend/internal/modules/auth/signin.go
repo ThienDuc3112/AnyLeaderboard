@@ -3,6 +3,7 @@ package auth
 import (
 	"anylbapi/internal/constants"
 	"anylbapi/internal/database"
+	"anylbapi/internal/models"
 	"anylbapi/internal/utils"
 	"context"
 	"os"
@@ -14,7 +15,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-func (s authService) login(context context.Context, param loginParam) (tokensReturn, error) {
+func (s AuthService) Login(context context.Context, param LoginParam) (TokensReturn, error) {
 	loginWithEmail := false
 	if strings.Contains(param.Username, "@") {
 		loginWithEmail = true
@@ -29,19 +30,19 @@ func (s authService) login(context context.Context, param loginParam) (tokensRet
 	}
 
 	if err == pgx.ErrNoRows {
-		return tokensReturn{}, errNoUser
+		return TokensReturn{}, ErrNoUser
 	} else if err != nil {
-		return tokensReturn{}, err
+		return TokensReturn{}, err
 	}
 
 	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(param.Password))
 	if err != nil {
-		return tokensReturn{}, errIncorrectPassword
+		return TokensReturn{}, ErrIncorrectPassword
 	}
 
 	accessToken, err := utils.MakeAccessTokenJWT(user, os.Getenv(constants.EnvKeySecret), constants.AccessTokenDuration)
 	if err != nil {
-		return tokensReturn{}, err
+		return TokensReturn{}, err
 	}
 
 	refreshTokenParam := database.CreateNewRefreshTokenParams{
@@ -54,19 +55,29 @@ func (s authService) login(context context.Context, param loginParam) (tokensRet
 		IpAddress:  param.IpAddress,
 	}
 
-	refreshToken, err := s.repo.CreateNewRefreshToken(context, refreshTokenParam)
+	rToken, err := s.repo.CreateNewRefreshToken(context, refreshTokenParam)
 	if err != nil {
-		return tokensReturn{}, err
+		return TokensReturn{}, err
 	}
 
-	refreshTokenStr, err := utils.MakeRefreshTokenJWT(refreshToken, os.Getenv(constants.EnvKeySecret), refreshToken.ExpiresAt.Time)
+	refreshTokenStr, err := utils.MakeRefreshTokenJWT(rToken, os.Getenv(constants.EnvKeySecret), rToken.ExpiresAt.Time)
 	if err != nil {
-		return tokensReturn{}, err
+		return TokensReturn{}, err
 	}
 
-	return tokensReturn{
-		accessToken:     accessToken,
-		refreshToken:    refreshTokenStr,
-		refreshTokenRaw: refreshToken,
+	rt := models.RefreshToken{
+		ID:              rToken.ID,
+		UserID:          rToken.UserID,
+		RotationCounter: rToken.RotationCounter,
+		IssuedAt:        rToken.IssuedAt.Time,
+		ExpiresAt:       rToken.ExpiresAt.Time,
+		DeviceInfo:      rToken.DeviceInfo,
+		IpAddress:       rToken.IpAddress,
+		RevokedAt:       nil,
+	}
+	return TokensReturn{
+		AccessToken:     accessToken,
+		RefreshToken:    refreshTokenStr,
+		RefreshTokenRaw: rt,
 	}, nil
 }

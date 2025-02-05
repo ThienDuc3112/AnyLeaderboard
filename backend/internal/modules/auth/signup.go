@@ -9,7 +9,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-func (s authService) signup(context context.Context, param signUpParam) error {
+func (s AuthService) Signup(context context.Context, param SignUpParam) error {
 	// Clean data
 	param.Username = strings.ToLower(param.Username)
 	param.Email = strings.ToLower(param.Email)
@@ -17,7 +17,7 @@ func (s authService) signup(context context.Context, param signUpParam) error {
 	// Check duplicate Username
 	_, err := s.repo.GetUserByUsername(context, param.Username)
 	if err == nil {
-		return errUsernameTaken
+		return ErrUsernameTaken
 	}
 	if err != pgx.ErrNoRows {
 		return err
@@ -26,7 +26,7 @@ func (s authService) signup(context context.Context, param signUpParam) error {
 	// Check duplicate Email
 	_, err = s.repo.GetUserByEmail(context, param.Email)
 	if err == nil {
-		return errEmailUsed
+		return ErrEmailUsed
 	}
 	if err != pgx.ErrNoRows {
 		return err

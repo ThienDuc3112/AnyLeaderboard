@@ -3,6 +3,7 @@ package server
 import (
 	c "anylbapi/internal/constants"
 	"anylbapi/internal/database"
+	authHandler "anylbapi/internal/handlers/auth"
 	lbHandler "anylbapi/internal/handlers/leaderboard"
 	"anylbapi/internal/middleware"
 	"anylbapi/internal/modules/auth"
@@ -23,8 +24,14 @@ func (s Server) RegisterRoutes() http.Handler {
 	lbService := leaderboard.New(repo, cache)
 	lbHandler := lbHandler.New(&lbService)
 
+	authService := auth.New(repo)
+	authHandler := authHandler.New(&authService)
+
 	// Service routes
-	mux.Handle("/auth/", http.StripPrefix("/auth", auth.Router(repo)))
+	mux.HandleFunc("POST /auth/login", authHandler.Login)
+	mux.HandleFunc("POST /auth/signup", authHandler.SignUp)
+	mux.HandleFunc("POST /auth/refresh", authHandler.Refresh)
+
 	// Unauth routes
 	mux.HandleFunc(
 		"GET /leaderboards/",

@@ -3,6 +3,7 @@ package auth
 import (
 	"anylbapi/internal/constants"
 	"anylbapi/internal/database"
+	"anylbapi/internal/modules/auth"
 	tu "anylbapi/internal/testutils"
 	"anylbapi/internal/utils"
 	"net/http"
@@ -21,7 +22,8 @@ var hash, _ = bcrypt.GenerateFromPassword([]byte("correct_password"), bcrypt.Def
 func TestLoginHandler_Success_Email_login(t *testing.T) {
 	t.Parallel()
 	m := tu.NewMockQuerierer(t)
-	service := newAuthService(m)
+	service := auth.New(m)
+	handler := New(&service)
 
 	// Mock behaviors
 	mockUser := database.User{
@@ -60,7 +62,7 @@ func TestLoginHandler_Success_Email_login(t *testing.T) {
 	// Run test
 	w, r, err := tu.SetupPostJSONTest("/login", body)
 	assert.NoError(t, err)
-	service.loginHandler(w, r)
+	handler.Login(w, r)
 
 	// Assertion
 	res := w.Result()
@@ -85,7 +87,8 @@ func TestLoginHandler_Success_Email_login(t *testing.T) {
 func TestLoginHandler_Success_Username_login(t *testing.T) {
 	t.Parallel()
 	m := tu.NewMockQuerierer(t)
-	service := newAuthService(m)
+	service := auth.New(m)
+	handler := New(&service)
 
 	// Mock behaviors
 	mockUser := database.User{
@@ -124,7 +127,7 @@ func TestLoginHandler_Success_Username_login(t *testing.T) {
 	// Run test
 	w, r, err := tu.SetupPostJSONTest("/login", body)
 	assert.NoError(t, err)
-	service.loginHandler(w, r)
+	handler.Login(w, r)
 
 	// Assertion
 	res := w.Result()
@@ -149,7 +152,8 @@ func TestLoginHandler_Success_Username_login(t *testing.T) {
 func TestLoginHandler_MissingFields(t *testing.T) {
 	t.Parallel()
 	m := tu.NewMockQuerierer(t)
-	service := newAuthService(m)
+	service := auth.New(m)
+	handler := New(&service)
 
 	// Test inputs
 	body := loginReqBody{}
@@ -157,7 +161,7 @@ func TestLoginHandler_MissingFields(t *testing.T) {
 	// Run test
 	w, r, err := tu.SetupPostJSONTest("/login", body)
 	assert.NoError(t, err)
-	service.loginHandler(w, r)
+	handler.Login(w, r)
 
 	// Assertion
 	res := w.Result()
@@ -176,7 +180,8 @@ func TestLoginHandler_MissingFields(t *testing.T) {
 func TestLoginHandler_UserNotFound(t *testing.T) {
 	t.Parallel()
 	m := tu.NewMockQuerierer(t)
-	service := newAuthService(m)
+	service := auth.New(m)
+	handler := New(&service)
 
 	// Mock behaviors
 	m.EXPECT().GetUserByEmail(mock.Anything, "nonexistent@test.com").Return(database.User{}, pgx.ErrNoRows)
@@ -190,7 +195,7 @@ func TestLoginHandler_UserNotFound(t *testing.T) {
 	// Run test
 	w, r, err := tu.SetupPostJSONTest("/login", body)
 	assert.NoError(t, err)
-	service.loginHandler(w, r)
+	handler.Login(w, r)
 
 	// Assertion
 	res := w.Result()
@@ -207,7 +212,8 @@ func TestLoginHandler_UserNotFound(t *testing.T) {
 func TestLoginHandler_IncorrectPassword(t *testing.T) {
 	t.Parallel()
 	m := tu.NewMockQuerierer(t)
-	service := newAuthService(m)
+	service := auth.New(m)
+	handler := New(&service)
 
 	// Mock behaviors
 	mockUser := database.User{
@@ -227,7 +233,7 @@ func TestLoginHandler_IncorrectPassword(t *testing.T) {
 	// Run test
 	w, r, err := tu.SetupPostJSONTest("/login", body)
 	assert.NoError(t, err)
-	service.loginHandler(w, r)
+	handler.Login(w, r)
 
 	// Assertion
 	res := w.Result()
@@ -244,7 +250,8 @@ func TestLoginHandler_IncorrectPassword(t *testing.T) {
 func TestLoginHandler_DatabaseFailure(t *testing.T) {
 	t.Parallel()
 	m := tu.NewMockQuerierer(t)
-	service := newAuthService(m)
+	service := auth.New(m)
+	handler := New(&service)
 
 	// Mock behaviors
 	m.EXPECT().GetUserByEmail(mock.Anything, "test@test.com").Return(database.User{}, assert.AnError)
@@ -258,7 +265,7 @@ func TestLoginHandler_DatabaseFailure(t *testing.T) {
 	// Run test
 	w, r, err := tu.SetupPostJSONTest("/login", body)
 	assert.NoError(t, err)
-	service.loginHandler(w, r)
+	handler.Login(w, r)
 
 	// Assertion
 	res := w.Result()

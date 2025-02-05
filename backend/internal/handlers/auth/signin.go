@@ -1,13 +1,19 @@
 package auth
 
 import (
+	"anylbapi/internal/modules/auth"
 	"anylbapi/internal/utils"
 	"net/http"
 	"strings"
 	"time"
 )
 
-func (s authService) loginHandler(w http.ResponseWriter, r *http.Request) {
+type loginReqBody struct {
+	Username string `json:"username" validate:"required,min=3,max=64,isUsername"`
+	Password string `json:"password" validate:"required"`
+}
+
+func (h AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 	var err error
 	defer func() { utils.LogError("signupHandler", err) }()
 
@@ -29,12 +35,13 @@ func (s authService) loginHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	session, err := s.login(r.Context(), loginParam{
-		loginReqBody: body,
-		DeviceInfo:   r.UserAgent(),
-		IpAddress:    r.RemoteAddr,
+	session, err := h.s.Login(r.Context(), auth.LoginParam{
+		Username:   body.Username,
+		Password:   body.Password,
+		DeviceInfo: r.UserAgent(),
+		IpAddress:  r.RemoteAddr,
 	})
-	if err == errIncorrectPassword || err == errNoUser {
+	if err == auth.ErrIncorrectPassword || err == auth.ErrNoUser {
 		utils.RespondWithError(w, 401, "Invalid credentials")
 		return
 	} else if err != nil {
@@ -42,10 +49,10 @@ func (s authService) loginHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	cookie := utils.CreateCookie(cookieKeyRefreshToken, session.refreshToken, r.URL.Host, session.refreshTokenRaw.ExpiresAt.Time)
+	cookie := utils.CreateCookie(cookieKeyRefreshToken, session.RefreshToken, r.URL.Host, session.RefreshTokenRaw.ExpiresAt)
 	http.SetCookie(w, cookie)
 
 	utils.RespondWithJSON(w, 200, map[string]string{
-		"access_token": session.accessToken,
+		"access_token": session.AccessToken,
 	})
 }

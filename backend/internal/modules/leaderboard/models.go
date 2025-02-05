@@ -7,8 +7,6 @@ import (
 	"time"
 )
 
-// ============ Request body type ============
-
 // ============ Service param and return types ============
 type CreateLeaderboardParam struct {
 	models.LeaderboardStructure

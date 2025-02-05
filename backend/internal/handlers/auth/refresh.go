@@ -1,12 +1,13 @@
 package auth
 
 import (
+	"anylbapi/internal/modules/auth"
 	"anylbapi/internal/utils"
 	"net/http"
 	"time"
 )
 
-func (s authService) refreshHandler(w http.ResponseWriter, r *http.Request) {
+func (h AuthHandler) Refresh(w http.ResponseWriter, r *http.Request) {
 	var err error
 	defer func() { utils.LogError("refreshHandler", err) }()
 
@@ -15,7 +16,7 @@ func (s authService) refreshHandler(w http.ResponseWriter, r *http.Request) {
 		utils.RespondWithError(w, 401, "You are not logged in")
 		return
 	}
-	tokens, err := s.refresh(r.Context(), refreshParam{
+	tokens, err := h.s.Refresh(r.Context(), auth.RefreshParam{
 		RefreshToken: cookie.Value,
 		IpAddress:    r.RemoteAddr,
 		DeviceInfo:   r.UserAgent(),
@@ -36,10 +37,10 @@ func (s authService) refreshHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	newCookie := utils.CreateCookie(cookieKeyRefreshToken, tokens.refreshToken, r.URL.Host, tokens.refreshTokenRaw.ExpiresAt.Time)
+	newCookie := utils.CreateCookie(cookieKeyRefreshToken, tokens.RefreshToken, r.URL.Host, tokens.RefreshTokenRaw.ExpiresAt)
 	http.SetCookie(w, newCookie)
 	utils.RespondWithJSON(w, 200, map[string]string{
-		"access_token": tokens.accessToken,
+		"access_token": tokens.AccessToken,
 	})
 }
 
@@ -52,13 +53,13 @@ func convertErrorToResponse(err error) struct {
 		responseStr     string
 	}
 	switch err {
-	case errMismatchRotationCounter, errInvalidToken, errNoTokenExist:
+	case auth.ErrMismatchRotationCounter, auth.ErrInvalidToken, auth.ErrNoTokenExist:
 		response.responseStr = "Forbidden"
-	case errTokenRevoked:
+	case auth.ErrTokenRevoked:
 		response.responseStr = "Session already signed out"
-	case errNoUser:
+	case auth.ErrNoUser:
 		response.responseStr = "Account not found, potentially deleted"
-	case errMismatchUpdatedRC:
+	case auth.ErrMismatchUpdatedRC:
 		fallthrough
 	default:
 		response.responseStr = "Internal server error"

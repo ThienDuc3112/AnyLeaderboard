@@ -5,13 +5,13 @@ import (
 	"anylbapi/internal/utils"
 )
 
-func newAuthService(repo database.Querierer) authService {
-	return authService{
+func New(repo database.Querierer) AuthService {
+	return AuthService{
 		repo: repo,
 	}
 }
 
-type authService struct {
+type AuthService struct {
 	repo database.Querierer
 }
 

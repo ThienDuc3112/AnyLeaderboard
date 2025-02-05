@@ -3,6 +3,7 @@ package auth
 import (
 	"anylbapi/internal/constants"
 	"anylbapi/internal/database"
+	"anylbapi/internal/modules/auth"
 	tu "anylbapi/internal/testutils"
 	"anylbapi/internal/utils"
 	"io"
@@ -20,7 +21,8 @@ import (
 func TestRefreshHandler_Success(t *testing.T) {
 	t.Parallel()
 	m := tu.NewMockQuerierer(t)
-	service := newAuthService(m)
+	service := auth.New(m)
+	handler := New(&service)
 
 	// Mock behaviors
 	mockUser := database.User{
@@ -68,7 +70,7 @@ func TestRefreshHandler_Success(t *testing.T) {
 	r.Header.Set("User-Agent", "TestDevice")
 
 	// Run test
-	service.refreshHandler(w, r)
+	handler.Refresh(w, r)
 
 	// Assertions
 	res := w.Result()
@@ -87,7 +89,8 @@ func TestRefreshHandler_Success(t *testing.T) {
 
 func TestRefreshHandler_ExpiredToken(t *testing.T) {
 	t.Parallel()
-	service := newAuthService(nil)
+	service := auth.New(nil)
+	handler := New(&service)
 
 	mockRefreshToken := database.RefreshToken{
 		ID:              1,
@@ -120,7 +123,7 @@ func TestRefreshHandler_ExpiredToken(t *testing.T) {
 	r.AddCookie(cookie)
 
 	// Run test
-	service.refreshHandler(w, r)
+	handler.Refresh(w, r)
 
 	// Assertions
 	res := w.Result()
@@ -139,7 +142,8 @@ func TestRefreshHandler_ExpiredToken(t *testing.T) {
 
 func TestRefreshHandler_InvalidToken(t *testing.T) {
 	t.Parallel()
-	service := newAuthService(nil)
+	service := auth.New(nil)
+	handler := New(&service)
 
 	// Test inputs
 	cookie := &http.Cookie{
@@ -150,7 +154,7 @@ func TestRefreshHandler_InvalidToken(t *testing.T) {
 	r.AddCookie(cookie)
 
 	// Run test
-	service.refreshHandler(w, r)
+	handler.Refresh(w, r)
 
 	// Assertions
 	res := w.Result()

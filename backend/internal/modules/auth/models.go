@@ -1,60 +1,46 @@
 package auth
 
 import (
-	"anylbapi/internal/database"
+	"anylbapi/internal/models"
 	"errors"
 )
 
-// ============ Constants ============
-const (
-	cookieKeyRefreshToken = "refresh_token"
-)
-
-// ============ Request body type ============
-type loginReqBody struct {
-	Username string `json:"username" validate:"required,min=3,max=64,isUsername"`
-	Password string `json:"password" validate:"required"`
-}
-
-type signUpReqBody struct {
-	Username    string `json:"username" validate:"required,min=3,max=64,isUsername"`
-	DisplayName string `json:"displayName" validate:"required,min=3,max=64,isSafeName"`
-	Email       string `json:"email" validate:"required,email"`
-	Password    string `json:"password" validate:"required,min=8,max=64"`
-}
-
 // ============ Service param and return types ============
-type loginParam struct {
-	loginReqBody
+type LoginParam struct {
+	Username   string
+	Password   string
 	DeviceInfo string
 	IpAddress  string
 }
 
-type refreshParam struct {
+type RefreshParam struct {
 	RefreshToken string
 	DeviceInfo   string
 	IpAddress    string
 }
 
-type tokensReturn struct {
-	accessToken     string
-	refreshToken    string
-	refreshTokenRaw database.RefreshToken
+type TokensReturn struct {
+	AccessToken     string
+	RefreshToken    string
+	RefreshTokenRaw models.RefreshToken
 }
 
-type signUpParam struct {
-	signUpReqBody
+type SignUpParam struct {
+	Username    string
+	DisplayName string
+	Email       string
+	Password    string
 }
 
 // ============ Service returned errors ============
 var (
-	errNoUser                  = errors.New("user don't exist")
-	errIncorrectPassword       = errors.New("incorrect password")
-	errUsernameTaken           = errors.New("username is taken")
-	errEmailUsed               = errors.New("email is already used")
-	errNoTokenExist            = errors.New("refresh token don't exist")
-	errMismatchRotationCounter = errors.New("refresh token rotationCounter don't match")
-	errMismatchUpdatedRC       = errors.New("refresh token rotationCounter don't match after update, potential race condition")
-	errTokenRevoked            = errors.New("refresh token revoked")
-	errInvalidToken            = errors.New("invalid token")
+	ErrNoUser                  = errors.New("user don't exist")
+	ErrIncorrectPassword       = errors.New("incorrect password")
+	ErrUsernameTaken           = errors.New("username is taken")
+	ErrEmailUsed               = errors.New("email is already used")
+	ErrNoTokenExist            = errors.New("refresh token don't exist")
+	ErrMismatchRotationCounter = errors.New("refresh token rotationCounter don't match")
+	ErrMismatchUpdatedRC       = errors.New("refresh token rotationCounter don't match after update, potential race condition")
+	ErrTokenRevoked            = errors.New("refresh token revoked")
+	ErrInvalidToken            = errors.New("invalid token")
 )

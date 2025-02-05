@@ -3,6 +3,7 @@ package auth
 import (
 	"anylbapi/internal/constants"
 	"anylbapi/internal/database"
+	"anylbapi/internal/models"
 	"anylbapi/internal/utils"
 	"context"
 	"os"
@@ -12,35 +13,35 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
-func (s authService) refresh(ctx context.Context, param refreshParam) (tokensReturn, error) {
+func (s AuthService) Refresh(ctx context.Context, param RefreshParam) (TokensReturn, error) {
 	claim, err := utils.ValidateRefreshToken(param.RefreshToken, os.Getenv(constants.EnvKeySecret))
 	if err != nil {
-		return tokensReturn{}, errInvalidToken
+		return TokensReturn{}, ErrInvalidToken
 	}
 	rToken, err := s.repo.GetRefreshToken(ctx, claim.TokenID)
 	if err == pgx.ErrNoRows {
-		return tokensReturn{}, errNoTokenExist
+		return TokensReturn{}, ErrNoTokenExist
 	} else if err != nil {
-		return tokensReturn{}, err
+		return TokensReturn{}, err
 	}
 
 	if rToken.RotationCounter != claim.RotationCounter {
-		return tokensReturn{}, errMismatchRotationCounter
+		return TokensReturn{}, ErrMismatchRotationCounter
 	}
 	if rToken.RevokedAt.Valid {
-		return tokensReturn{}, errTokenRevoked
+		return TokensReturn{}, ErrTokenRevoked
 	}
 
 	user, err := s.repo.GetUserByID(ctx, rToken.UserID)
 	if err == pgx.ErrNoRows {
-		return tokensReturn{}, errNoUser
+		return TokensReturn{}, ErrNoUser
 	} else if err != nil {
-		return tokensReturn{}, err
+		return TokensReturn{}, err
 	}
 
 	accessTokenStr, err := utils.MakeAccessTokenJWT(user, os.Getenv(constants.EnvKeySecret), constants.AccessTokenDuration)
 	if err != nil {
-		return tokensReturn{}, err
+		return TokensReturn{}, err
 	}
 	rToken.ExpiresAt = pgtype.Timestamptz{
 		Time:  time.Now().Add(constants.RefreshTokenDuration),
@@ -52,7 +53,7 @@ func (s authService) refresh(ctx context.Context, param refreshParam) (tokensRet
 	rToken.IpAddress = param.IpAddress
 	refreshTokenStr, err := utils.MakeRefreshTokenJWT(rToken, os.Getenv(constants.EnvKeySecret), rToken.ExpiresAt.Time)
 	if err != nil {
-		return tokensReturn{}, err
+		return TokensReturn{}, err
 	}
 	rToken, err = s.repo.UpdateRefreshToken(ctx, database.UpdateRefreshTokenParams{
 		ExpiresAt:  rToken.ExpiresAt,
@@ -61,15 +62,26 @@ func (s authService) refresh(ctx context.Context, param refreshParam) (tokensRet
 		ID:         rToken.ID,
 	})
 	if err != nil {
-		return tokensReturn{}, err
+		return TokensReturn{}, err
 	}
 	if rToken.RotationCounter != newRotationCounter {
-		return tokensReturn{}, errMismatchUpdatedRC
+		return TokensReturn{}, ErrMismatchUpdatedRC
 	}
 
-	return tokensReturn{
-		accessToken:     accessTokenStr,
-		refreshToken:    refreshTokenStr,
-		refreshTokenRaw: rToken,
+	rt := models.RefreshToken{
+		ID:              rToken.ID,
+		UserID:          rToken.UserID,
+		RotationCounter: rToken.RotationCounter,
+		IssuedAt:        rToken.IssuedAt.Time,
+		ExpiresAt:       rToken.ExpiresAt.Time,
+		DeviceInfo:      rToken.DeviceInfo,
+		IpAddress:       rToken.IpAddress,
+		RevokedAt:       nil,
+	}
+
+	return TokensReturn{
+		AccessToken:     accessTokenStr,
+		RefreshToken:    refreshTokenStr,
+		RefreshTokenRaw: rt,
 	}, nil
 }
