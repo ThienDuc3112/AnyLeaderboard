@@ -5,27 +5,26 @@ import (
 	"context"
 )
 
-type editLeaderboardAction string
+type EditLeaderboardAction string
 
 const (
-	addField           editLeaderboardAction = "ADD"
-	renameField        editLeaderboardAction = "RENAME"
-	deleteField        editLeaderboardAction = "DELETE"
-	addOptionsField    editLeaderboardAction = "ADD_OPTION"
-	deleteOptionsField editLeaderboardAction = "DELETE_OPTION"
-	renameOptionsField editLeaderboardAction = "RENAME_OPTION"
+	addField           EditLeaderboardAction = "ADD"
+	renameField        EditLeaderboardAction = "RENAME"
+	deleteField        EditLeaderboardAction = "DELETE"
+	addOptionsField    EditLeaderboardAction = "ADD_OPTION"
+	deleteOptionsField EditLeaderboardAction = "DELETE_OPTION"
+	renameOptionsField EditLeaderboardAction = "RENAME_OPTION"
 )
 
 type EditLeaderboardParam struct {
 	Lid          int32
 	OldFieldName string
-	NewField     struct {
-		models.Field
-		defaultValue any
-	}
-	OldOption string
-	NewOption string
-	Action    editLeaderboardAction `validate:"oneof=RENAME ADD DELETE ADD_OPTION DELETE_OPTION RENAME_OPTION"`
+	NewFieldName string
+	NewField     *models.Field
+	DefaultValue any
+	OldOption    string
+	NewOption    string
+	Action       EditLeaderboardAction `validate:"oneof=RENAME ADD DELETE ADD_OPTION DELETE_OPTION RENAME_OPTION"`
 }
 
 func (s LeaderboardService) EditLeaderboard(ctx context.Context, param EditLeaderboardParam) error {
@@ -36,8 +35,9 @@ func (s LeaderboardService) EditLeaderboard(ctx context.Context, param EditLeade
 	// The only action that doesn't need old field
 	if param.Action == addField {
 		return s.AddField(ctx, AddFieldParam{
-			Lid:      param.Lid,
-			NewField: param.NewField,
+			Lid:          param.Lid,
+			NewField:     *param.NewField,
+			DefaultValue: param.DefaultValue,
 		})
 	}
 
@@ -53,7 +53,7 @@ func (s LeaderboardService) EditLeaderboard(ctx context.Context, param EditLeade
 	case renameField:
 		return s.RenameField(ctx, RenameFieldParams{
 			fieldName: param.OldFieldName,
-			newName:   param.NewField.Name,
+			newName:   param.NewFieldName,
 			lid:       param.Lid,
 		})
 	case deleteField:

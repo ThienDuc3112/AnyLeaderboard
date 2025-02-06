@@ -11,11 +11,9 @@ import (
 )
 
 type AddFieldParam struct {
-	Lid      int32
-	NewField struct {
-		models.Field
-		defaultValue any
-	}
+	Lid          int32
+	NewField     models.Field
+	DefaultValue any
 }
 
 func (s LeaderboardService) AddField(ctx context.Context, param AddFieldParam) error {
@@ -42,7 +40,7 @@ func (s LeaderboardService) AddField(ctx context.Context, param AddFieldParam) e
 	var val any
 	var ok bool
 	if field.Required {
-		input := param.NewField.defaultValue
+		input := param.DefaultValue
 		switch field.FieldValue {
 		case database.FieldTypeDURATION, database.FieldTypeNUMBER:
 			val, ok = input.(float64)
