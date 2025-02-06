@@ -11,7 +11,6 @@ const (
 	addField           editLeaderboardAction = "ADD"
 	renameField        editLeaderboardAction = "RENAME"
 	deleteField        editLeaderboardAction = "DELETE"
-	replaceField       editLeaderboardAction = "REPLACE"
 	addOptionsField    editLeaderboardAction = "ADD_OPTION"
 	deleteOptionsField editLeaderboardAction = "DELETE_OPTION"
 	renameOptionsField editLeaderboardAction = "RENAME_OPTION"
@@ -26,7 +25,7 @@ type EditLeaderboardParam struct {
 	}
 	OldOption string
 	NewOption string
-	Action    editLeaderboardAction `validate:"oneof=RENAME ADD DELETE REPLACE ADD_OPTION DELETE_OPTION RENAME_OPTION"`
+	Action    editLeaderboardAction `validate:"oneof=RENAME ADD DELETE ADD_OPTION DELETE_OPTION RENAME_OPTION"`
 }
 
 func (s LeaderboardService) EditLeaderboard(ctx context.Context, param EditLeaderboardParam) error {

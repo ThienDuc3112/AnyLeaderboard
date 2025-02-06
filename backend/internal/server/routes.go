@@ -27,12 +27,12 @@ func (s Server) RegisterRoutes() http.Handler {
 	authService := auth.New(repo)
 	authHandler := authHandler.New(&authService)
 
-	// Service routes
+	// Auth routes
 	mux.HandleFunc("POST /auth/login", authHandler.Login)
 	mux.HandleFunc("POST /auth/signup", authHandler.SignUp)
 	mux.HandleFunc("POST /auth/refresh", authHandler.Refresh)
 
-	// Unauth routes
+	// Leaderboard routes
 	mux.HandleFunc(
 		"GET /leaderboards/",
 		lbHandler.GetLeaderboards,
@@ -46,9 +46,6 @@ func (s Server) RegisterRoutes() http.Handler {
 		dummyFunction,
 	)
 
-	// Auth routes
-	// mux.Handle("/", m.AuthAccessToken(authMux))
-
 	// CRUD on leaderboard
 	mux.Handle(
 		"POST /leaderboards/",
@@ -58,8 +55,11 @@ func (s Server) RegisterRoutes() http.Handler {
 	)
 	mux.Handle(
 		fmt.Sprintf("PUT /leaderboards/{%s}", c.PathValueLeaderboardId),
-		m.AuthAccessToken(
-			http.HandlerFunc(dummyFunction),
+		middleware.CreateStack(
+			http.HandlerFunc(lbHandler.EditLeaderboard),
+			m.AuthAccessToken,
+			m.GetLeaderboard,
+			m.IsLeaderboardCreator,
 		),
 	)
 	mux.Handle(
