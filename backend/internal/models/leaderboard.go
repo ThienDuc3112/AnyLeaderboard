@@ -16,7 +16,7 @@ type LeaderboardFull struct {
 	UniqueSubmission     bool           `json:"uniqueSubmission"`
 	ExternalLink         []ExternalLink `json:"externalLinks"`
 	Fields               []Field        `json:"fields"`
-	Data                 []Entry        `json:"data"`
+	Data                 []Entry        `json:"data,omitempty"`
 }
 
 type LeaderboardStructure struct {

@@ -42,8 +42,12 @@ func (s Server) RegisterRoutes() http.Handler {
 		lbHandler.GetLeaderboard,
 	)
 	mux.HandleFunc(
+		fmt.Sprintf("GET /leaderboards/{%s}/config", c.PathValueLeaderboardId),
+		lbHandler.GetLeaderboardConfig,
+	)
+	mux.HandleFunc(
 		fmt.Sprintf("GET /leaderboards/{%s}/entries/{%s}", c.PathValueLeaderboardId, c.PathValueEntryId),
-		dummyFunction,
+		lbHandler.GetEntry,
 	)
 
 	// CRUD on leaderboard
@@ -133,6 +137,14 @@ func (s Server) RegisterRoutes() http.Handler {
 			m.AuthAccessToken,
 			m.GetLeaderboard,
 			m.IsLeaderboardCreator,
+		),
+	)
+
+	mux.Handle(
+		fmt.Sprintf("PUT /users/addleaderboard/{%s}", c.PathValueLeaderboardId),
+		middleware.CreateStack(
+			http.HandlerFunc(dummyFunction),
+			m.AuthAccessToken,
 		),
 	)
 
