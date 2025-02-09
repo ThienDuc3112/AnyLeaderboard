@@ -58,6 +58,15 @@ func (s Server) RegisterRoutes() http.Handler {
 		),
 	)
 	mux.Handle(
+		fmt.Sprintf("PATCH /leaderboards/{%s}", c.PathValueLeaderboardId),
+		middleware.CreateStack(
+			http.HandlerFunc(lbHandler.EditLeaderboard),
+			m.AuthAccessToken,
+			m.GetLeaderboard,
+			m.IsLeaderboardCreator,
+		),
+	)
+	mux.Handle(
 		fmt.Sprintf("PUT /leaderboards/{%s}", c.PathValueLeaderboardId),
 		middleware.CreateStack(
 			http.HandlerFunc(lbHandler.EditLeaderboard),

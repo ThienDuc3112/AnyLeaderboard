@@ -1830,6 +1830,63 @@ func (_c *MockQuerierer_GetUserByUsername_Call) RunAndReturn(run func(context.Co
 	return _c
 }
 
+// GetUsernameFromId provides a mock function with given fields: ctx, id
+func (_m *MockQuerierer) GetUsernameFromId(ctx context.Context, id int32) (string, error) {
+	ret := _m.Called(ctx, id)
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetUsernameFromId")
+	}
+
+	var r0 string
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context, int32) (string, error)); ok {
+		return rf(ctx, id)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, int32) string); ok {
+		r0 = rf(ctx, id)
+	} else {
+		r0 = ret.Get(0).(string)
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, int32) error); ok {
+		r1 = rf(ctx, id)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// MockQuerierer_GetUsernameFromId_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetUsernameFromId'
+type MockQuerierer_GetUsernameFromId_Call struct {
+	*mock.Call
+}
+
+// GetUsernameFromId is a helper method to define mock.On call
+//   - ctx context.Context
+//   - id int32
+func (_e *MockQuerierer_Expecter) GetUsernameFromId(ctx interface{}, id interface{}) *MockQuerierer_GetUsernameFromId_Call {
+	return &MockQuerierer_GetUsernameFromId_Call{Call: _e.mock.On("GetUsernameFromId", ctx, id)}
+}
+
+func (_c *MockQuerierer_GetUsernameFromId_Call) Run(run func(ctx context.Context, id int32)) *MockQuerierer_GetUsernameFromId_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(int32))
+	})
+	return _c
+}
+
+func (_c *MockQuerierer_GetUsernameFromId_Call) Return(_a0 string, _a1 error) *MockQuerierer_GetUsernameFromId_Call {
+	_c.Call.Return(_a0, _a1)
+	return _c
+}
+
+func (_c *MockQuerierer_GetUsernameFromId_Call) RunAndReturn(run func(context.Context, int32) (string, error)) *MockQuerierer_GetUsernameFromId_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // GetVerifiers provides a mock function with given fields: ctx, leaderboardID
 func (_m *MockQuerierer) GetVerifiers(ctx context.Context, leaderboardID int32) ([]database.User, error) {
 	ret := _m.Called(ctx, leaderboardID)

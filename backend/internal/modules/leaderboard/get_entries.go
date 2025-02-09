@@ -16,6 +16,8 @@ func (s LeaderboardService) GetEntries(ctx context.Context, param GetEntriesPara
 		Offset:        param.Offset,
 		Limit:         param.PageSize,
 		Distinct:      param.UniqueSubmission,
+		HasBeenCheck:  nil,
+		VerifyState:   nil,
 	}
 	false := false
 	true := true

@@ -41,11 +41,31 @@ func (s LeaderboardService) GetLeaderboardWithEntry(ctx context.Context, param G
 
 	for _, row := range entries.Entries {
 		entry := models.Entry{
-			Id:        int(row.ID),
-			CreatedAt: row.CreatedAt.Time,
-			UpdatedAt: row.UpdatedAt.Time,
-			Fields:    row.CustomFields,
-			Verified:  row.Verified,
+			Id:         int(row.ID),
+			CreatedAt:  row.CreatedAt.Time,
+			UpdatedAt:  row.UpdatedAt.Time,
+			Fields:     row.CustomFields,
+			Verified:   row.Verified,
+			Username:   row.Username,
+			VerifiedAt: nil,
+			VerifiedBy: "",
+		}
+
+		if row.VerifiedAt.Valid {
+			entry.VerifiedAt = &row.VerifiedAt.Time
+		}
+		if row.VerifiedBy.Valid {
+			var username string
+			username, err = s.repo.GetUsernameFromId(ctx, row.VerifiedBy.Int32)
+			if err != nil {
+				return models.LeaderboardFull{}, err
+			}
+			entry.VerifiedBy = username
+		}
+		if row.Username == "" && row.UserID.Valid {
+			var username string
+			username, err = s.repo.GetUsernameFromId(ctx, row.UserID.Int32)
+			entry.Username = username
 		}
 
 		res.Data = append(res.Data, entry)

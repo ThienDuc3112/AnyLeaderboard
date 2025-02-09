@@ -119,6 +119,12 @@ func (s LeaderboardService) GetLeaderboard(ctx context.Context, id int32) (model
 		}
 	}
 
+	creatorUsername, err := s.repo.GetUsernameFromId(ctx, lb.Creator)
+	if err != nil {
+		return models.LeaderboardFull{}, nil
+	}
+	res.Creator = creatorUsername
+
 	// Cache the data
 	s.cache.SetDefault(cacheKeyLBFull, res)
 	res.Data = make([]models.Entry, 0)

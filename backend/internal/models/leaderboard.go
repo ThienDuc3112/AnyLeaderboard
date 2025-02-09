@@ -9,6 +9,7 @@ type LeaderboardFull struct {
 	ID                   int            `json:"id"`
 	Name                 string         `json:"name"`
 	Description          string         `json:"description"`
+	Creator              string         `json:"creator"`
 	CoverImageUrl        string         `json:"coverImageUrl,omitempty"`
 	EntriesCount         int            `json:"entriesCount"`
 	AllowAnonymous       bool           `json:"allowAnonymous"`
@@ -34,6 +35,7 @@ type Entry struct {
 	Id         int             `json:"id"`
 	CreatedAt  time.Time       `json:"createdAt"`
 	UpdatedAt  time.Time       `json:"updatedAt"`
+	Username   string          `json:"username"`
 	Fields     json.RawMessage `json:"fields"`
 	Verified   bool            `json:"verified"`
 	VerifiedAt *time.Time      `json:"verifiedAt,omitempty"`

@@ -39,6 +39,7 @@ type Querier interface {
 	GetUserByEmail(ctx context.Context, email string) (User, error)
 	GetUserByID(ctx context.Context, id int32) (User, error)
 	GetUserByUsername(ctx context.Context, username string) (User, error)
+	GetUsernameFromId(ctx context.Context, id int32) (string, error)
 	GetVerifiers(ctx context.Context, leaderboardID int32) ([]User, error)
 	RemoveVerifier(ctx context.Context, arg RemoveVerifierParams) error
 	RenameFieldOnEntriesByLeaderboardId(ctx context.Context, arg RenameFieldOnEntriesByLeaderboardIdParams) error

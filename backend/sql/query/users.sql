@@ -35,3 +35,5 @@ WHERE username = $1;
 -- name: DeleteUser :exec
 DELETE FROM users
 WHERE id = $1;
+-- name: GetUsernameFromId :one
+SELECT username FROM users WHERE id = $1;
