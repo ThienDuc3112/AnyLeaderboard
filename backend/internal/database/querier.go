@@ -9,6 +9,7 @@ import (
 )
 
 type Querier interface {
+	AddFavorite(ctx context.Context, arg AddFavoriteParams) error
 	AddFieldToEntriesByLeaderboardId(ctx context.Context, arg AddFieldToEntriesByLeaderboardIdParams) error
 	AddLeaderboardOption(ctx context.Context, arg AddLeaderboardOptionParams) error
 	AddVerifier(ctx context.Context, arg AddVerifierParams) error
@@ -21,6 +22,7 @@ type Querier interface {
 	CreateNewRefreshToken(ctx context.Context, arg CreateNewRefreshTokenParams) (RefreshToken, error)
 	CreateUser(ctx context.Context, arg CreateUserParams) error
 	DeleteEntry(ctx context.Context, id int32) error
+	DeleteFavorite(ctx context.Context, arg DeleteFavoriteParams) error
 	DeleteField(ctx context.Context, arg DeleteFieldParams) error
 	DeleteFieldOnEntriesByLeaderboardId(ctx context.Context, arg DeleteFieldOnEntriesByLeaderboardIdParams) error
 	DeleteLeadeboardOption(ctx context.Context, arg DeleteLeadeboardOptionParams) error
@@ -28,6 +30,7 @@ type Querier interface {
 	DeleteLeaderboard(ctx context.Context, id int32) error
 	DeleteUser(ctx context.Context, id int32) error
 	DeleteUserByUsername(ctx context.Context, username string) error
+	DeleteUserFavorite(ctx context.Context, userID int32) error
 	GetFieldByLID(ctx context.Context, arg GetFieldByLIDParams) (LeaderboardField, error)
 	GetFieldOptions(ctx context.Context, arg GetFieldOptionsParams) ([]string, error)
 	GetLeaderboardById(ctx context.Context, id int32) (Leaderboard, error)
@@ -39,6 +42,7 @@ type Querier interface {
 	GetUserByEmail(ctx context.Context, email string) (User, error)
 	GetUserByID(ctx context.Context, id int32) (User, error)
 	GetUserByUsername(ctx context.Context, username string) (User, error)
+	GetUserFavorite(ctx context.Context, userID int32) ([]LeaderboardFavourite, error)
 	GetUsernameFromId(ctx context.Context, id int32) (string, error)
 	GetVerifiers(ctx context.Context, leaderboardID int32) ([]User, error)
 	RemoveVerifier(ctx context.Context, arg RemoveVerifierParams) error

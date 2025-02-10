@@ -22,6 +22,53 @@ func (_m *MockQuerierer) EXPECT() *MockQuerierer_Expecter {
 	return &MockQuerierer_Expecter{mock: &_m.Mock}
 }
 
+// AddFavorite provides a mock function with given fields: ctx, arg
+func (_m *MockQuerierer) AddFavorite(ctx context.Context, arg database.AddFavoriteParams) error {
+	ret := _m.Called(ctx, arg)
+
+	if len(ret) == 0 {
+		panic("no return value specified for AddFavorite")
+	}
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(context.Context, database.AddFavoriteParams) error); ok {
+		r0 = rf(ctx, arg)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
+// MockQuerierer_AddFavorite_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'AddFavorite'
+type MockQuerierer_AddFavorite_Call struct {
+	*mock.Call
+}
+
+// AddFavorite is a helper method to define mock.On call
+//   - ctx context.Context
+//   - arg database.AddFavoriteParams
+func (_e *MockQuerierer_Expecter) AddFavorite(ctx interface{}, arg interface{}) *MockQuerierer_AddFavorite_Call {
+	return &MockQuerierer_AddFavorite_Call{Call: _e.mock.On("AddFavorite", ctx, arg)}
+}
+
+func (_c *MockQuerierer_AddFavorite_Call) Run(run func(ctx context.Context, arg database.AddFavoriteParams)) *MockQuerierer_AddFavorite_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(database.AddFavoriteParams))
+	})
+	return _c
+}
+
+func (_c *MockQuerierer_AddFavorite_Call) Return(_a0 error) *MockQuerierer_AddFavorite_Call {
+	_c.Call.Return(_a0)
+	return _c
+}
+
+func (_c *MockQuerierer_AddFavorite_Call) RunAndReturn(run func(context.Context, database.AddFavoriteParams) error) *MockQuerierer_AddFavorite_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // AddFieldToEntriesByLeaderboardId provides a mock function with given fields: ctx, arg
 func (_m *MockQuerierer) AddFieldToEntriesByLeaderboardId(ctx context.Context, arg database.AddFieldToEntriesByLeaderboardIdParams) error {
 	ret := _m.Called(ctx, arg)
@@ -750,6 +797,53 @@ func (_c *MockQuerierer_DeleteEntry_Call) RunAndReturn(run func(context.Context,
 	return _c
 }
 
+// DeleteFavorite provides a mock function with given fields: ctx, arg
+func (_m *MockQuerierer) DeleteFavorite(ctx context.Context, arg database.DeleteFavoriteParams) error {
+	ret := _m.Called(ctx, arg)
+
+	if len(ret) == 0 {
+		panic("no return value specified for DeleteFavorite")
+	}
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(context.Context, database.DeleteFavoriteParams) error); ok {
+		r0 = rf(ctx, arg)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
+// MockQuerierer_DeleteFavorite_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'DeleteFavorite'
+type MockQuerierer_DeleteFavorite_Call struct {
+	*mock.Call
+}
+
+// DeleteFavorite is a helper method to define mock.On call
+//   - ctx context.Context
+//   - arg database.DeleteFavoriteParams
+func (_e *MockQuerierer_Expecter) DeleteFavorite(ctx interface{}, arg interface{}) *MockQuerierer_DeleteFavorite_Call {
+	return &MockQuerierer_DeleteFavorite_Call{Call: _e.mock.On("DeleteFavorite", ctx, arg)}
+}
+
+func (_c *MockQuerierer_DeleteFavorite_Call) Run(run func(ctx context.Context, arg database.DeleteFavoriteParams)) *MockQuerierer_DeleteFavorite_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(database.DeleteFavoriteParams))
+	})
+	return _c
+}
+
+func (_c *MockQuerierer_DeleteFavorite_Call) Return(_a0 error) *MockQuerierer_DeleteFavorite_Call {
+	_c.Call.Return(_a0)
+	return _c
+}
+
+func (_c *MockQuerierer_DeleteFavorite_Call) RunAndReturn(run func(context.Context, database.DeleteFavoriteParams) error) *MockQuerierer_DeleteFavorite_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // DeleteField provides a mock function with given fields: ctx, arg
 func (_m *MockQuerierer) DeleteField(ctx context.Context, arg database.DeleteFieldParams) error {
 	ret := _m.Called(ctx, arg)
@@ -1075,6 +1169,53 @@ func (_c *MockQuerierer_DeleteUserByUsername_Call) Return(_a0 error) *MockQuerie
 }
 
 func (_c *MockQuerierer_DeleteUserByUsername_Call) RunAndReturn(run func(context.Context, string) error) *MockQuerierer_DeleteUserByUsername_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// DeleteUserFavorite provides a mock function with given fields: ctx, userID
+func (_m *MockQuerierer) DeleteUserFavorite(ctx context.Context, userID int32) error {
+	ret := _m.Called(ctx, userID)
+
+	if len(ret) == 0 {
+		panic("no return value specified for DeleteUserFavorite")
+	}
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(context.Context, int32) error); ok {
+		r0 = rf(ctx, userID)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
+// MockQuerierer_DeleteUserFavorite_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'DeleteUserFavorite'
+type MockQuerierer_DeleteUserFavorite_Call struct {
+	*mock.Call
+}
+
+// DeleteUserFavorite is a helper method to define mock.On call
+//   - ctx context.Context
+//   - userID int32
+func (_e *MockQuerierer_Expecter) DeleteUserFavorite(ctx interface{}, userID interface{}) *MockQuerierer_DeleteUserFavorite_Call {
+	return &MockQuerierer_DeleteUserFavorite_Call{Call: _e.mock.On("DeleteUserFavorite", ctx, userID)}
+}
+
+func (_c *MockQuerierer_DeleteUserFavorite_Call) Run(run func(ctx context.Context, userID int32)) *MockQuerierer_DeleteUserFavorite_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(int32))
+	})
+	return _c
+}
+
+func (_c *MockQuerierer_DeleteUserFavorite_Call) Return(_a0 error) *MockQuerierer_DeleteUserFavorite_Call {
+	_c.Call.Return(_a0)
+	return _c
+}
+
+func (_c *MockQuerierer_DeleteUserFavorite_Call) RunAndReturn(run func(context.Context, int32) error) *MockQuerierer_DeleteUserFavorite_Call {
 	_c.Call.Return(run)
 	return _c
 }
@@ -1826,6 +1967,65 @@ func (_c *MockQuerierer_GetUserByUsername_Call) Return(_a0 database.User, _a1 er
 }
 
 func (_c *MockQuerierer_GetUserByUsername_Call) RunAndReturn(run func(context.Context, string) (database.User, error)) *MockQuerierer_GetUserByUsername_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// GetUserFavorite provides a mock function with given fields: ctx, userID
+func (_m *MockQuerierer) GetUserFavorite(ctx context.Context, userID int32) ([]database.LeaderboardFavourite, error) {
+	ret := _m.Called(ctx, userID)
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetUserFavorite")
+	}
+
+	var r0 []database.LeaderboardFavourite
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context, int32) ([]database.LeaderboardFavourite, error)); ok {
+		return rf(ctx, userID)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, int32) []database.LeaderboardFavourite); ok {
+		r0 = rf(ctx, userID)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]database.LeaderboardFavourite)
+		}
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, int32) error); ok {
+		r1 = rf(ctx, userID)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// MockQuerierer_GetUserFavorite_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetUserFavorite'
+type MockQuerierer_GetUserFavorite_Call struct {
+	*mock.Call
+}
+
+// GetUserFavorite is a helper method to define mock.On call
+//   - ctx context.Context
+//   - userID int32
+func (_e *MockQuerierer_Expecter) GetUserFavorite(ctx interface{}, userID interface{}) *MockQuerierer_GetUserFavorite_Call {
+	return &MockQuerierer_GetUserFavorite_Call{Call: _e.mock.On("GetUserFavorite", ctx, userID)}
+}
+
+func (_c *MockQuerierer_GetUserFavorite_Call) Run(run func(ctx context.Context, userID int32)) *MockQuerierer_GetUserFavorite_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(int32))
+	})
+	return _c
+}
+
+func (_c *MockQuerierer_GetUserFavorite_Call) Return(_a0 []database.LeaderboardFavourite, _a1 error) *MockQuerierer_GetUserFavorite_Call {
+	_c.Call.Return(_a0, _a1)
+	return _c
+}
+
+func (_c *MockQuerierer_GetUserFavorite_Call) RunAndReturn(run func(context.Context, int32) ([]database.LeaderboardFavourite, error)) *MockQuerierer_GetUserFavorite_Call {
 	_c.Call.Return(run)
 	return _c
 }
