@@ -4,9 +4,11 @@ import (
 	c "anylbapi/internal/constants"
 	"anylbapi/internal/database"
 	authHandler "anylbapi/internal/handlers/auth"
+	favHandler "anylbapi/internal/handlers/favorite"
 	lbHandler "anylbapi/internal/handlers/leaderboard"
 	"anylbapi/internal/middleware"
 	"anylbapi/internal/modules/auth"
+	"anylbapi/internal/modules/favorite"
 	"anylbapi/internal/modules/leaderboard"
 	"fmt"
 	"net/http"
@@ -27,6 +29,8 @@ func (s Server) RegisterRoutes() http.Handler {
 	authService := auth.New(repo)
 	authHandler := authHandler.New(&authService)
 
+	favService := favorite.New(repo, cache)
+	favHandler := favHandler.New(favService)
 	// Auth routes
 	mux.HandleFunc("POST /auth/login", authHandler.Login)
 	mux.HandleFunc("POST /auth/signup", authHandler.SignUp)
@@ -153,6 +157,23 @@ func (s Server) RegisterRoutes() http.Handler {
 		fmt.Sprintf("PUT /users/addleaderboard/{%s}", c.PathValueLeaderboardId),
 		middleware.CreateStack(
 			http.HandlerFunc(dummyFunction),
+			m.AuthAccessToken,
+		),
+	)
+
+	// Favorites
+	mux.Handle(
+		fmt.Sprintf("POST /favorite/{%s}", c.PathValueLeaderboardId),
+		middleware.CreateStack(
+			http.HandlerFunc(favHandler.AddFavorite),
+			m.AuthAccessToken,
+		),
+	)
+
+	mux.Handle(
+		fmt.Sprintf("DELETE /favorite/{%s}", c.PathValueLeaderboardId),
+		middleware.CreateStack(
+			http.HandlerFunc(favHandler.DeleteFavorite),
 			m.AuthAccessToken,
 		),
 	)
