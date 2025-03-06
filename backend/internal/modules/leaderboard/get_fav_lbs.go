@@ -4,24 +4,31 @@ import (
 	"anylbapi/internal/database"
 	"anylbapi/internal/models"
 	"context"
+	"time"
 
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
-func (s LeaderboardService) GetRecentLeaderboards(ctx context.Context, param GetLeaderboardsParam) ([]models.LeaderboardPreview, error) {
-	rows, err := s.repo.GetRecentLeaderboards(ctx, database.GetRecentLeaderboardsParams{
+type GetFavLBParams struct {
+	UserID   int32
+	Cursor   time.Time
+	PageSize int32
+}
+
+func (s LeaderboardService) GetFavoriteLeaderboards(ctx context.Context, param GetFavLBParams) ([]models.LeaderboardPreview, error) {
+	rows, err := s.repo.GetFavoriteLeaderboards(ctx, database.GetFavoriteLeaderboardsParams{
+		UserID: param.UserID,
 		CreatedAt: pgtype.Timestamptz{
-			Time:  param.Cursor,
 			Valid: true,
+			Time:  param.Cursor,
 		},
-		Limit: int32(param.PageSize),
+		Limit: param.PageSize,
 	})
 	if err != nil {
 		return nil, err
 	}
 
 	res := make([]models.LeaderboardPreview, len(rows))
-
 	for i, row := range rows {
 		res[i] = models.LeaderboardPreview{
 			ID:            int(row.ID),

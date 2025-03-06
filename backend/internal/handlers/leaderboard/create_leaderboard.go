@@ -14,7 +14,7 @@ func (h LeaderboardHandler) CreateLeaderboard(w http.ResponseWriter, r *http.Req
 	var err error
 	defer func() { utils.LogError("createLeaderboardHandler", err) }()
 
-	body, err := utils.ExtractBody[models.LeaderboardStructure](r.Body)
+	body, err := utils.ExtractBody[models.SubmitLBStructure](r.Body)
 	if err != nil {
 		utils.RespondWithError(w, 400, "Unable to decode body")
 		return
@@ -33,8 +33,8 @@ func (h LeaderboardHandler) CreateLeaderboard(w http.ResponseWriter, r *http.Req
 	}
 
 	leaderboard, err := h.s.CreateLeaderboard(r.Context(), lb.CreateLeaderboardParam{
-		LeaderboardStructure: body,
-		User:                 user,
+		SubmitLBStructure: body,
+		User:              user,
 	})
 
 	if err != nil {

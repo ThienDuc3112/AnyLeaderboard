@@ -38,7 +38,7 @@ func (s Server) RegisterRoutes() http.Handler {
 
 	// Leaderboard routes
 	mux.HandleFunc(
-		"GET /leaderboards/",
+		"GET /leaderboards",
 		lbHandler.GetLeaderboards,
 	)
 	mux.HandleFunc(
@@ -56,7 +56,7 @@ func (s Server) RegisterRoutes() http.Handler {
 
 	// CRUD on leaderboard
 	mux.Handle(
-		"POST /leaderboards/",
+		"POST /leaderboards",
 		m.AuthAccessToken(
 			http.HandlerFunc(lbHandler.CreateLeaderboard),
 		),
@@ -106,7 +106,7 @@ func (s Server) RegisterRoutes() http.Handler {
 
 	// View for verifier
 	mux.Handle(
-		fmt.Sprintf("GET /leaderboards/{%s}/verifyEntries", c.PathValueLeaderboardId),
+		fmt.Sprintf("GET /leaderboards/{%s}/verifyentries", c.PathValueLeaderboardId),
 		middleware.CreateStack(
 			http.HandlerFunc(lbHandler.GetVerifiedEntries),
 			m.AuthAccessToken,
@@ -115,7 +115,7 @@ func (s Server) RegisterRoutes() http.Handler {
 		),
 	)
 	mux.Handle(
-		fmt.Sprintf("POST /leaderboards/{%s}/verifyEntries/{%s}", c.PathValueLeaderboardId, c.PathValueEntryId),
+		fmt.Sprintf("POST /leaderboards/{%s}/verifyentries/{%s}", c.PathValueLeaderboardId, c.PathValueEntryId),
 		middleware.CreateStack(
 			http.HandlerFunc(lbHandler.VerifyEntry),
 			m.AuthAccessToken,
@@ -124,7 +124,7 @@ func (s Server) RegisterRoutes() http.Handler {
 		),
 	)
 
-	// Manage verifier
+	// Manage verifiers
 	mux.Handle(
 		fmt.Sprintf("GET /leaderboards/{%s}/verifiers", c.PathValueLeaderboardId),
 		middleware.CreateStack(
@@ -153,17 +153,26 @@ func (s Server) RegisterRoutes() http.Handler {
 		),
 	)
 
+	// I have no idea what this is for
+	// mux.Handle(
+	// 	fmt.Sprintf("PUT /users/addleaderboard/{%s}", c.PathValueLeaderboardId),
+	// 	middleware.CreateStack(
+	// 		http.HandlerFunc(dummyFunction),
+	// 		m.AuthAccessToken,
+	// 	),
+	// )
+
+	// Favorites
 	mux.Handle(
-		fmt.Sprintf("PUT /users/addleaderboard/{%s}", c.PathValueLeaderboardId),
+		"GET /favorites",
 		middleware.CreateStack(
-			http.HandlerFunc(dummyFunction),
+			http.HandlerFunc(lbHandler.GetFavoriteLeaderboards),
 			m.AuthAccessToken,
 		),
 	)
 
-	// Favorites
 	mux.Handle(
-		fmt.Sprintf("POST /favorite/{%s}", c.PathValueLeaderboardId),
+		fmt.Sprintf("POST /favorites/{%s}", c.PathValueLeaderboardId),
 		middleware.CreateStack(
 			http.HandlerFunc(favHandler.AddFavorite),
 			m.AuthAccessToken,
@@ -171,7 +180,7 @@ func (s Server) RegisterRoutes() http.Handler {
 	)
 
 	mux.Handle(
-		fmt.Sprintf("DELETE /favorite/{%s}", c.PathValueLeaderboardId),
+		fmt.Sprintf("DELETE /favorites/{%s}", c.PathValueLeaderboardId),
 		middleware.CreateStack(
 			http.HandlerFunc(favHandler.DeleteFavorite),
 			m.AuthAccessToken,

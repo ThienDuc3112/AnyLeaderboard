@@ -63,6 +63,7 @@ func (s LeaderboardService) GetLeaderboard(ctx context.Context, id int32) (model
 		AllowAnonymous:       lb.AllowAnnonymous,
 		RequiredVerification: lb.RequireVerification,
 		UniqueSubmission:     lb.UniqueSubmission,
+		CreatedAt:            lb.CreatedAt.Time,
 		ExternalLink:         make([]models.ExternalLink, 0),
 		Fields:               make([]models.Field, 0),
 	}
@@ -121,7 +122,7 @@ func (s LeaderboardService) GetLeaderboard(ctx context.Context, id int32) (model
 
 	creatorUsername, err := s.repo.GetUsernameFromId(ctx, lb.Creator)
 	if err != nil {
-		return models.LeaderboardFull{}, nil
+		return models.LeaderboardFull{}, err
 	}
 	res.Creator = creatorUsername
 

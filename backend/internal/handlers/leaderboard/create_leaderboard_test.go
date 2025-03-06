@@ -17,7 +17,7 @@ import (
 
 // Mock successful input
 var mockOptions = []string{"v1.0", "v1.1", "v1.2", "v2.0"}
-var mockBody = models.LeaderboardStructure{
+var mockBody = models.SubmitLBStructure{
 	Name: "Test Leaderboard",
 	Fields: []models.Field{
 		{Name: "Score", Type: "NUMBER", FieldOrder: 1, ForRank: true, Required: true},
@@ -228,13 +228,13 @@ func TestCreateLeaderboardHandler_Validation(t *testing.T) {
 	// Define the table of test cases
 	tests := []struct {
 		name               string
-		setupBody          func() models.LeaderboardStructure
+		setupBody          func() models.SubmitLBStructure
 		expectedStatus     int
 		expectedErrorField string
 	}{
 		{
 			name: "MissingName",
-			setupBody: func() models.LeaderboardStructure {
+			setupBody: func() models.SubmitLBStructure {
 				body := copyMockBody()
 				body.Name = "" // Missing name
 				return body
@@ -244,7 +244,7 @@ func TestCreateLeaderboardHandler_Validation(t *testing.T) {
 		},
 		{
 			name: "InvalidLBName",
-			setupBody: func() models.LeaderboardStructure {
+			setupBody: func() models.SubmitLBStructure {
 				body := copyMockBody()
 				body.Name = "Invalid Name!" // Invalid LBName due to special character "!"
 				return body
@@ -254,7 +254,7 @@ func TestCreateLeaderboardHandler_Validation(t *testing.T) {
 		},
 		{
 			name: "MissingFields",
-			setupBody: func() models.LeaderboardStructure {
+			setupBody: func() models.SubmitLBStructure {
 				body := copyMockBody()
 				body.Fields = []models.Field{} // No fields
 				return body
@@ -264,7 +264,7 @@ func TestCreateLeaderboardHandler_Validation(t *testing.T) {
 		},
 		{
 			name: "InvalidFieldName",
-			setupBody: func() models.LeaderboardStructure {
+			setupBody: func() models.SubmitLBStructure {
 				body := copyMockBody()
 				body.Fields[0].Name = "\"Invalid Name!\"" // Invalid field name
 				return body
@@ -274,7 +274,7 @@ func TestCreateLeaderboardHandler_Validation(t *testing.T) {
 		},
 		{
 			name: "InvalidExternalLinkURL",
-			setupBody: func() models.LeaderboardStructure {
+			setupBody: func() models.SubmitLBStructure {
 				body := copyMockBody()
 				body.ExternalLinks[0].URL = "invalid-url" // Invalid URL
 				return body
@@ -316,7 +316,7 @@ func TestCreateLeaderboardHandler_Validation(t *testing.T) {
 	}
 }
 
-func copyMockBody() models.LeaderboardStructure {
+func copyMockBody() models.SubmitLBStructure {
 	res := mockBody
 	res.ExternalLinks = make([]models.ExternalLink, 0)
 	res.Fields = make([]models.Field, 0)

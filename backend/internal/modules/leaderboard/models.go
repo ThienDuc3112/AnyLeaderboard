@@ -9,7 +9,7 @@ import (
 
 // ============ Service param and return types ============
 type CreateLeaderboardParam struct {
-	models.LeaderboardStructure
+	models.SubmitLBStructure
 	User database.User
 }
 

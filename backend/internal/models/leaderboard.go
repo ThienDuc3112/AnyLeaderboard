@@ -11,6 +11,7 @@ type LeaderboardFull struct {
 	Description          string         `json:"description"`
 	Creator              string         `json:"creator"`
 	CoverImageUrl        string         `json:"coverImageUrl,omitempty"`
+	CreatedAt            time.Time      `json:"createdAt"`
 	EntriesCount         int            `json:"entriesCount"`
 	AllowAnonymous       bool           `json:"allowAnonymous"`
 	RequiredVerification bool           `json:"requiredVerification"`
@@ -20,7 +21,7 @@ type LeaderboardFull struct {
 	Data                 []Entry        `json:"data,omitempty"`
 }
 
-type LeaderboardStructure struct {
+type SubmitLBStructure struct {
 	Name                 string         `json:"name" validate:"required,isLBName"`
 	Description          string         `json:"description" validate:"max=256"`
 	CoverImageURL        string         `json:"coverImageUrl" validate:"omitempty,http_url"`
@@ -29,6 +30,16 @@ type LeaderboardStructure struct {
 	RequiredVerification bool           `json:"requiredVerification"`
 	UniqueSubmission     bool           `json:"uniqueSubmission" validate:"excluded_if=RequiredVerification false"`
 	Fields               []Field        `json:"fields" validate:"required,min=1,max=10,unique=Name,unique=FieldOrder,dive"`
+}
+
+type LeaderboardPreview struct {
+	ID            int       `json:"id"`
+	Name          string    `json:"name"`
+	Description   string    `json:"description"`
+	CoverImageUrl string    `json:"coverImageUrl,omitempty"`
+	EntriesCount  int       `json:"entriesCount"`
+	CreatedAt     time.Time `json:"createdAt"`
+	// Creator              string         `json:"creator"`
 }
 
 type Entry struct {

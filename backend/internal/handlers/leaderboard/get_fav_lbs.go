@@ -2,6 +2,7 @@ package leaderboard
 
 import (
 	c "anylbapi/internal/constants"
+	"anylbapi/internal/database"
 	"anylbapi/internal/modules/leaderboard"
 	"anylbapi/internal/utils"
 	"fmt"
@@ -11,14 +12,16 @@ import (
 	"time"
 )
 
-// TODO
-// - Default sorting: by recent no user
-// - Add support for sorted by:
-//   - author
-//   - entries count
-func (h LeaderboardHandler) GetLeaderboards(w http.ResponseWriter, r *http.Request) {
+func (h LeaderboardHandler) GetFavoriteLeaderboards(w http.ResponseWriter, r *http.Request) {
 	var err error
-	defer func() { utils.LogError("getLeaderboardsHandler", err) }()
+	defer func() { utils.LogError("GetFavoriteLeaderboards", err) }()
+
+	user, ok := r.Context().Value(c.MiddlewareKeyUser).(database.User)
+	if !ok {
+		utils.RespondWithError(w, 500, "Internal server error")
+		err = fmt.Errorf("context does not give user type")
+		return
+	}
 
 	cursorStr := r.URL.Query().Get(c.QueryParamCursor)
 	pageSizeStr := r.URL.Query().Get(c.QueryParamPageSize)
@@ -39,32 +42,22 @@ func (h LeaderboardHandler) GetLeaderboards(w http.ResponseWriter, r *http.Reque
 		}
 	}
 
-	lbs, err := h.s.GetRecentLeaderboards(r.Context(), leaderboard.GetLeaderboardsParam{
-		PageSize: pageSize + 1,
+	lbs, err := h.s.GetFavoriteLeaderboards(r.Context(), leaderboard.GetFavLBParams{
+		UserID:   user.ID,
 		Cursor:   cursor,
+		PageSize: int32(pageSize + 1),
 	})
 	if err != nil {
-		utils.RespondWithError(w, 500, "Cannot get leaderboards")
+		utils.RespondWithError(w, 500, "Internal server error")
 		return
 	}
 
-	lbPreviews := make([]map[string]any, 0)
-
-	for i, lb := range lbs {
-		if i == pageSize {
-			break
-		}
-		lbPreviews = append(lbPreviews, map[string]any{
-			"id":            lb.ID,
-			"name":          lb.Name,
-			"description":   lb.Description,
-			"coverImageUrl": lb.CoverImageUrl,
-			"entriesCount":  lb.EntriesCount,
-		})
+	if len(lbs) == 0 {
+		utils.RespondWithError(w, 404, "No favorited leaderboards found")
+		return
 	}
-
 	response := map[string]any{
-		"data": lbPreviews,
+		"data": lbs[:len(lbs)-1],
 	}
 
 	if len(lbs) > pageSize {
