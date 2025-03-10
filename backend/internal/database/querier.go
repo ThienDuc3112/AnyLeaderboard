@@ -53,7 +53,7 @@ type Querier interface {
 	RevokedRefreshToken(ctx context.Context, id int32) error
 	UpdateFieldsName(ctx context.Context, arg UpdateFieldsNameParams) error
 	UpdateRefreshToken(ctx context.Context, arg UpdateRefreshTokenParams) (RefreshToken, error)
-	UpdateUserDescription(ctx context.Context, arg UpdateUserDescriptionParams) error
+	UpdateUser(ctx context.Context, arg UpdateUserParams) (User, error)
 	UpdateUserPassword(ctx context.Context, arg UpdateUserPasswordParams) error
 	VerifyEntry(ctx context.Context, arg VerifyEntryParams) error
 }

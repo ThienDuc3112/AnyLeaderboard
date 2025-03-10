@@ -199,6 +199,22 @@ func (s Server) RegisterRoutes() http.Handler {
 		http.HandlerFunc(userHandler.GetUser),
 	)
 
+	mux.Handle(
+		fmt.Sprintf("PUT /users/{%s}", c.PathValueUsername),
+		middleware.CreateStack(
+			http.HandlerFunc(userHandler.UpdateUser),
+			m.AuthAccessToken,
+		),
+	)
+
+	mux.Handle(
+		fmt.Sprintf("PATCH /users/{%s}", c.PathValueUsername),
+		middleware.CreateStack(
+			http.HandlerFunc(userHandler.UpdateUser),
+			m.AuthAccessToken,
+		),
+	)
+
 	return middleware.Cors(mux)
 }
 

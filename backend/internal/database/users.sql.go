@@ -136,21 +136,35 @@ func (q *Queries) GetUsernameFromId(ctx context.Context, id int32) (string, erro
 	return username, err
 }
 
-const updateUserDescription = `-- name: UpdateUserDescription :exec
-UPDATE users
-SET description = $1,
-    updated_at = NOW()
-WHERE username = $2
+const updateUser = `-- name: UpdateUser :one
+UPDATE users 
+SET updated_at = NOW(),
+    description = $1,
+    display_name = $2
+WHERE username = $3
+RETURNING id, created_at, updated_at, username, display_name, email, password, description
 `
 
-type UpdateUserDescriptionParams struct {
+type UpdateUserParams struct {
 	Description string
+	DisplayName string
 	Username    string
 }
 
-func (q *Queries) UpdateUserDescription(ctx context.Context, arg UpdateUserDescriptionParams) error {
-	_, err := q.db.Exec(ctx, updateUserDescription, arg.Description, arg.Username)
-	return err
+func (q *Queries) UpdateUser(ctx context.Context, arg UpdateUserParams) (User, error) {
+	row := q.db.QueryRow(ctx, updateUser, arg.Description, arg.DisplayName, arg.Username)
+	var i User
+	err := row.Scan(
+		&i.ID,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.Username,
+		&i.DisplayName,
+		&i.Email,
+		&i.Password,
+		&i.Description,
+	)
+	return i, err
 }
 
 const updateUserPassword = `-- name: UpdateUserPassword :exec

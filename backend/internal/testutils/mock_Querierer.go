@@ -2590,49 +2590,59 @@ func (_c *MockQuerierer_UpdateRefreshToken_Call) RunAndReturn(run func(context.C
 	return _c
 }
 
-// UpdateUserDescription provides a mock function with given fields: ctx, arg
-func (_m *MockQuerierer) UpdateUserDescription(ctx context.Context, arg database.UpdateUserDescriptionParams) error {
+// UpdateUser provides a mock function with given fields: ctx, arg
+func (_m *MockQuerierer) UpdateUser(ctx context.Context, arg database.UpdateUserParams) (database.User, error) {
 	ret := _m.Called(ctx, arg)
 
 	if len(ret) == 0 {
-		panic("no return value specified for UpdateUserDescription")
+		panic("no return value specified for UpdateUser")
 	}
 
-	var r0 error
-	if rf, ok := ret.Get(0).(func(context.Context, database.UpdateUserDescriptionParams) error); ok {
+	var r0 database.User
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context, database.UpdateUserParams) (database.User, error)); ok {
+		return rf(ctx, arg)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, database.UpdateUserParams) database.User); ok {
 		r0 = rf(ctx, arg)
 	} else {
-		r0 = ret.Error(0)
+		r0 = ret.Get(0).(database.User)
 	}
 
-	return r0
+	if rf, ok := ret.Get(1).(func(context.Context, database.UpdateUserParams) error); ok {
+		r1 = rf(ctx, arg)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
 }
 
-// MockQuerierer_UpdateUserDescription_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'UpdateUserDescription'
-type MockQuerierer_UpdateUserDescription_Call struct {
+// MockQuerierer_UpdateUser_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'UpdateUser'
+type MockQuerierer_UpdateUser_Call struct {
 	*mock.Call
 }
 
-// UpdateUserDescription is a helper method to define mock.On call
+// UpdateUser is a helper method to define mock.On call
 //   - ctx context.Context
-//   - arg database.UpdateUserDescriptionParams
-func (_e *MockQuerierer_Expecter) UpdateUserDescription(ctx interface{}, arg interface{}) *MockQuerierer_UpdateUserDescription_Call {
-	return &MockQuerierer_UpdateUserDescription_Call{Call: _e.mock.On("UpdateUserDescription", ctx, arg)}
+//   - arg database.UpdateUserParams
+func (_e *MockQuerierer_Expecter) UpdateUser(ctx interface{}, arg interface{}) *MockQuerierer_UpdateUser_Call {
+	return &MockQuerierer_UpdateUser_Call{Call: _e.mock.On("UpdateUser", ctx, arg)}
 }
 
-func (_c *MockQuerierer_UpdateUserDescription_Call) Run(run func(ctx context.Context, arg database.UpdateUserDescriptionParams)) *MockQuerierer_UpdateUserDescription_Call {
+func (_c *MockQuerierer_UpdateUser_Call) Run(run func(ctx context.Context, arg database.UpdateUserParams)) *MockQuerierer_UpdateUser_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(context.Context), args[1].(database.UpdateUserDescriptionParams))
+		run(args[0].(context.Context), args[1].(database.UpdateUserParams))
 	})
 	return _c
 }
 
-func (_c *MockQuerierer_UpdateUserDescription_Call) Return(_a0 error) *MockQuerierer_UpdateUserDescription_Call {
-	_c.Call.Return(_a0)
+func (_c *MockQuerierer_UpdateUser_Call) Return(_a0 database.User, _a1 error) *MockQuerierer_UpdateUser_Call {
+	_c.Call.Return(_a0, _a1)
 	return _c
 }
 
-func (_c *MockQuerierer_UpdateUserDescription_Call) RunAndReturn(run func(context.Context, database.UpdateUserDescriptionParams) error) *MockQuerierer_UpdateUserDescription_Call {
+func (_c *MockQuerierer_UpdateUser_Call) RunAndReturn(run func(context.Context, database.UpdateUserParams) (database.User, error)) *MockQuerierer_UpdateUser_Call {
 	_c.Call.Return(run)
 	return _c
 }

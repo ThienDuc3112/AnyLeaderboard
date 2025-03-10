@@ -19,11 +19,14 @@ INSERT INTO users (
         description
     )
 VALUES ($1, $2, $3, $4, $5);
--- name: UpdateUserDescription :exec
-UPDATE users
-SET description = $1,
-    updated_at = NOW()
-WHERE username = $2;
+-- name: UpdateUser :one
+UPDATE users 
+SET updated_at = NOW(),
+    description = $1,
+    display_name = $2
+WHERE username = $3
+RETURNING *;
+
 -- name: UpdateUserPassword :exec
 UPDATE users
 SET password = $1,
