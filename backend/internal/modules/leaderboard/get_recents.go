@@ -8,7 +8,7 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
-func (s LeaderboardService) GetRecentLeaderboards(ctx context.Context, param GetLeaderboardsParam) ([]models.LeaderboardPreview, error) {
+func (s LeaderboardService) GetRecents(ctx context.Context, param GetRecentsParam) ([]models.LeaderboardPreview, error) {
 	rows, err := s.repo.GetRecentLeaderboards(ctx, database.GetRecentLeaderboardsParams{
 		CreatedAt: pgtype.Timestamptz{
 			Time:  param.Cursor,

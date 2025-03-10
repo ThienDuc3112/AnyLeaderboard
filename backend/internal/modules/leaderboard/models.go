@@ -36,7 +36,7 @@ type GetLeaderboardParam struct {
 	ForcedPending        bool
 }
 
-type GetLeaderboardsParam struct {
+type GetRecentsParam struct {
 	PageSize int
 	Cursor   time.Time
 }

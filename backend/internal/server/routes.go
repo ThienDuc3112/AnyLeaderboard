@@ -6,10 +6,12 @@ import (
 	authHandler "anylbapi/internal/handlers/auth"
 	favHandler "anylbapi/internal/handlers/favorite"
 	lbHandler "anylbapi/internal/handlers/leaderboard"
+	userHandler "anylbapi/internal/handlers/user"
 	"anylbapi/internal/middleware"
 	"anylbapi/internal/modules/auth"
 	"anylbapi/internal/modules/favorite"
 	"anylbapi/internal/modules/leaderboard"
+	"anylbapi/internal/modules/user"
 	"fmt"
 	"net/http"
 	"time"
@@ -31,6 +33,10 @@ func (s Server) RegisterRoutes() http.Handler {
 
 	favService := favorite.New(repo, cache)
 	favHandler := favHandler.New(favService)
+
+	userService := user.New(repo, cache)
+	userHandler := userHandler.New(userService)
+
 	// Auth routes
 	mux.HandleFunc("POST /auth/login", authHandler.Login)
 	mux.HandleFunc("POST /auth/signup", authHandler.SignUp)
@@ -185,6 +191,12 @@ func (s Server) RegisterRoutes() http.Handler {
 			http.HandlerFunc(favHandler.DeleteFavorite),
 			m.AuthAccessToken,
 		),
+	)
+
+	// Users
+	mux.Handle(
+		fmt.Sprintf("GET /users/{%s}", c.PathValueUsername),
+		http.HandlerFunc(userHandler.GetUser),
 	)
 
 	return middleware.Cors(mux)

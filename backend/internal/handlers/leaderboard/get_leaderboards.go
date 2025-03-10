@@ -39,7 +39,7 @@ func (h LeaderboardHandler) GetLeaderboards(w http.ResponseWriter, r *http.Reque
 		}
 	}
 
-	lbs, err := h.s.GetRecentLeaderboards(r.Context(), leaderboard.GetLeaderboardsParam{
+	lbs, err := h.s.GetRecents(r.Context(), leaderboard.GetRecentsParam{
 		PageSize: pageSize + 1,
 		Cursor:   cursor,
 	})
