@@ -1743,6 +1743,65 @@ func (_c *MockQuerierer_GetLeaderboardFull_Call) RunAndReturn(run func(context.C
 	return _c
 }
 
+// GetLeaderboardsByUsername provides a mock function with given fields: ctx, arg
+func (_m *MockQuerierer) GetLeaderboardsByUsername(ctx context.Context, arg database.GetLeaderboardsByUsernameParams) ([]database.GetLeaderboardsByUsernameRow, error) {
+	ret := _m.Called(ctx, arg)
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetLeaderboardsByUsername")
+	}
+
+	var r0 []database.GetLeaderboardsByUsernameRow
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context, database.GetLeaderboardsByUsernameParams) ([]database.GetLeaderboardsByUsernameRow, error)); ok {
+		return rf(ctx, arg)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, database.GetLeaderboardsByUsernameParams) []database.GetLeaderboardsByUsernameRow); ok {
+		r0 = rf(ctx, arg)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]database.GetLeaderboardsByUsernameRow)
+		}
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, database.GetLeaderboardsByUsernameParams) error); ok {
+		r1 = rf(ctx, arg)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// MockQuerierer_GetLeaderboardsByUsername_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetLeaderboardsByUsername'
+type MockQuerierer_GetLeaderboardsByUsername_Call struct {
+	*mock.Call
+}
+
+// GetLeaderboardsByUsername is a helper method to define mock.On call
+//   - ctx context.Context
+//   - arg database.GetLeaderboardsByUsernameParams
+func (_e *MockQuerierer_Expecter) GetLeaderboardsByUsername(ctx interface{}, arg interface{}) *MockQuerierer_GetLeaderboardsByUsername_Call {
+	return &MockQuerierer_GetLeaderboardsByUsername_Call{Call: _e.mock.On("GetLeaderboardsByUsername", ctx, arg)}
+}
+
+func (_c *MockQuerierer_GetLeaderboardsByUsername_Call) Run(run func(ctx context.Context, arg database.GetLeaderboardsByUsernameParams)) *MockQuerierer_GetLeaderboardsByUsername_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(database.GetLeaderboardsByUsernameParams))
+	})
+	return _c
+}
+
+func (_c *MockQuerierer_GetLeaderboardsByUsername_Call) Return(_a0 []database.GetLeaderboardsByUsernameRow, _a1 error) *MockQuerierer_GetLeaderboardsByUsername_Call {
+	_c.Call.Return(_a0, _a1)
+	return _c
+}
+
+func (_c *MockQuerierer_GetLeaderboardsByUsername_Call) RunAndReturn(run func(context.Context, database.GetLeaderboardsByUsernameParams) ([]database.GetLeaderboardsByUsernameRow, error)) *MockQuerierer_GetLeaderboardsByUsername_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // GetRecentLeaderboards provides a mock function with given fields: ctx, arg
 func (_m *MockQuerierer) GetRecentLeaderboards(ctx context.Context, arg database.GetRecentLeaderboardsParams) ([]database.GetRecentLeaderboardsRow, error) {
 	ret := _m.Called(ctx, arg)

@@ -77,7 +77,7 @@ SELECT l.id,
     l.description,
     l.cover_image_url,
     l.created_at,
-    COUNT(le.id) AS entries_count
+    COUNT(le.*) AS entries_count
 FROM leaderboards l
     INNER JOIN leaderboard_favourites f ON f.leaderboard_id = l.id
     LEFT JOIN leaderboard_entries le ON l.id = le.leaderboard_id
@@ -242,13 +242,73 @@ func (q *Queries) GetLeaderboardFull(ctx context.Context, id int32) ([]GetLeader
 	return items, nil
 }
 
+const getLeaderboardsByUsername = `-- name: GetLeaderboardsByUsername :many
+SELECT l.id,
+    l.name,
+    l.description,
+    l.cover_image_url,
+    l.created_at, 
+    COUNT(le.*) AS entries_count
+FROM leaderboards l, users u, leaderboard_entries le 
+WHERE u.id = l.creator AND u.username = $1 AND l.created_at < $2
+GROUP BY l.id,
+    l.name,
+    l.description,
+    l.cover_image_url,
+    l.created_at
+ORDER BY l.created_at DESC
+LIMIT $3
+`
+
+type GetLeaderboardsByUsernameParams struct {
+	Username  string
+	CreatedAt pgtype.Timestamptz
+	Limit     int32
+}
+
+type GetLeaderboardsByUsernameRow struct {
+	ID            int32
+	Name          string
+	Description   string
+	CoverImageUrl pgtype.Text
+	CreatedAt     pgtype.Timestamptz
+	EntriesCount  int64
+}
+
+func (q *Queries) GetLeaderboardsByUsername(ctx context.Context, arg GetLeaderboardsByUsernameParams) ([]GetLeaderboardsByUsernameRow, error) {
+	rows, err := q.db.Query(ctx, getLeaderboardsByUsername, arg.Username, arg.CreatedAt, arg.Limit)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetLeaderboardsByUsernameRow
+	for rows.Next() {
+		var i GetLeaderboardsByUsernameRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.Name,
+			&i.Description,
+			&i.CoverImageUrl,
+			&i.CreatedAt,
+			&i.EntriesCount,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getRecentLeaderboards = `-- name: GetRecentLeaderboards :many
 SELECT l.id,
     l.name,
     l.description,
     l.cover_image_url,
     l.created_at,
-    COUNT(le.id) AS entries_count
+    COUNT(le.*) AS entries_count
 FROM leaderboards l
     LEFT JOIN leaderboard_entries le ON l.id = le.leaderboard_id
 WHERE l.created_at < $1

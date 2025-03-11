@@ -10,17 +10,36 @@ INSERT INTO leaderboards(
     )
 VALUES ($1, $2, $3, $4, $5, $6, $7)
 RETURNING *;
+
 -- name: GetLeaderboardById :one
 SELECT *
 FROM leaderboards
 WHERE id = $1;
+
+-- name: GetLeaderboardsByUsername :many
+SELECT l.id,
+    l.name,
+    l.description,
+    l.cover_image_url,
+    l.created_at, 
+    COUNT(le.*) AS entries_count
+FROM leaderboards l, users u, leaderboard_entries le 
+WHERE u.id = l.creator AND u.username = $1 AND l.created_at < $2
+GROUP BY l.id,
+    l.name,
+    l.description,
+    l.cover_image_url,
+    l.created_at
+ORDER BY l.created_at DESC
+LIMIT $3;
+
 -- name: GetRecentLeaderboards :many
 SELECT l.id,
     l.name,
     l.description,
     l.cover_image_url,
     l.created_at,
-    COUNT(le.id) AS entries_count
+    COUNT(le.*) AS entries_count
 FROM leaderboards l
     LEFT JOIN leaderboard_entries le ON l.id = le.leaderboard_id
 WHERE l.created_at < $1
@@ -31,6 +50,7 @@ GROUP BY l.id,
     l.created_at
 ORDER BY l.created_at DESC
 LIMIT $2;
+
 -- name: GetLeaderboardFull :many
 SELECT l.*,
     lf.lid AS field_lid,
@@ -48,16 +68,18 @@ from leaderboards l
     LEFT JOIN leaderboard_fields lf ON l.id = lf.lid
     LEFT JOIN leaderboard_external_links lel ON l.id = lel.leaderboard_id
 WHERE l.id = $1;
+
 -- name: DeleteLeaderboard :exec
 DELETE FROM leaderboards
 WHERE id = $1;
+
 -- name: GetFavoriteLeaderboards :many
 SELECT l.id,
     l.name,
     l.description,
     l.cover_image_url,
     l.created_at,
-    COUNT(le.id) AS entries_count
+    COUNT(le.*) AS entries_count
 FROM leaderboards l
     INNER JOIN leaderboard_favourites f ON f.leaderboard_id = l.id
     LEFT JOIN leaderboard_entries le ON l.id = le.leaderboard_id

@@ -1,15 +1,43 @@
 package leaderboard
 
 import (
+	"anylbapi/internal/database"
 	"anylbapi/internal/models"
 	"context"
-	"fmt"
+	"time"
+
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
-type GetByUserParam struct {
-	UserId int32
+type GetByUsernameParam struct {
+	Username string
+	Cursor   time.Time
+	PageSize int
 }
 
-func (s LeaderboardService) GetByUser(ctx context.Context, param GetByUserParam) ([]models.LeaderboardPreview, error) {
-	return nil, fmt.Errorf("Unimplemented")
+func (s LeaderboardService) GetByUsername(ctx context.Context, param GetByUsernameParam) ([]models.LeaderboardPreview, error) {
+	rows, err := s.repo.GetLeaderboardsByUsername(ctx, database.GetLeaderboardsByUsernameParams{
+		Username: param.Username,
+		CreatedAt: pgtype.Timestamptz{
+			Time:  param.Cursor,
+			Valid: true,
+		},
+		Limit: int32(param.PageSize),
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	res := make([]models.LeaderboardPreview, len(rows))
+	for i, row := range rows {
+		res[i] = models.LeaderboardPreview{
+			ID:            int(row.ID),
+			Name:          row.Name,
+			Description:   row.Description,
+			CoverImageUrl: row.CoverImageUrl.String,
+			CreatedAt:     row.CreatedAt.Time,
+			EntriesCount:  int(row.EntriesCount),
+		}
+	}
+	return res, nil
 }

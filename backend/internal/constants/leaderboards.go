@@ -1,8 +1,9 @@
 package constants
 
 const (
-	QueryParamPageSize = "page_size"
-	QueryParamCursor   = "cursor"
+	QueryParamPageSize  = "page_size"
+	QueryParamCursor    = "cursor"
+	QueryParamCreatedBy = "author"
 )
 
 const (
