@@ -23,8 +23,10 @@ SELECT l.id,
     l.cover_image_url,
     l.created_at, 
     COUNT(le.*) AS entries_count
-FROM leaderboards l, users u, leaderboard_entries le 
-WHERE u.id = l.creator AND u.username = $1 AND l.created_at < $2
+FROM leaderboards l 
+    LEFT JOIN users u ON u.id = l.creator
+    LEFT JOIN leaderboard_entries le ON l.id = le.leaderboard_id
+WHERE u.username = $1 AND l.created_at < $2
 GROUP BY l.id,
     l.name,
     l.description,

@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"net/url"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -20,11 +21,11 @@ import (
 //   - Entries count
 func (h LeaderboardHandler) GetLeaderboards(w http.ResponseWriter, r *http.Request) {
 	var err error
-	defer func() { utils.LogError("getLeaderboardsHandler", err) }()
+	defer func() { utils.LogError("GetLeaderboardsHandler", err) }()
 
 	cursorStr := r.URL.Query().Get(c.QueryParamCursor)
 	pageSizeStr := r.URL.Query().Get(c.QueryParamPageSize)
-	creatorStr := r.URL.Query().Get(c.QueryParamCreatedBy)
+	creatorStr := strings.ToLower(r.URL.Query().Get(c.QueryParamCreatedBy))
 	pageSize := c.DefaultPageSize
 	cursor := time.Now()
 
@@ -44,7 +45,7 @@ func (h LeaderboardHandler) GetLeaderboards(w http.ResponseWriter, r *http.Reque
 
 	var lbs []models.LeaderboardPreview
 
-	if creatorStr != "user" {
+	if creatorStr != "" {
 		lbs, err = h.s.GetByUsername(r.Context(), leaderboard.GetByUsernameParam{
 			PageSize: pageSize + 1,
 			Cursor:   cursor,
@@ -61,8 +62,9 @@ func (h LeaderboardHandler) GetLeaderboards(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
+	limit := min(pageSize, len(lbs))
 	response := map[string]any{
-		"data": lbs[:pageSize],
+		"data": lbs[:limit],
 	}
 
 	if len(lbs) > pageSize {

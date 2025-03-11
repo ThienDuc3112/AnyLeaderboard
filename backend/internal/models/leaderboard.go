@@ -28,7 +28,7 @@ type SubmitLBStructure struct {
 	ExternalLinks        []ExternalLink `json:"externalLinks" validate:"max=5,unique=DisplayValue,dive"`
 	AllowAnonymous       bool           `json:"allowAnonymous"`
 	RequiredVerification bool           `json:"requiredVerification"`
-	UniqueSubmission     bool           `json:"uniqueSubmission" validate:"excluded_if=RequiredVerification false"`
+	UniqueSubmission     bool           `json:"uniqueSubmission"`
 	Fields               []Field        `json:"fields" validate:"required,min=1,max=10,unique=Name,unique=FieldOrder,dive"`
 }
 
