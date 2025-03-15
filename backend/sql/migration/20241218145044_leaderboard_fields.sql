@@ -17,7 +17,7 @@ CREATE TABLE leaderboard_fields(
     required BOOLEAN NOT NULL,
     PRIMARY KEY (lid, field_name)
 );
-CREATE INDEX IF EXISTS idx_leaderboard_id ON leaderboard_fields(lid);
+CREATE INDEX idx_leaderboard_id ON leaderboard_fields(lid);
 -- +goose StatementEnd
 -- +goose Down
 -- +goose StatementBegin

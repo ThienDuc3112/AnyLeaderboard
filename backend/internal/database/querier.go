@@ -17,7 +17,7 @@ type Querier interface {
 	CreateLeadeboardField(ctx context.Context, arg CreateLeadeboardFieldParams) error
 	CreateLeadeboardFields(ctx context.Context, arg []CreateLeadeboardFieldsParams) (int64, error)
 	CreateLeadeboardOptions(ctx context.Context, arg []CreateLeadeboardOptionsParams) (int64, error)
-	CreateLeaderboard(ctx context.Context, arg CreateLeaderboardParams) (Leaderboard, error)
+	CreateLeaderboard(ctx context.Context, arg CreateLeaderboardParams) (CreateLeaderboardRow, error)
 	CreateLeaderboardExternalLink(ctx context.Context, arg []CreateLeaderboardExternalLinkParams) (int64, error)
 	CreateNewRefreshToken(ctx context.Context, arg CreateNewRefreshTokenParams) (RefreshToken, error)
 	CreateUser(ctx context.Context, arg CreateUserParams) error
@@ -34,7 +34,7 @@ type Querier interface {
 	GetFavoriteLeaderboards(ctx context.Context, arg GetFavoriteLeaderboardsParams) ([]GetFavoriteLeaderboardsRow, error)
 	GetFieldByLID(ctx context.Context, arg GetFieldByLIDParams) (LeaderboardField, error)
 	GetFieldOptions(ctx context.Context, arg GetFieldOptionsParams) ([]string, error)
-	GetLeaderboardById(ctx context.Context, id int32) (Leaderboard, error)
+	GetLeaderboardById(ctx context.Context, id int32) (GetLeaderboardByIdRow, error)
 	GetLeaderboardEntryById(ctx context.Context, id int32) (LeaderboardEntry, error)
 	GetLeaderboardFieldsByLID(ctx context.Context, lid int32) ([]LeaderboardField, error)
 	GetLeaderboardFull(ctx context.Context, id int32) ([]GetLeaderboardFullRow, error)

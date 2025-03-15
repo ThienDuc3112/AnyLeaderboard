@@ -11,7 +11,16 @@ INSERT INTO leaderboards(
         creator
     )
 VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
-RETURNING *;
+RETURNING id, 
+  name,
+  description,
+  created_at,
+  updated_at,
+  cover_image_url,
+  allow_annonymous,
+  require_verification,
+  unique_submission,
+  creator;
 
 -- name: GetLeaderboardById :one
 SELECT id, name, description, created_at, updated_at, cover_image_url, allow_annonymous, require_verification, unique_submission, creator
@@ -56,7 +65,16 @@ ORDER BY l.created_at DESC
 LIMIT $2;
 
 -- name: GetLeaderboardFull :many
-SELECT l.*,
+SELECT l.id, 
+    l.name,
+    l.description,
+    l.created_at,
+    l.updated_at,
+    l.cover_image_url,
+    l.allow_annonymous,
+    l.require_verification,
+    l.unique_submission,
+    l.creator,
     lf.lid AS field_lid,
     lf.field_name,
     lf.field_value,

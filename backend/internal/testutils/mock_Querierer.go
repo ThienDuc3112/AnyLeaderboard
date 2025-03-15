@@ -533,22 +533,22 @@ func (_c *MockQuerierer_CreateLeadeboardOptions_Call) RunAndReturn(run func(cont
 }
 
 // CreateLeaderboard provides a mock function with given fields: ctx, arg
-func (_m *MockQuerierer) CreateLeaderboard(ctx context.Context, arg database.CreateLeaderboardParams) (database.Leaderboard, error) {
+func (_m *MockQuerierer) CreateLeaderboard(ctx context.Context, arg database.CreateLeaderboardParams) (database.CreateLeaderboardRow, error) {
 	ret := _m.Called(ctx, arg)
 
 	if len(ret) == 0 {
 		panic("no return value specified for CreateLeaderboard")
 	}
 
-	var r0 database.Leaderboard
+	var r0 database.CreateLeaderboardRow
 	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, database.CreateLeaderboardParams) (database.Leaderboard, error)); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, database.CreateLeaderboardParams) (database.CreateLeaderboardRow, error)); ok {
 		return rf(ctx, arg)
 	}
-	if rf, ok := ret.Get(0).(func(context.Context, database.CreateLeaderboardParams) database.Leaderboard); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, database.CreateLeaderboardParams) database.CreateLeaderboardRow); ok {
 		r0 = rf(ctx, arg)
 	} else {
-		r0 = ret.Get(0).(database.Leaderboard)
+		r0 = ret.Get(0).(database.CreateLeaderboardRow)
 	}
 
 	if rf, ok := ret.Get(1).(func(context.Context, database.CreateLeaderboardParams) error); ok {
@@ -579,12 +579,12 @@ func (_c *MockQuerierer_CreateLeaderboard_Call) Run(run func(ctx context.Context
 	return _c
 }
 
-func (_c *MockQuerierer_CreateLeaderboard_Call) Return(_a0 database.Leaderboard, _a1 error) *MockQuerierer_CreateLeaderboard_Call {
+func (_c *MockQuerierer_CreateLeaderboard_Call) Return(_a0 database.CreateLeaderboardRow, _a1 error) *MockQuerierer_CreateLeaderboard_Call {
 	_c.Call.Return(_a0, _a1)
 	return _c
 }
 
-func (_c *MockQuerierer_CreateLeaderboard_Call) RunAndReturn(run func(context.Context, database.CreateLeaderboardParams) (database.Leaderboard, error)) *MockQuerierer_CreateLeaderboard_Call {
+func (_c *MockQuerierer_CreateLeaderboard_Call) RunAndReturn(run func(context.Context, database.CreateLeaderboardParams) (database.CreateLeaderboardRow, error)) *MockQuerierer_CreateLeaderboard_Call {
 	_c.Call.Return(run)
 	return _c
 }
@@ -1512,22 +1512,22 @@ func (_c *MockQuerierer_GetFieldOptions_Call) RunAndReturn(run func(context.Cont
 }
 
 // GetLeaderboardById provides a mock function with given fields: ctx, id
-func (_m *MockQuerierer) GetLeaderboardById(ctx context.Context, id int32) (database.Leaderboard, error) {
+func (_m *MockQuerierer) GetLeaderboardById(ctx context.Context, id int32) (database.GetLeaderboardByIdRow, error) {
 	ret := _m.Called(ctx, id)
 
 	if len(ret) == 0 {
 		panic("no return value specified for GetLeaderboardById")
 	}
 
-	var r0 database.Leaderboard
+	var r0 database.GetLeaderboardByIdRow
 	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, int32) (database.Leaderboard, error)); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, int32) (database.GetLeaderboardByIdRow, error)); ok {
 		return rf(ctx, id)
 	}
-	if rf, ok := ret.Get(0).(func(context.Context, int32) database.Leaderboard); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, int32) database.GetLeaderboardByIdRow); ok {
 		r0 = rf(ctx, id)
 	} else {
-		r0 = ret.Get(0).(database.Leaderboard)
+		r0 = ret.Get(0).(database.GetLeaderboardByIdRow)
 	}
 
 	if rf, ok := ret.Get(1).(func(context.Context, int32) error); ok {
@@ -1558,12 +1558,12 @@ func (_c *MockQuerierer_GetLeaderboardById_Call) Run(run func(ctx context.Contex
 	return _c
 }
 
-func (_c *MockQuerierer_GetLeaderboardById_Call) Return(_a0 database.Leaderboard, _a1 error) *MockQuerierer_GetLeaderboardById_Call {
+func (_c *MockQuerierer_GetLeaderboardById_Call) Return(_a0 database.GetLeaderboardByIdRow, _a1 error) *MockQuerierer_GetLeaderboardById_Call {
 	_c.Call.Return(_a0, _a1)
 	return _c
 }
 
-func (_c *MockQuerierer_GetLeaderboardById_Call) RunAndReturn(run func(context.Context, int32) (database.Leaderboard, error)) *MockQuerierer_GetLeaderboardById_Call {
+func (_c *MockQuerierer_GetLeaderboardById_Call) RunAndReturn(run func(context.Context, int32) (database.GetLeaderboardByIdRow, error)) *MockQuerierer_GetLeaderboardById_Call {
 	_c.Call.Return(run)
 	return _c
 }

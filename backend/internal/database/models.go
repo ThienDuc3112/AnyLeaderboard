@@ -67,6 +67,11 @@ type Leaderboard struct {
 	RequireVerification bool
 	UniqueSubmission    bool
 	Creator             int32
+	NameLanguage        string
+	DescriptionLanguage string
+	NameTsv             interface{}
+	DescriptionTsv      interface{}
+	SearchTsv           interface{}
 }
 
 type LeaderboardEntry struct {
