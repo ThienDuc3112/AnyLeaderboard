@@ -57,7 +57,7 @@ func (h LeaderboardHandler) GetFavoriteLeaderboards(w http.ResponseWriter, r *ht
 		return
 	}
 	response := map[string]any{
-		"data": lbs[:len(lbs)-1],
+		"data": lbs[:min(pageSize, len(lbs))],
 	}
 
 	if len(lbs) > pageSize {

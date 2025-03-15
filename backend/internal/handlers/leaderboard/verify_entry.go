@@ -3,6 +3,7 @@ package leaderboard
 import (
 	c "anylbapi/internal/constants"
 	"anylbapi/internal/database"
+	"anylbapi/internal/models"
 	"anylbapi/internal/modules/leaderboard"
 	"anylbapi/internal/utils"
 	"fmt"
@@ -27,7 +28,7 @@ func (h LeaderboardHandler) VerifyEntry(w http.ResponseWriter, r *http.Request) 
 		err = fmt.Errorf("context does not give user type")
 		return
 	}
-	lb, ok := r.Context().Value(c.MiddlewareKeyLeaderboard).(database.Leaderboard)
+	lb, ok := r.Context().Value(c.MiddlewareKeyLeaderboard).(models.LeaderboardPreview)
 	if !ok {
 		utils.RespondWithError(w, 500, "Internal server error")
 		err = fmt.Errorf("context does not give leaderboard type")
@@ -45,7 +46,7 @@ func (h LeaderboardHandler) VerifyEntry(w http.ResponseWriter, r *http.Request) 
 	}
 
 	err = h.s.VerifyEntry(r.Context(), leaderboard.VerifyEntryParam{
-		LeaderboardId: lb.ID,
+		LeaderboardId: int32(lb.ID),
 		UserId:        user.ID,
 		EntryId:       int32(eid),
 		VerifyState:   body.Verify,

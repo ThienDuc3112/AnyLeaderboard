@@ -156,5 +156,6 @@ func (s LeaderboardService) CreateLeaderboard(ctx context.Context, param CreateL
 		Description:   lb.Description,
 		CoverImageUrl: lb.CoverImageUrl.String,
 		CreatedAt:     lb.CreatedAt.Time,
+		CreatorId:     int(lb.Creator),
 	}, nil
 }

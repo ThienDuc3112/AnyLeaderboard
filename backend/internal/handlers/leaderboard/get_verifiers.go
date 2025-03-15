@@ -2,7 +2,7 @@ package leaderboard
 
 import (
 	c "anylbapi/internal/constants"
-	"anylbapi/internal/database"
+	"anylbapi/internal/models"
 	"anylbapi/internal/utils"
 	"fmt"
 	"net/http"
@@ -12,14 +12,14 @@ func (h LeaderboardHandler) GetVerifiers(w http.ResponseWriter, r *http.Request)
 	var err error
 	defer func() { utils.LogError("getVerifiersHandler", err) }()
 
-	lb, ok := r.Context().Value(c.MiddlewareKeyLeaderboard).(database.Leaderboard)
+	lb, ok := r.Context().Value(c.MiddlewareKeyLeaderboard).(models.LeaderboardPreview)
 	if !ok {
 		utils.RespondWithError(w, 500, "Internal server error")
 		err = fmt.Errorf("user context is not of type database.Leaderboard")
 		return
 	}
 
-	verifiers, err := h.s.GetVerifiers(r.Context(), lb.ID)
+	verifiers, err := h.s.GetVerifiers(r.Context(), int32(lb.ID))
 	if err != nil {
 		utils.RespondWithError(w, 500, "Internal server error")
 		return

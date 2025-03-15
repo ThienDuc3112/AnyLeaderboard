@@ -3,6 +3,7 @@ package leaderboard
 import (
 	c "anylbapi/internal/constants"
 	"anylbapi/internal/database"
+	"anylbapi/internal/models"
 	"anylbapi/internal/modules/leaderboard"
 	"anylbapi/internal/utils"
 	"fmt"
@@ -19,7 +20,7 @@ func (h LeaderboardHandler) CreateEntry(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	lb, ok := r.Context().Value(c.MiddlewareKeyLeaderboard).(database.Leaderboard)
+	lb, ok := r.Context().Value(c.MiddlewareKeyLeaderboard).(models.LeaderboardPreview)
 	if !ok {
 		utils.RespondWithError(w, 500, "Internal server error")
 		err = fmt.Errorf("context does not give leaderboard type")
@@ -29,7 +30,7 @@ func (h LeaderboardHandler) CreateEntry(w http.ResponseWriter, r *http.Request) 
 	var user *database.User
 	userData, ok := r.Context().Value(c.MiddlewareKeyUser).(database.User)
 	if !ok {
-		if !lb.AllowAnnonymous {
+		if !lb.AllowAnonymous {
 			utils.RespondWithError(w, 401, "You are not logged in")
 			return
 		} else {

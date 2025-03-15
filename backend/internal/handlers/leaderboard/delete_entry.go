@@ -3,6 +3,7 @@ package leaderboard
 import (
 	c "anylbapi/internal/constants"
 	"anylbapi/internal/database"
+	"anylbapi/internal/models"
 	"anylbapi/internal/modules/leaderboard"
 	"anylbapi/internal/utils"
 	"fmt"
@@ -27,14 +28,14 @@ func (h LeaderboardHandler) DeleteEntry(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	lb, ok := r.Context().Value(c.MiddlewareKeyLeaderboard).(database.Leaderboard)
+	lb, ok := r.Context().Value(c.MiddlewareKeyLeaderboard).(models.LeaderboardPreview)
 	if !ok {
 		utils.RespondWithError(w, 500, "Internal server error")
 		err = fmt.Errorf("context does not give leaderboard type")
 		return
 	}
 
-	err = h.s.DeleteEntry(r.Context(), leaderboard.DeleteEntryParam{User: user, Leaderboard: lb, EntryId: eid})
+	err = h.s.DeleteEntry(r.Context(), leaderboard.DeleteEntryParam{UserId: user.ID, Leaderboard: lb, EntryId: eid})
 
 	if err != nil {
 		switch err {

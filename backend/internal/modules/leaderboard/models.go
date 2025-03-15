@@ -14,15 +14,15 @@ type CreateLeaderboardParam struct {
 }
 
 type CreateEntryParam struct {
-	Leaderboard database.Leaderboard
-	Entry       map[string]interface{}
+	Leaderboard models.LeaderboardPreview
+	Entry       map[string]any
 	User        *database.User
 	DisplayName string
 }
 
 type DeleteEntryParam struct {
-	User        database.User
-	Leaderboard database.Leaderboard
+	UserId      int32
+	Leaderboard models.LeaderboardPreview
 	EntryId     int
 }
 

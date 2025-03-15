@@ -8,6 +8,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"slices"
 	"time"
 
 	"github.com/jackc/pgx/v5/pgtype"
@@ -16,7 +17,7 @@ import (
 func (s LeaderboardService) CreateEntry(ctx context.Context, param CreateEntryParam) (database.LeaderboardEntry, string, error) {
 	entryData := make(map[string]any)
 
-	if !param.Leaderboard.AllowAnnonymous && param.User == nil {
+	if !param.Leaderboard.AllowAnonymous && param.User == nil {
 		return database.LeaderboardEntry{}, "", ErrNonAnonymousLeaderboard
 	} else if param.DisplayName == "" && param.User == nil {
 		return database.LeaderboardEntry{}, "", ErrNoDisplayName
@@ -31,7 +32,7 @@ func (s LeaderboardService) CreateEntry(ctx context.Context, param CreateEntryPa
 		lb.Data = make([]models.Entry, 0)
 	} else {
 		var err error
-		lb, err = s.GetLeaderboard(ctx, param.Leaderboard.ID)
+		lb, err = s.GetLeaderboard(ctx, int32(param.Leaderboard.ID))
 		if err != nil {
 			return database.LeaderboardEntry{}, "", err
 		}
@@ -98,13 +99,9 @@ func (s LeaderboardService) CreateEntry(ctx context.Context, param CreateEntryPa
 				if len(options) == 0 {
 					return database.LeaderboardEntry{}, field.Name, ErrOptionFieldNoOptions
 				}
-				isAnOption := false
-				for _, option := range options {
-					if option == val {
-						isAnOption = true
-						break
-					}
-				}
+
+				isAnOption := slices.Contains(options, val)
+
 				if !isAnOption {
 					return database.LeaderboardEntry{}, field.Name, ErrNotAnOption
 				}
@@ -139,7 +136,7 @@ func (s LeaderboardService) CreateEntry(ctx context.Context, param CreateEntryPa
 		CustomFields:  entryJson,
 		UserID:        userId,
 		Username:      param.DisplayName,
-		LeaderboardID: param.Leaderboard.ID,
+		LeaderboardID: int32(param.Leaderboard.ID),
 		SortedField:   sortedValue,
 	}
 

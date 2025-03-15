@@ -33,13 +33,14 @@ type SubmitLBStructure struct {
 }
 
 type LeaderboardPreview struct {
-	ID            int       `json:"id"`
-	Name          string    `json:"name"`
-	Description   string    `json:"description"`
-	CoverImageUrl string    `json:"coverImageUrl,omitempty"`
-	EntriesCount  int       `json:"entriesCount"`
-	CreatedAt     time.Time `json:"createdAt"`
-	// Creator              string         `json:"creator"`
+	ID             int       `json:"id"`
+	Name           string    `json:"name"`
+	Description    string    `json:"description"`
+	CoverImageUrl  string    `json:"coverImageUrl,omitempty"`
+	EntriesCount   int       `json:"entriesCount"`
+	CreatedAt      time.Time `json:"createdAt"`
+	CreatorId      int       `json:"-"`
+	AllowAnonymous bool      `json:"allowAnonymous"`
 }
 
 type Entry struct {
