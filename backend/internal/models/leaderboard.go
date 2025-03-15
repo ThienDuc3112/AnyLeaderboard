@@ -9,7 +9,7 @@ type Leaderboard struct {
 	ID                   int
 	Name                 string
 	Description          string
-	Creator              string
+	Creator              int
 	CoverImageUrl        string
 	CreatedAt            time.Time
 	UpdatedAt            time.Time

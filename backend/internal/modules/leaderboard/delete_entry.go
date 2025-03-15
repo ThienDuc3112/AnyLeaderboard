@@ -16,7 +16,7 @@ func (s LeaderboardService) DeleteEntry(ctx context.Context, param DeleteEntryPa
 		return ErrNoEntry
 	}
 
-	if param.UserId == int32(param.Leaderboard.CreatorId) {
+	if param.UserId == int32(param.Leaderboard.Creator) {
 		return s.repo.DeleteEntry(ctx, int32(param.EntryId))
 	}
 

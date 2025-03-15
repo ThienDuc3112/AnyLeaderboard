@@ -14,7 +14,7 @@ type CreateLeaderboardParam struct {
 }
 
 type CreateEntryParam struct {
-	Leaderboard models.LeaderboardPreview
+	Leaderboard models.Leaderboard
 	Entry       map[string]any
 	User        *database.User
 	DisplayName string
@@ -22,7 +22,7 @@ type CreateEntryParam struct {
 
 type DeleteEntryParam struct {
 	UserId      int32
-	Leaderboard models.LeaderboardPreview
+	Leaderboard models.Leaderboard
 	EntryId     int
 }
 

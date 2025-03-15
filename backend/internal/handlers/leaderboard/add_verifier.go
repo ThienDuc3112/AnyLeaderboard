@@ -13,7 +13,7 @@ func (h LeaderboardHandler) AddVerifier(w http.ResponseWriter, r *http.Request) 
 	var err error
 	defer func() { utils.LogError("addVerifierHandler", err) }()
 
-	lb, ok := r.Context().Value(c.MiddlewareKeyLeaderboard).(models.LeaderboardPreview)
+	lb, ok := r.Context().Value(c.MidKeyLeaderboard).(models.Leaderboard)
 	if !ok {
 		utils.RespondWithError(w, 500, "Internal server error")
 		err = fmt.Errorf("user context is not of type database.Leaderboard")

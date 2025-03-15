@@ -28,7 +28,7 @@ func (h LeaderboardHandler) VerifyEntry(w http.ResponseWriter, r *http.Request) 
 		err = fmt.Errorf("context does not give user type")
 		return
 	}
-	lb, ok := r.Context().Value(c.MiddlewareKeyLeaderboard).(models.LeaderboardPreview)
+	lb, ok := r.Context().Value(c.MidKeyLeaderboard).(models.Leaderboard)
 	if !ok {
 		utils.RespondWithError(w, 500, "Internal server error")
 		err = fmt.Errorf("context does not give leaderboard type")

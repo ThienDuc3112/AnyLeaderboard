@@ -20,8 +20,8 @@ func (m Middleware) GetLeaderboard(next http.Handler) http.Handler {
 
 		// Check cache
 		if data, exist := m.cache.Get(cachedKey); exist {
-			if lb, ok := data.(models.LeaderboardPreview); ok {
-				newCtx := context.WithValue(r.Context(), c.MiddlewareKeyLeaderboard, lb)
+			if lb, ok := data.(models.Leaderboard); ok {
+				newCtx := context.WithValue(r.Context(), c.MidKeyLeaderboard, lb)
 				next.ServeHTTP(w, r.WithContext(newCtx))
 				return
 			} else {
@@ -45,17 +45,20 @@ func (m Middleware) GetLeaderboard(next http.Handler) http.Handler {
 			return
 		}
 
-		lb := models.LeaderboardPreview{
-			ID:             int(row.ID),
-			Name:           row.Name,
-			Description:    row.Description,
-			CoverImageUrl:  row.CoverImageUrl.String,
-			AllowAnonymous: row.AllowAnonymous,
-			CreatorId:      int(row.Creator),
-			CreatedAt:      row.CreatedAt.Time,
+		lb := models.Leaderboard{
+			ID:                   int(row.ID),
+			Name:                 row.Name,
+			Description:          row.Description,
+			CoverImageUrl:        row.CoverImageUrl.String,
+			AllowAnonymous:       row.AllowAnonymous,
+			Creator:              int(row.Creator),
+			CreatedAt:            row.CreatedAt.Time,
+			UpdatedAt:            row.UpdatedAt.Time,
+			RequiredVerification: row.RequireVerification,
+			UniqueSubmission:     row.UniqueSubmission,
 		}
 		m.cache.SetDefault(cachedKey, lb)
-		newCtx := context.WithValue(r.Context(), c.MiddlewareKeyLeaderboard, lb)
+		newCtx := context.WithValue(r.Context(), c.MidKeyLeaderboard, lb)
 		next.ServeHTTP(w, r.WithContext(newCtx))
 	})
 }
@@ -72,14 +75,14 @@ func (m Middleware) IsLeaderboardCreator(next http.Handler) http.Handler {
 			return
 		}
 
-		lb, ok := r.Context().Value(c.MiddlewareKeyLeaderboard).(models.LeaderboardPreview)
+		lb, ok := r.Context().Value(c.MidKeyLeaderboard).(models.Leaderboard)
 		if !ok {
 			utils.RespondWithError(w, 500, "Internal server error")
 			err = fmt.Errorf("user context is not of type database.Leaderboard")
 			return
 		}
 
-		if user.ID != int32(lb.CreatorId) {
+		if user.ID != int32(lb.Creator) {
 			utils.RespondWithError(w, 403, "You're not the creator of this leaderboard")
 			return
 		}
@@ -100,14 +103,14 @@ func (m Middleware) IsLeaderboardVerifier(next http.Handler) http.Handler {
 			return
 		}
 
-		lb, ok := r.Context().Value(c.MiddlewareKeyLeaderboard).(models.LeaderboardPreview)
+		lb, ok := r.Context().Value(c.MidKeyLeaderboard).(models.Leaderboard)
 		if !ok {
 			utils.RespondWithError(w, 500, "Internal server error")
 			err = fmt.Errorf("user context is not of type database.Leaderboard")
 			return
 		}
 
-		if user.ID != int32(lb.CreatorId) {
+		if user.ID != int32(lb.Creator) {
 			var verifiers []database.User
 			verifiers, err = m.db.GetVerifiers(r.Context(), int32(lb.ID))
 			if err != nil {
