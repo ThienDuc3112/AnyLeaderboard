@@ -28,7 +28,7 @@ func (h LeaderboardHandler) CreateEntry(w http.ResponseWriter, r *http.Request) 
 	}
 
 	var user *database.User
-	userData, ok := r.Context().Value(c.MiddlewareKeyUser).(database.User)
+	userData, ok := r.Context().Value(c.MidKeyUser).(database.User)
 	if !ok {
 		if !lb.AllowAnonymous {
 			utils.RespondWithError(w, 401, "You are not logged in")

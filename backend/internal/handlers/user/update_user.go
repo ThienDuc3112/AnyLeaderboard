@@ -21,7 +21,7 @@ func (h UserHandler) UpdateUser(w http.ResponseWriter, r *http.Request) {
 
 	username := r.PathValue(constants.PathValueUsername)
 
-	userData, ok := r.Context().Value(constants.MiddlewareKeyUser).(database.User)
+	userData, ok := r.Context().Value(constants.MidKeyUser).(database.User)
 	if !ok {
 		utils.RespondWithError(w, 500, "Internal server error")
 		err = fmt.Errorf("user context is not of type database.User")

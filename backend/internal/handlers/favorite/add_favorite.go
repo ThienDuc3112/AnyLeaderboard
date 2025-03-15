@@ -14,7 +14,7 @@ func (h FavoriteHandler) AddFavorite(w http.ResponseWriter, r *http.Request) {
 	var err error
 	defer func() { utils.LogError("AddFavoriteHandler", err) }()
 
-	user, ok := r.Context().Value(constants.MiddlewareKeyUser).(database.User)
+	user, ok := r.Context().Value(constants.MidKeyUser).(database.User)
 	if !ok {
 		utils.RespondWithError(w, 500, "Internal server error")
 		err = fmt.Errorf("user context is not of type database.User")

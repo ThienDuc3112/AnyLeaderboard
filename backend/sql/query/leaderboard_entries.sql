@@ -27,8 +27,8 @@ SET custom_fields = jsonb_set(custom_fields, $1, @value::jsonb, $2)
 WHERE leaderboard_id = $3;
 -- name: RenameFieldOnEntriesByLeaderboardId :exec
 UPDATE leaderboard_entries
-SET custom_fields = jsonb_set(custom_fields #- @old_key, @new_key, data#>@old_key, TRUE)
-WHERE leaderboard_id = $1;
+SET custom_fields = jsonb_set(custom_fields - @old_key, ARRAY[@new_key], custom_fields -> @old_key, TRUE)
+WHERE leaderboard_id = $1 AND custom_fields ? @old_key;
 -- name: DeleteFieldOnEntriesByLeaderboardId :exec
 UPDATE leaderboard_entries
 SET custom_fields = custom_fields - @field_name

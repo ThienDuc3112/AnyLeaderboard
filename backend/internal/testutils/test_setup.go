@@ -42,7 +42,7 @@ func SetupPostJSONTestWithUser(path string, payload any) (*httptest.ResponseReco
 			Email:       "tester@professional.com",
 			Description: "The best tester to ever lived",
 		}
-		newCtx := context.WithValue(r.Context(), c.MiddlewareKeyUser, mockUser)
+		newCtx := context.WithValue(r.Context(), c.MidKeyUser, mockUser)
 		r = r.WithContext(newCtx)
 	}
 	return w, r, mockUser, err

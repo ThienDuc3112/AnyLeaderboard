@@ -35,7 +35,7 @@ func (m Middleware) AuthAccessToken(next http.Handler) http.Handler {
 		cached, exist := m.cache.Get(cacheKey)
 		if exist {
 			if user, ok := cached.(database.User); ok {
-				newCtx := context.WithValue(r.Context(), c.MiddlewareKeyUser, user)
+				newCtx := context.WithValue(r.Context(), c.MidKeyUser, user)
 				next.ServeHTTP(w, r.WithContext(newCtx))
 				return
 			} else {
@@ -50,7 +50,7 @@ func (m Middleware) AuthAccessToken(next http.Handler) http.Handler {
 		}
 
 		m.cache.SetDefault(cacheKey, user)
-		newCtx := context.WithValue(r.Context(), c.MiddlewareKeyUser, user)
+		newCtx := context.WithValue(r.Context(), c.MidKeyUser, user)
 		next.ServeHTTP(w, r.WithContext(newCtx))
 	})
 }
@@ -79,7 +79,7 @@ func (m Middleware) OptionalAuthAccessToken(next http.Handler) http.Handler {
 		cached, exist := m.cache.Get(cacheKey)
 		if exist {
 			if user, ok := cached.(database.User); ok {
-				newCtx := context.WithValue(r.Context(), c.MiddlewareKeyUser, user)
+				newCtx := context.WithValue(r.Context(), c.MidKeyUser, user)
 				next.ServeHTTP(w, r.WithContext(newCtx))
 				return
 			} else {
@@ -94,7 +94,7 @@ func (m Middleware) OptionalAuthAccessToken(next http.Handler) http.Handler {
 		}
 
 		m.cache.SetDefault(cacheKey, user)
-		newCtx := context.WithValue(r.Context(), c.MiddlewareKeyUser, user)
+		newCtx := context.WithValue(r.Context(), c.MidKeyUser, user)
 		next.ServeHTTP(w, r.WithContext(newCtx))
 	})
 }

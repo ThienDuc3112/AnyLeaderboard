@@ -22,7 +22,7 @@ func (h LeaderboardHandler) VerifyEntry(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	user, ok := r.Context().Value(c.MiddlewareKeyUser).(database.User)
+	user, ok := r.Context().Value(c.MidKeyUser).(database.User)
 	if !ok {
 		utils.RespondWithError(w, 500, "Internal server error")
 		err = fmt.Errorf("context does not give user type")

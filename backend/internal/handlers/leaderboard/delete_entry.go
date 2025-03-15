@@ -21,7 +21,7 @@ func (h LeaderboardHandler) DeleteEntry(w http.ResponseWriter, r *http.Request) 
 		utils.RespondWithError(w, 400, "Invalid entry id")
 	}
 
-	user, ok := r.Context().Value(c.MiddlewareKeyUser).(database.User)
+	user, ok := r.Context().Value(c.MidKeyUser).(database.User)
 	if !ok {
 		utils.RespondWithError(w, 500, "Internal server error")
 		err = fmt.Errorf("context does not give user type")

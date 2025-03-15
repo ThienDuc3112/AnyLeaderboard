@@ -3,6 +3,6 @@ package constants
 type contextKey string
 
 const (
-	MiddlewareKeyUser = contextKey("auth_user")
+	MidKeyUser        = contextKey("auth_user")
 	MidKeyLeaderboard = contextKey("lb")
 )

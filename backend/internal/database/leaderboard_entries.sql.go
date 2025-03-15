@@ -132,8 +132,8 @@ func (q *Queries) GetLeaderboardEntryById(ctx context.Context, id int32) (Leader
 
 const renameFieldOnEntriesByLeaderboardId = `-- name: RenameFieldOnEntriesByLeaderboardId :exec
 UPDATE leaderboard_entries
-SET custom_fields = jsonb_set(custom_fields #- $2, $3, data#>@old_key, TRUE)
-WHERE leaderboard_id = $1
+SET custom_fields = jsonb_set(custom_fields - $2, ARRAY[$3], custom_fields -> $2, TRUE)
+WHERE leaderboard_id = $1 AND custom_fields ? $2
 `
 
 type RenameFieldOnEntriesByLeaderboardIdParams struct {

@@ -28,8 +28,8 @@ func (s LeaderboardService) RenameField(ctx context.Context, param RenameFieldPa
 
 	err = tx.RenameFieldOnEntriesByLeaderboardId(ctx, database.RenameFieldOnEntriesByLeaderboardIdParams{
 		LeaderboardID: param.lid,
-		OldKey:        []byte("{" + param.fieldName + "}"),
-		NewKey:        []string{param.newName},
+		OldKey:        []byte(param.fieldName),
+		NewKey:        param.newName,
 	})
 	if err != nil {
 		return err

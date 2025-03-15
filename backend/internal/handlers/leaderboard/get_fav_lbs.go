@@ -16,7 +16,7 @@ func (h LeaderboardHandler) GetFavoriteLeaderboards(w http.ResponseWriter, r *ht
 	var err error
 	defer func() { utils.LogError("GetFavoriteLeaderboards", err) }()
 
-	user, ok := r.Context().Value(c.MiddlewareKeyUser).(database.User)
+	user, ok := r.Context().Value(c.MidKeyUser).(database.User)
 	if !ok {
 		utils.RespondWithError(w, 500, "Internal server error")
 		err = fmt.Errorf("context does not give user type")

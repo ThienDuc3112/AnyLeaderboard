@@ -3,6 +3,7 @@ package leaderboard
 import (
 	"anylbapi/internal/database"
 	"context"
+	"log"
 )
 
 func (s LeaderboardService) GetEntries(ctx context.Context, param GetEntriesParam) (GetEntriesReturn, error) {
@@ -28,10 +29,13 @@ func (s LeaderboardService) GetEntries(ctx context.Context, param GetEntriesPara
 		getEntriesParam.VerifyState = &param.VerifyState
 	}
 
+	log.Printf("%+v\n", getEntriesParam)
+
 	entries, err = s.repo.GetEntries(ctx, getEntriesParam)
 	if err != nil {
 		return GetEntriesReturn{}, err
 	}
+	log.Println(len(entries))
 	count, err = s.repo.GetEntriesCount(ctx, getEntriesParam)
 	if err != nil {
 		return GetEntriesReturn{}, err

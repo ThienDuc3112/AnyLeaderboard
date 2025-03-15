@@ -421,13 +421,13 @@ SELECT l.id,
     l.cover_image_url,
     l.created_at,
     COUNT(le.*) AS entries_count,
-    ts_rank_cd(l.search_tsv, query) AS rank
-FROM leaderboards l, websearch_to_tsquery(($3::text)::regconfig, $4) query
+    ts_rank_cd(l.search_tsv, websearch_to_tsquery(($3::text)::regconfig, $4)) AS rank
+FROM leaderboards l
     INNER JOIN leaderboard_favourites f ON f.leaderboard_id = l.id
     LEFT JOIN leaderboard_entries le ON l.id = le.leaderboard_id
 WHERE f.user_id = $1
 GROUP BY l.id
-HAVING ts_rank_cd(l.search_tsv, query) < $5::float4
+HAVING ts_rank_cd(l.search_tsv, websearch_to_tsquery(($3::text)::regconfig, $4)) < $5::float4
 ORDER BY rank DESC
 LIMIT $2
 `
