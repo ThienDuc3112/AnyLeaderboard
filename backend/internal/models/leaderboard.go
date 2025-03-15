@@ -26,7 +26,7 @@ type SubmitLBStructure struct {
 	Description          string         `json:"description" validate:"max=256"`
 	CoverImageURL        string         `json:"coverImageUrl" validate:"omitempty,http_url"`
 	ExternalLinks        []ExternalLink `json:"externalLinks" validate:"max=5,unique=DisplayValue,dive"`
-	AllowAnonymous       bool           `json:"allowAnonymous"`
+	AllowAnonymous       bool           `json:"allowAnonymous" validate:"excluded_if=UniqueSubmission true"`
 	RequiredVerification bool           `json:"requiredVerification"`
 	UniqueSubmission     bool           `json:"uniqueSubmission"`
 	Fields               []Field        `json:"fields" validate:"required,min=1,max=10,unique=Name,unique=FieldOrder,dive"`
