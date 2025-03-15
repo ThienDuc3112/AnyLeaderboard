@@ -17,10 +17,10 @@ CREATE TABLE leaderboard_fields(
     required BOOLEAN NOT NULL,
     PRIMARY KEY (lid, field_name)
 );
-CREATE INDEX idx_leaderboard_id ON leaderboard_fields(lid);
+CREATE INDEX IF EXISTS idx_leaderboard_id ON leaderboard_fields(lid);
 -- +goose StatementEnd
 -- +goose Down
 -- +goose StatementBegin
-DROP TABLE leaderboard_fields;
-DROP TYPE field_type CASCADE;
+DROP TABLE IF EXISTS leaderboard_fields;
+DROP TYPE IF EXISTS field_type CASCADE;
 -- +goose StatementEnd

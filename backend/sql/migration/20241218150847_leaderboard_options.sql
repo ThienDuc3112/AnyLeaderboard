@@ -11,5 +11,5 @@ CREATE INDEX idx_leaderboard_options ON leaderboard_options(lid, field_name);
 -- +goose StatementEnd
 -- +goose Down
 -- +goose StatementBegin
-DROP TABLE leaderboard_options;
+DROP TABLE IF EXISTS leaderboard_options;
 -- +goose StatementEnd

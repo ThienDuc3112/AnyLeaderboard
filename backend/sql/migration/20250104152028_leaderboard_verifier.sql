@@ -11,5 +11,5 @@ CREATE INDEX idx_leaderboard_verifiers_user_id ON leaderboard_verifiers(user_id)
 -- +goose StatementEnd
 -- +goose Down
 -- +goose StatementBegin
-DROP TABLE leaderboard_verifiers;
+DROP TABLE IF EXISTS leaderboard_verifiers;
 -- +goose StatementEnd

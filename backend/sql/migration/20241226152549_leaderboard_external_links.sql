@@ -10,5 +10,5 @@ CREATE INDEX idx_leaderboard_external_links_leaderboard_id ON leaderboard_extern
 -- +goose StatementEnd
 -- +goose Down
 -- +goose StatementBegin
-DROP TABLE leaderboard_external_links;
+DROP TABLE IF EXISTS leaderboard_external_links;
 -- +goose StatementEnd

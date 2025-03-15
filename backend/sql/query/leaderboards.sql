@@ -1,18 +1,20 @@
 -- name: CreateLeaderboard :one
 INSERT INTO leaderboards(
         name,
+        name_language,
         description,
+        description_language,
         cover_image_url,
         allow_annonymous,
         require_verification,
         unique_submission,
         creator
     )
-VALUES ($1, $2, $3, $4, $5, $6, $7)
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
 RETURNING *;
 
 -- name: GetLeaderboardById :one
-SELECT *
+SELECT id, name, description, created_at, updated_at, cover_image_url, allow_annonymous, require_verification, unique_submission, creator
 FROM leaderboards
 WHERE id = $1;
 

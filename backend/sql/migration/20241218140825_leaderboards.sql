@@ -16,5 +16,5 @@ CREATE INDEX idx_leaderboards_created_at ON leaderboards(created_at DESC);
 -- +goose StatementEnd
 -- +goose Down
 -- +goose StatementBegin
-DROP TABLE leaderboards;
+DROP TABLE IF EXISTS leaderboards;
 -- +goose StatementEnd

@@ -20,5 +20,5 @@ CREATE INDEX idx_leaderboard_entries_sorted_field ON leaderboard_entries(sorted_
 -- +goose StatementEnd
 -- +goose Down
 -- +goose StatementBegin
-DROP TABLE leaderboard_entries;
+DROP TABLE IF EXISTS leaderboard_entries;
 -- +goose StatementEnd

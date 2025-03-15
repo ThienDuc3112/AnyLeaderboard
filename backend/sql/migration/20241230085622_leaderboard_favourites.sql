@@ -9,5 +9,5 @@ CREATE INDEX idx_leaderboard_favourites_user_id ON leaderboard_favourites(user_i
 -- +goose StatementEnd
 -- +goose Down
 -- +goose StatementBegin
-DROP TABLE leaderboard_favourites;
+DROP TABLE IF EXISTS leaderboard_favourites;
 -- +goose StatementEnd
