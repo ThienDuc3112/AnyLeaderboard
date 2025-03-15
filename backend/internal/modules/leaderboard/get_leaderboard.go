@@ -60,7 +60,7 @@ func (s LeaderboardService) GetLeaderboard(ctx context.Context, id int32) (model
 		Name:                 lb.Name,
 		Description:          lb.Description,
 		CoverImageUrl:        lb.CoverImageUrl.String,
-		AllowAnonymous:       lb.AllowAnnonymous,
+		AllowAnonymous:       lb.AllowAnonymous,
 		RequiredVerification: lb.RequireVerification,
 		UniqueSubmission:     lb.UniqueSubmission,
 		CreatedAt:            lb.CreatedAt.Time,

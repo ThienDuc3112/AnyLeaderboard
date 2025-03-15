@@ -5,7 +5,7 @@ INSERT INTO leaderboards(
         description,
         description_language,
         cover_image_url,
-        allow_annonymous,
+        allow_anonymous,
         require_verification,
         unique_submission,
         creator
@@ -17,13 +17,13 @@ RETURNING id,
   created_at,
   updated_at,
   cover_image_url,
-  allow_annonymous,
+  allow_anonymous,
   require_verification,
   unique_submission,
   creator;
 
 -- name: GetLeaderboardById :one
-SELECT id, name, description, created_at, updated_at, cover_image_url, allow_annonymous, require_verification, unique_submission, creator
+SELECT id, name, description, created_at, updated_at, cover_image_url, allow_anonymous, require_verification, unique_submission, creator
 FROM leaderboards
 WHERE id = $1;
 
@@ -71,7 +71,7 @@ SELECT l.id,
     l.created_at,
     l.updated_at,
     l.cover_image_url,
-    l.allow_annonymous,
+    l.allow_anonymous,
     l.require_verification,
     l.unique_submission,
     l.creator,

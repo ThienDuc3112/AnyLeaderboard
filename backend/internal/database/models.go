@@ -63,7 +63,7 @@ type Leaderboard struct {
 	CreatedAt           pgtype.Timestamptz
 	UpdatedAt           pgtype.Timestamptz
 	CoverImageUrl       pgtype.Text
-	AllowAnnonymous     bool
+	AllowAnonymous      bool
 	RequireVerification bool
 	UniqueSubmission    bool
 	Creator             int32

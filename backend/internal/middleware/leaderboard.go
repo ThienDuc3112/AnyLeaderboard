@@ -50,7 +50,7 @@ func (m Middleware) GetLeaderboard(next http.Handler) http.Handler {
 			Name:           row.Name,
 			Description:    row.Description,
 			CoverImageUrl:  row.CoverImageUrl.String,
-			AllowAnonymous: row.AllowAnnonymous,
+			AllowAnonymous: row.AllowAnonymous,
 			CreatorId:      int(row.Creator),
 			CreatedAt:      row.CreatedAt.Time,
 		}
