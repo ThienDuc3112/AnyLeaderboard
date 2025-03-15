@@ -413,3 +413,73 @@ func (q *Queries) GetRecentLeaderboards(ctx context.Context, arg GetRecentLeader
 	}
 	return items, nil
 }
+
+const searchFavoriteLeaderboards = `-- name: SearchFavoriteLeaderboards :many
+SELECT l.id,
+    l.name,
+    l.description,
+    l.cover_image_url,
+    l.created_at,
+    COUNT(le.*) AS entries_count,
+    ts_rank_cd(l.search_tsv, query) AS rank
+FROM leaderboards l, websearch_to_tsquery(($3::text)::regconfig, $4) query
+    INNER JOIN leaderboard_favourites f ON f.leaderboard_id = l.id
+    LEFT JOIN leaderboard_entries le ON l.id = le.leaderboard_id
+WHERE f.user_id = $1
+GROUP BY l.id
+HAVING ts_rank_cd(l.search_tsv, query) < $5::float4
+ORDER BY rank DESC
+LIMIT $2
+`
+
+type SearchFavoriteLeaderboardsParams struct {
+	UserID     int32
+	Limit      int32
+	Language   string
+	Query      string
+	RankCursor float32
+}
+
+type SearchFavoriteLeaderboardsRow struct {
+	ID            int32
+	Name          string
+	Description   string
+	CoverImageUrl pgtype.Text
+	CreatedAt     pgtype.Timestamptz
+	EntriesCount  int64
+	Rank          float32
+}
+
+func (q *Queries) SearchFavoriteLeaderboards(ctx context.Context, arg SearchFavoriteLeaderboardsParams) ([]SearchFavoriteLeaderboardsRow, error) {
+	rows, err := q.db.Query(ctx, searchFavoriteLeaderboards,
+		arg.UserID,
+		arg.Limit,
+		arg.Language,
+		arg.Query,
+		arg.RankCursor,
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []SearchFavoriteLeaderboardsRow
+	for rows.Next() {
+		var i SearchFavoriteLeaderboardsRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.Name,
+			&i.Description,
+			&i.CoverImageUrl,
+			&i.CreatedAt,
+			&i.EntriesCount,
+			&i.Rank,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}

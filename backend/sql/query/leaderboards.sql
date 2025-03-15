@@ -113,3 +113,20 @@ GROUP BY l.id,
     l.created_at
 ORDER BY l.created_at DESC
 LIMIT $3;
+
+-- name: SearchFavoriteLeaderboards :many
+SELECT l.id,
+    l.name,
+    l.description,
+    l.cover_image_url,
+    l.created_at,
+    COUNT(le.*) AS entries_count,
+    ts_rank_cd(l.search_tsv, websearch_to_tsquery((@language::text)::regconfig, @query)) AS rank
+FROM leaderboards l
+    INNER JOIN leaderboard_favourites f ON f.leaderboard_id = l.id
+    LEFT JOIN leaderboard_entries le ON l.id = le.leaderboard_id
+WHERE f.user_id = $1
+GROUP BY l.id
+HAVING ts_rank_cd(l.search_tsv, websearch_to_tsquery((@language::text)::regconfig, @query)) < @rank_cursor::float4
+ORDER BY rank DESC
+LIMIT $2;

@@ -52,6 +52,7 @@ type Querier interface {
 	RenameLeadeboardOption(ctx context.Context, arg RenameLeadeboardOptionParams) error
 	RevokedAllRefreshToken(ctx context.Context, userID int32) error
 	RevokedRefreshToken(ctx context.Context, id int32) error
+	SearchFavoriteLeaderboards(ctx context.Context, arg SearchFavoriteLeaderboardsParams) ([]SearchFavoriteLeaderboardsRow, error)
 	UpdateFieldsName(ctx context.Context, arg UpdateFieldsNameParams) error
 	UpdateRefreshToken(ctx context.Context, arg UpdateRefreshTokenParams) (RefreshToken, error)
 	UpdateUser(ctx context.Context, arg UpdateUserParams) (User, error)

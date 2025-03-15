@@ -5,6 +5,19 @@ import (
 	"time"
 )
 
+type Leaderboard struct {
+	ID                   int
+	Name                 string
+	Description          string
+	Creator              string
+	CoverImageUrl        string
+	CreatedAt            time.Time
+	UpdatedAt            time.Time
+	AllowAnonymous       bool
+	RequiredVerification bool
+	UniqueSubmission     bool
+}
+
 type LeaderboardFull struct {
 	ID                   int            `json:"id"`
 	Name                 string         `json:"name"`
@@ -41,6 +54,7 @@ type LeaderboardPreview struct {
 	CreatedAt      time.Time `json:"createdAt"`
 	CreatorId      int       `json:"-"`
 	AllowAnonymous bool      `json:"allowAnonymous"`
+	Rank           float32   `json:"-"` // Only for searching purpose
 }
 
 type Entry struct {
