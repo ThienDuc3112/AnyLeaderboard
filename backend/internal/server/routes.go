@@ -43,6 +43,12 @@ func (s Server) RegisterRoutes() http.Handler {
 	mux.HandleFunc("POST /auth/refresh", authHandler.Refresh)
 
 	// Leaderboard routes
+	mux.Handle(
+		"GET /leaderboards/search",
+		m.OptionalAuthAccessToken(
+			http.HandlerFunc(lbHandler.Search),
+		),
+	)
 	mux.HandleFunc(
 		"GET /leaderboards",
 		lbHandler.GetLeaderboards,

@@ -13,12 +13,6 @@ import (
 	"time"
 )
 
-// TODO
-// - Default sorting: by recent no user
-// - Search
-// - Add support for sorted by:
-//   - Author
-//   - Entries count
 func (h LeaderboardHandler) GetLeaderboards(w http.ResponseWriter, r *http.Request) {
 	var err error
 	defer func() { utils.LogError("GetLeaderboardsHandler", err) }()
@@ -43,16 +37,16 @@ func (h LeaderboardHandler) GetLeaderboards(w http.ResponseWriter, r *http.Reque
 		}
 	}
 
-	var lbs []models.LeaderboardPreview
+	var rows leaderboard.GetLBsReturn
 
 	if creatorStr != "" {
-		lbs, err = h.s.GetByUsername(r.Context(), leaderboard.GetByUsernameParam{
+		rows, err = h.s.GetByUsername(r.Context(), leaderboard.GetByUsernameParam{
 			PageSize: pageSize + 1,
 			Cursor:   cursor,
 			Username: creatorStr,
 		})
 	} else {
-		lbs, err = h.s.GetRecents(r.Context(), leaderboard.GetRecentsParam{
+		rows, err = h.s.GetRecents(r.Context(), leaderboard.GetRecentsParam{
 			PageSize: pageSize + 1,
 			Cursor:   cursor,
 		})
@@ -60,6 +54,19 @@ func (h LeaderboardHandler) GetLeaderboards(w http.ResponseWriter, r *http.Reque
 	if err != nil {
 		utils.RespondWithError(w, 500, "Cannot get leaderboards")
 		return
+	}
+
+	lbs := make([]models.LeaderboardPreview, len(rows.Leaderboards))
+	for i, row := range rows.Leaderboards {
+		lbs[i] = models.LeaderboardPreview{
+			ID:             row.ID,
+			Name:           row.Name,
+			Description:    row.Description,
+			CoverImageUrl:  row.CoverImageUrl,
+			EntriesCount:   rows.EntryCounts[i],
+			CreatedAt:      row.CreatedAt,
+			AllowAnonymous: row.AllowAnonymous,
+		}
 	}
 
 	limit := min(pageSize, len(lbs))

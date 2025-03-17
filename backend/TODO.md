@@ -1,6 +1,7 @@
 # TODO
 - [ ] Search function in get leaderboards
-- [ ] Handle unique submission in leaderboards
+- [x] Handle unique submission in leaderboards
+- [ ] Fetch all user submissions on a leaderboard (for unique lb)
 - [ ] Delete leaderboard
 - [ ] Add password changing
 - [ ] Add email changing

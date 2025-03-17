@@ -100,11 +100,16 @@ func (q *Queries) DeleteLeaderboard(ctx context.Context, id int32) error {
 }
 
 const getFavoriteLeaderboards = `-- name: GetFavoriteLeaderboards :many
-SELECT l.id,
+SELECT l.id, 
     l.name,
     l.description,
-    l.cover_image_url,
     l.created_at,
+    l.updated_at,
+    l.cover_image_url,
+    l.allow_anonymous,
+    l.require_verification,
+    l.unique_submission,
+    l.creator,
     COUNT(le.*) AS entries_count
 FROM leaderboards l
     INNER JOIN leaderboard_favourites f ON f.leaderboard_id = l.id
@@ -126,12 +131,17 @@ type GetFavoriteLeaderboardsParams struct {
 }
 
 type GetFavoriteLeaderboardsRow struct {
-	ID            int32
-	Name          string
-	Description   string
-	CoverImageUrl pgtype.Text
-	CreatedAt     pgtype.Timestamptz
-	EntriesCount  int64
+	ID                  int32
+	Name                string
+	Description         string
+	CreatedAt           pgtype.Timestamptz
+	UpdatedAt           pgtype.Timestamptz
+	CoverImageUrl       pgtype.Text
+	AllowAnonymous      bool
+	RequireVerification bool
+	UniqueSubmission    bool
+	Creator             int32
+	EntriesCount        int64
 }
 
 func (q *Queries) GetFavoriteLeaderboards(ctx context.Context, arg GetFavoriteLeaderboardsParams) ([]GetFavoriteLeaderboardsRow, error) {
@@ -147,8 +157,13 @@ func (q *Queries) GetFavoriteLeaderboards(ctx context.Context, arg GetFavoriteLe
 			&i.ID,
 			&i.Name,
 			&i.Description,
-			&i.CoverImageUrl,
 			&i.CreatedAt,
+			&i.UpdatedAt,
+			&i.CoverImageUrl,
+			&i.AllowAnonymous,
+			&i.RequireVerification,
+			&i.UniqueSubmission,
+			&i.Creator,
 			&i.EntriesCount,
 		); err != nil {
 			return nil, err
@@ -293,11 +308,16 @@ func (q *Queries) GetLeaderboardFull(ctx context.Context, id int32) ([]GetLeader
 }
 
 const getLeaderboardsByUsername = `-- name: GetLeaderboardsByUsername :many
-SELECT l.id,
+SELECT l.id, 
     l.name,
     l.description,
+    l.created_at,
+    l.updated_at,
     l.cover_image_url,
-    l.created_at, 
+    l.allow_anonymous,
+    l.require_verification,
+    l.unique_submission,
+    l.creator,
     COUNT(le.*) AS entries_count
 FROM leaderboards l 
     LEFT JOIN users u ON u.id = l.creator
@@ -319,12 +339,17 @@ type GetLeaderboardsByUsernameParams struct {
 }
 
 type GetLeaderboardsByUsernameRow struct {
-	ID            int32
-	Name          string
-	Description   string
-	CoverImageUrl pgtype.Text
-	CreatedAt     pgtype.Timestamptz
-	EntriesCount  int64
+	ID                  int32
+	Name                string
+	Description         string
+	CreatedAt           pgtype.Timestamptz
+	UpdatedAt           pgtype.Timestamptz
+	CoverImageUrl       pgtype.Text
+	AllowAnonymous      bool
+	RequireVerification bool
+	UniqueSubmission    bool
+	Creator             int32
+	EntriesCount        int64
 }
 
 func (q *Queries) GetLeaderboardsByUsername(ctx context.Context, arg GetLeaderboardsByUsernameParams) ([]GetLeaderboardsByUsernameRow, error) {
@@ -340,8 +365,13 @@ func (q *Queries) GetLeaderboardsByUsername(ctx context.Context, arg GetLeaderbo
 			&i.ID,
 			&i.Name,
 			&i.Description,
-			&i.CoverImageUrl,
 			&i.CreatedAt,
+			&i.UpdatedAt,
+			&i.CoverImageUrl,
+			&i.AllowAnonymous,
+			&i.RequireVerification,
+			&i.UniqueSubmission,
+			&i.Creator,
 			&i.EntriesCount,
 		); err != nil {
 			return nil, err
@@ -355,11 +385,16 @@ func (q *Queries) GetLeaderboardsByUsername(ctx context.Context, arg GetLeaderbo
 }
 
 const getRecentLeaderboards = `-- name: GetRecentLeaderboards :many
-SELECT l.id,
+SELECT l.id, 
     l.name,
     l.description,
-    l.cover_image_url,
     l.created_at,
+    l.updated_at,
+    l.cover_image_url,
+    l.allow_anonymous,
+    l.require_verification,
+    l.unique_submission,
+    l.creator,
     COUNT(le.*) AS entries_count
 FROM leaderboards l
     LEFT JOIN leaderboard_entries le ON l.id = le.leaderboard_id
@@ -379,12 +414,17 @@ type GetRecentLeaderboardsParams struct {
 }
 
 type GetRecentLeaderboardsRow struct {
-	ID            int32
-	Name          string
-	Description   string
-	CoverImageUrl pgtype.Text
-	CreatedAt     pgtype.Timestamptz
-	EntriesCount  int64
+	ID                  int32
+	Name                string
+	Description         string
+	CreatedAt           pgtype.Timestamptz
+	UpdatedAt           pgtype.Timestamptz
+	CoverImageUrl       pgtype.Text
+	AllowAnonymous      bool
+	RequireVerification bool
+	UniqueSubmission    bool
+	Creator             int32
+	EntriesCount        int64
 }
 
 func (q *Queries) GetRecentLeaderboards(ctx context.Context, arg GetRecentLeaderboardsParams) ([]GetRecentLeaderboardsRow, error) {
@@ -400,8 +440,13 @@ func (q *Queries) GetRecentLeaderboards(ctx context.Context, arg GetRecentLeader
 			&i.ID,
 			&i.Name,
 			&i.Description,
-			&i.CoverImageUrl,
 			&i.CreatedAt,
+			&i.UpdatedAt,
+			&i.CoverImageUrl,
+			&i.AllowAnonymous,
+			&i.RequireVerification,
+			&i.UniqueSubmission,
+			&i.Creator,
 			&i.EntriesCount,
 		); err != nil {
 			return nil, err
@@ -418,8 +463,13 @@ const searchFavoriteLeaderboards = `-- name: SearchFavoriteLeaderboards :many
 SELECT l.id,
     l.name,
     l.description,
-    l.cover_image_url,
     l.created_at,
+    l.updated_at,
+    l.cover_image_url,
+    l.allow_anonymous,
+    l.require_verification,
+    l.unique_submission,
+    l.creator,
     COUNT(le.*) AS entries_count,
     ts_rank_cd(l.search_tsv, websearch_to_tsquery(($3::text)::regconfig, $4)) AS rank
 FROM leaderboards l
@@ -441,13 +491,18 @@ type SearchFavoriteLeaderboardsParams struct {
 }
 
 type SearchFavoriteLeaderboardsRow struct {
-	ID            int32
-	Name          string
-	Description   string
-	CoverImageUrl pgtype.Text
-	CreatedAt     pgtype.Timestamptz
-	EntriesCount  int64
-	Rank          float32
+	ID                  int32
+	Name                string
+	Description         string
+	CreatedAt           pgtype.Timestamptz
+	UpdatedAt           pgtype.Timestamptz
+	CoverImageUrl       pgtype.Text
+	AllowAnonymous      bool
+	RequireVerification bool
+	UniqueSubmission    bool
+	Creator             int32
+	EntriesCount        int64
+	Rank                float32
 }
 
 func (q *Queries) SearchFavoriteLeaderboards(ctx context.Context, arg SearchFavoriteLeaderboardsParams) ([]SearchFavoriteLeaderboardsRow, error) {
@@ -469,8 +524,94 @@ func (q *Queries) SearchFavoriteLeaderboards(ctx context.Context, arg SearchFavo
 			&i.ID,
 			&i.Name,
 			&i.Description,
-			&i.CoverImageUrl,
 			&i.CreatedAt,
+			&i.UpdatedAt,
+			&i.CoverImageUrl,
+			&i.AllowAnonymous,
+			&i.RequireVerification,
+			&i.UniqueSubmission,
+			&i.Creator,
+			&i.EntriesCount,
+			&i.Rank,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const searchLeaderboards = `-- name: SearchLeaderboards :many
+SELECT l.id, 
+    l.name,
+    l.description,
+    l.created_at,
+    l.updated_at,
+    l.cover_image_url,
+    l.allow_anonymous,
+    l.require_verification,
+    l.unique_submission,
+    l.creator,
+    COUNT(le.*) AS entries_count,
+    ts_rank_cd(l.search_tsv, websearch_to_tsquery(($2::text)::regconfig, $3)) AS rank
+FROM leaderboards l
+    LEFT JOIN leaderboard_entries le ON l.id = le.leaderboard_id
+GROUP BY l.id
+HAVING ts_rank_cd(l.search_tsv, websearch_to_tsquery(($2::text)::regconfig, $3)) < $4::float4
+ORDER BY rank DESC
+LIMIT $1
+`
+
+type SearchLeaderboardsParams struct {
+	Limit      int32
+	Language   string
+	Query      string
+	RankCursor float32
+}
+
+type SearchLeaderboardsRow struct {
+	ID                  int32
+	Name                string
+	Description         string
+	CreatedAt           pgtype.Timestamptz
+	UpdatedAt           pgtype.Timestamptz
+	CoverImageUrl       pgtype.Text
+	AllowAnonymous      bool
+	RequireVerification bool
+	UniqueSubmission    bool
+	Creator             int32
+	EntriesCount        int64
+	Rank                float32
+}
+
+func (q *Queries) SearchLeaderboards(ctx context.Context, arg SearchLeaderboardsParams) ([]SearchLeaderboardsRow, error) {
+	rows, err := q.db.Query(ctx, searchLeaderboards,
+		arg.Limit,
+		arg.Language,
+		arg.Query,
+		arg.RankCursor,
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []SearchLeaderboardsRow
+	for rows.Next() {
+		var i SearchLeaderboardsRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.Name,
+			&i.Description,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+			&i.CoverImageUrl,
+			&i.AllowAnonymous,
+			&i.RequireVerification,
+			&i.UniqueSubmission,
+			&i.Creator,
 			&i.EntriesCount,
 			&i.Rank,
 		); err != nil {

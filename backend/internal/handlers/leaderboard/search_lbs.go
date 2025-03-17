@@ -7,32 +7,33 @@ import (
 	"anylbapi/internal/modules/leaderboard"
 	"anylbapi/internal/utils"
 	"fmt"
+	"math"
 	"net/http"
 	"net/url"
 	"strconv"
-	"time"
 )
 
-func (h LeaderboardHandler) GetFavoriteLeaderboards(w http.ResponseWriter, r *http.Request) {
+func (h LeaderboardHandler) Search(w http.ResponseWriter, r *http.Request) {
 	var err error
 	defer func() { utils.LogError("GetFavoriteLeaderboards", err) }()
 
-	user, ok := r.Context().Value(c.MidKeyUser).(database.User)
-	if !ok {
-		utils.RespondWithError(w, 500, "Internal server error")
-		err = fmt.Errorf("context does not give user type")
-		return
-	}
+	user, _ := r.Context().Value(c.MidKeyUser).(database.User)
 
 	cursorStr := r.URL.Query().Get(c.QueryParamCursor)
 	pageSizeStr := r.URL.Query().Get(c.QueryParamPageSize)
+	SearchStr := r.URL.Query().Get(c.QueryParamSearch)
 	pageSize := c.DefaultPageSize
-	cursor := time.Now()
+	cursor := float32(math.Inf(1))
+
+	if SearchStr == "" {
+		utils.RespondWithError(w, 400, fmt.Sprintf("Query param \"%s\" must be present", c.QueryParamSearch))
+		return
+	}
 
 	if cursorStr != "" {
-		msec, err := strconv.ParseInt(cursorStr, 10, 64)
+		num, err := strconv.ParseFloat(cursorStr, 32)
 		if err == nil {
-			cursor = time.UnixMilli(msec)
+			cursor = float32(num)
 		}
 	}
 
@@ -43,10 +44,11 @@ func (h LeaderboardHandler) GetFavoriteLeaderboards(w http.ResponseWriter, r *ht
 		}
 	}
 
-	res, err := h.s.GetFavoriteLeaderboards(r.Context(), leaderboard.GetFavLBParams{
-		UserID:   user.ID,
-		Cursor:   cursor,
-		PageSize: int32(pageSize + 1),
+	res, err := h.s.Search(r.Context(), leaderboard.SearchParam{
+		Term:         SearchStr,
+		UserId:       user.ID,
+		PageSize:     int32(pageSize + 1),
+		SearchCursor: cursor,
 	})
 	if err != nil {
 		utils.RespondWithError(w, 500, "Internal server error")
@@ -74,12 +76,12 @@ func (h LeaderboardHandler) GetFavoriteLeaderboards(w http.ResponseWriter, r *ht
 		"data": lbs[:min(pageSize, len(lbs))],
 	}
 
-	if len(lbs) > pageSize {
+	if len(lbs) > pageSize && res.Rank[len(res.Rank)-1] > 0 {
 		newUrl, _ := url.Parse(r.RequestURI)
 		newQuery := newUrl.Query()
 
-		secondLastLb := lbs[len(lbs)-2]
-		newQuery.Set(c.QueryParamCursor, fmt.Sprintf("%d", secondLastLb.CreatedAt.UnixMilli()))
+		secondLastLb := res.Rank[len(lbs)-2]
+		newQuery.Set(c.QueryParamCursor, fmt.Sprintf("%f", secondLastLb-0.000001))
 		newUrl.RawQuery = newQuery.Encode()
 		newUrl.Host = r.Host
 		newUrl.Scheme = "https"
@@ -89,4 +91,5 @@ func (h LeaderboardHandler) GetFavoriteLeaderboards(w http.ResponseWriter, r *ht
 	}
 
 	utils.RespondWithJSON(w, 200, response)
+
 }

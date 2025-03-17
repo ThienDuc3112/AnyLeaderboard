@@ -4,6 +4,7 @@ const (
 	QueryParamPageSize  = "page_size"
 	QueryParamCursor    = "cursor"
 	QueryParamCreatedBy = "author"
+	QueryParamSearch    = "query"
 )
 
 const (

@@ -15,7 +15,7 @@ type GetByUsernameParam struct {
 	PageSize int
 }
 
-func (s LeaderboardService) GetByUsername(ctx context.Context, param GetByUsernameParam) ([]models.LeaderboardPreview, error) {
+func (s LeaderboardService) GetByUsername(ctx context.Context, param GetByUsernameParam) (GetLBsReturn, error) {
 	rows, err := s.repo.GetLeaderboardsByUsername(ctx, database.GetLeaderboardsByUsernameParams{
 		Username: param.Username,
 		CreatedAt: pgtype.Timestamptz{
@@ -25,19 +25,31 @@ func (s LeaderboardService) GetByUsername(ctx context.Context, param GetByUserna
 		Limit: int32(param.PageSize),
 	})
 	if err != nil {
-		return nil, err
+		return GetLBsReturn{}, err
 	}
 
-	res := make([]models.LeaderboardPreview, len(rows))
+	res := make([]models.Leaderboard, len(rows))
+	counts := make([]int, len(rows))
+
 	for i, row := range rows {
-		res[i] = models.LeaderboardPreview{
-			ID:            int(row.ID),
-			Name:          row.Name,
-			Description:   row.Description,
-			CoverImageUrl: row.CoverImageUrl.String,
-			CreatedAt:     row.CreatedAt.Time,
-			EntriesCount:  int(row.EntriesCount),
+		counts[i] = int(row.EntriesCount)
+		res[i] = models.Leaderboard{
+			ID:                   int(row.ID),
+			Name:                 row.Name,
+			Description:          row.Description,
+			CoverImageUrl:        row.CoverImageUrl.String,
+			CreatedAt:            row.CreatedAt.Time,
+			Creator:              int(row.Creator),
+			UpdatedAt:            row.UpdatedAt.Time,
+			AllowAnonymous:       row.AllowAnonymous,
+			RequiredVerification: row.RequireVerification,
+			UniqueSubmission:     row.UniqueSubmission,
 		}
 	}
-	return res, nil
+
+	return GetLBsReturn{
+		Leaderboards: res,
+		EntryCounts:  counts,
+	}, nil
+
 }

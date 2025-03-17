@@ -11,10 +11,10 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
-func (s LeaderboardService) CreateLeaderboard(ctx context.Context, param CreateLeaderboardParam) (models.LeaderboardPreview, error) {
+func (s LeaderboardService) CreateLeaderboard(ctx context.Context, param CreateLeaderboardParam) (models.Leaderboard, error) {
 	tx, err := s.repo.BeginTx(ctx)
 	if err != nil {
-		return models.LeaderboardPreview{}, err
+		return models.Leaderboard{}, err
 	}
 	defer tx.Rollback(ctx)
 
@@ -39,7 +39,7 @@ func (s LeaderboardService) CreateLeaderboard(ctx context.Context, param CreateL
 	// ================== Inserting leaderboard ==================
 	lb, err := tx.CreateLeaderboard(ctx, lbParam)
 	if err != nil {
-		return models.LeaderboardPreview{}, err
+		return models.Leaderboard{}, err
 	}
 
 	// ================== Processing leaderboard links ==================
@@ -56,10 +56,10 @@ func (s LeaderboardService) CreateLeaderboard(ctx context.Context, param CreateL
 	if len(links) > 0 {
 		n, err := tx.CreateLeaderboardExternalLink(ctx, links)
 		if err != nil {
-			return models.LeaderboardPreview{}, err
+			return models.Leaderboard{}, err
 		}
 		if n != int64(len(links)) {
-			return models.LeaderboardPreview{}, ErrUnableToInsertAllLinks
+			return models.Leaderboard{}, ErrUnableToInsertAllLinks
 		}
 	}
 
@@ -76,10 +76,10 @@ func (s LeaderboardService) CreateLeaderboard(ctx context.Context, param CreateL
 
 	for _, field := range param.Fields {
 		if forRankExist && field.ForRank {
-			return models.LeaderboardPreview{}, ErrMultipleForRankField
+			return models.Leaderboard{}, ErrMultipleForRankField
 		}
 		if field.ForRank && !field.Required {
-			return models.LeaderboardPreview{}, ErrForRankNotRequired
+			return models.Leaderboard{}, ErrForRankNotRequired
 		}
 		forRankExist = forRankExist || field.ForRank
 		nonHiddenFieldExist = nonHiddenFieldExist || !field.Hidden
@@ -95,7 +95,7 @@ func (s LeaderboardService) CreateLeaderboard(ctx context.Context, param CreateL
 
 		if field.Type == string(database.FieldTypeOPTION) {
 			if len(field.Options) == 0 {
-				return models.LeaderboardPreview{}, ErrNoOptions
+				return models.Leaderboard{}, ErrNoOptions
 			}
 			opts = append(opts, optionsToInsert{
 				fieldName: field.Name,
@@ -106,19 +106,19 @@ func (s LeaderboardService) CreateLeaderboard(ctx context.Context, param CreateL
 	}
 
 	if !forRankExist {
-		return models.LeaderboardPreview{}, ErrNoForRankField
+		return models.Leaderboard{}, ErrNoForRankField
 	}
 	if !nonHiddenFieldExist {
-		return models.LeaderboardPreview{}, ErrNoPublicField
+		return models.Leaderboard{}, ErrNoPublicField
 	}
 
 	// ================== Inserting leaderboard fields ==================
 	n, err := tx.CreateLeadeboardFields(ctx, fields)
 	if err != nil {
-		return models.LeaderboardPreview{}, err
+		return models.Leaderboard{}, err
 	}
 	if n != int64(len(fields)) {
-		return models.LeaderboardPreview{}, ErrUnableToInsertAllFields
+		return models.Leaderboard{}, ErrUnableToInsertAllFields
 	}
 
 	for _, opt := range opts {
@@ -135,27 +135,31 @@ func (s LeaderboardService) CreateLeaderboard(ctx context.Context, param CreateL
 		// ================== Inserting leaderboard options ==================
 		n, err = tx.CreateLeadeboardOptions(ctx, optParam)
 		if err != nil {
-			return models.LeaderboardPreview{}, err
+			return models.Leaderboard{}, err
 		}
 		if n != int64(len(optParam)) {
-			return models.LeaderboardPreview{}, ErrUnableToInsertAllOptions
+			return models.Leaderboard{}, ErrUnableToInsertAllOptions
 		}
 	}
 
 	// ================== Commiting changes ==================
 	err = tx.Commit(ctx)
 	if err != nil {
-		return models.LeaderboardPreview{}, err
+		return models.Leaderboard{}, err
 	}
 
 	// Remove caching if exist
 	s.cache.Delete(fmt.Sprintf("%s-%d", c.CachePrefixNoLeaderboard, lb.ID))
-	return models.LeaderboardPreview{
-		ID:            int(lb.ID),
-		Name:          lb.Name,
-		Description:   lb.Description,
-		CoverImageUrl: lb.CoverImageUrl.String,
-		CreatedAt:     lb.CreatedAt.Time,
-		CreatorId:     int(lb.Creator),
+	return models.Leaderboard{
+		ID:                   int(lb.ID),
+		Name:                 lb.Name,
+		Description:          lb.Description,
+		CoverImageUrl:        lb.CoverImageUrl.String,
+		CreatedAt:            lb.CreatedAt.Time,
+		Creator:              int(lb.Creator),
+		UpdatedAt:            lb.UpdatedAt.Time,
+		AllowAnonymous:       lb.AllowAnonymous,
+		RequiredVerification: lb.RequireVerification,
+		UniqueSubmission:     lb.UniqueSubmission,
 	}, nil
 }

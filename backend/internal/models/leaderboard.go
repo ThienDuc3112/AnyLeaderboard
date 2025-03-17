@@ -52,9 +52,9 @@ type LeaderboardPreview struct {
 	CoverImageUrl  string    `json:"coverImageUrl,omitempty"`
 	EntriesCount   int       `json:"entriesCount"`
 	CreatedAt      time.Time `json:"createdAt"`
-	CreatorId      int       `json:"-"`
 	AllowAnonymous bool      `json:"allowAnonymous"`
-	Rank           float32   `json:"-"` // Only for searching purpose
+	// CreatorId      int       `json:"-"`
+	// Rank           float32   `json:"-"` // Only for searching purpose
 }
 
 type Entry struct {

@@ -28,11 +28,16 @@ FROM leaderboards
 WHERE id = $1;
 
 -- name: GetLeaderboardsByUsername :many
-SELECT l.id,
+SELECT l.id, 
     l.name,
     l.description,
+    l.created_at,
+    l.updated_at,
     l.cover_image_url,
-    l.created_at, 
+    l.allow_anonymous,
+    l.require_verification,
+    l.unique_submission,
+    l.creator,
     COUNT(le.*) AS entries_count
 FROM leaderboards l 
     LEFT JOIN users u ON u.id = l.creator
@@ -47,11 +52,16 @@ ORDER BY l.created_at DESC
 LIMIT $3;
 
 -- name: GetRecentLeaderboards :many
-SELECT l.id,
+SELECT l.id, 
     l.name,
     l.description,
-    l.cover_image_url,
     l.created_at,
+    l.updated_at,
+    l.cover_image_url,
+    l.allow_anonymous,
+    l.require_verification,
+    l.unique_submission,
+    l.creator,
     COUNT(le.*) AS entries_count
 FROM leaderboards l
     LEFT JOIN leaderboard_entries le ON l.id = le.leaderboard_id
@@ -96,11 +106,16 @@ DELETE FROM leaderboards
 WHERE id = $1;
 
 -- name: GetFavoriteLeaderboards :many
-SELECT l.id,
+SELECT l.id, 
     l.name,
     l.description,
-    l.cover_image_url,
     l.created_at,
+    l.updated_at,
+    l.cover_image_url,
+    l.allow_anonymous,
+    l.require_verification,
+    l.unique_submission,
+    l.creator,
     COUNT(le.*) AS entries_count
 FROM leaderboards l
     INNER JOIN leaderboard_favourites f ON f.leaderboard_id = l.id
@@ -118,8 +133,13 @@ LIMIT $3;
 SELECT l.id,
     l.name,
     l.description,
-    l.cover_image_url,
     l.created_at,
+    l.updated_at,
+    l.cover_image_url,
+    l.allow_anonymous,
+    l.require_verification,
+    l.unique_submission,
+    l.creator,
     COUNT(le.*) AS entries_count,
     ts_rank_cd(l.search_tsv, websearch_to_tsquery((@language::text)::regconfig, @query)) AS rank
 FROM leaderboards l
@@ -130,3 +150,23 @@ GROUP BY l.id
 HAVING ts_rank_cd(l.search_tsv, websearch_to_tsquery((@language::text)::regconfig, @query)) < @rank_cursor::float4
 ORDER BY rank DESC
 LIMIT $2;
+
+-- name: SearchLeaderboards :many
+SELECT l.id, 
+    l.name,
+    l.description,
+    l.created_at,
+    l.updated_at,
+    l.cover_image_url,
+    l.allow_anonymous,
+    l.require_verification,
+    l.unique_submission,
+    l.creator,
+    COUNT(le.*) AS entries_count,
+    ts_rank_cd(l.search_tsv, websearch_to_tsquery((@language::text)::regconfig, @query)) AS rank
+FROM leaderboards l
+    LEFT JOIN leaderboard_entries le ON l.id = le.leaderboard_id
+GROUP BY l.id
+HAVING ts_rank_cd(l.search_tsv, websearch_to_tsquery((@language::text)::regconfig, @query)) < @rank_cursor::float4
+ORDER BY rank DESC
+LIMIT $1;
