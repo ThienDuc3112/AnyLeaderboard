@@ -65,6 +65,9 @@ func (s LeaderboardService) GetLeaderboardWithEntry(ctx context.Context, param G
 		if row.Username == "" && row.UserID.Valid {
 			var username string
 			username, err = s.repo.GetUsernameFromId(ctx, row.UserID.Int32)
+			if err != nil {
+				return models.LeaderboardFull{}, err
+			}
 			entry.Username = username
 		}
 

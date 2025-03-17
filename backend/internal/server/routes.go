@@ -65,6 +65,10 @@ func (s Server) RegisterRoutes() http.Handler {
 		fmt.Sprintf("GET /leaderboards/{%s}/entries/{%s}", c.PathValueLeaderboardId, c.PathValueEntryId),
 		lbHandler.GetEntry,
 	)
+	mux.HandleFunc(
+		fmt.Sprintf("GET /leaderboards/{%s}/userentries/{%s}", c.PathValueLeaderboardId, c.PathValueUsername),
+		lbHandler.GetUserEntries,
+	)
 
 	// CRUD on leaderboard
 	mux.Handle(

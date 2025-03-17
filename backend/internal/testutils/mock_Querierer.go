@@ -1220,6 +1220,65 @@ func (_c *MockQuerierer_DeleteUserFavorite_Call) RunAndReturn(run func(context.C
 	return _c
 }
 
+// GetAllEntriesByUsername provides a mock function with given fields: ctx, arg
+func (_m *MockQuerierer) GetAllEntriesByUsername(ctx context.Context, arg database.GetAllEntriesByUsernameParams) ([]database.LeaderboardEntry, error) {
+	ret := _m.Called(ctx, arg)
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetAllEntriesByUsername")
+	}
+
+	var r0 []database.LeaderboardEntry
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context, database.GetAllEntriesByUsernameParams) ([]database.LeaderboardEntry, error)); ok {
+		return rf(ctx, arg)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, database.GetAllEntriesByUsernameParams) []database.LeaderboardEntry); ok {
+		r0 = rf(ctx, arg)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]database.LeaderboardEntry)
+		}
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, database.GetAllEntriesByUsernameParams) error); ok {
+		r1 = rf(ctx, arg)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// MockQuerierer_GetAllEntriesByUsername_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetAllEntriesByUsername'
+type MockQuerierer_GetAllEntriesByUsername_Call struct {
+	*mock.Call
+}
+
+// GetAllEntriesByUsername is a helper method to define mock.On call
+//   - ctx context.Context
+//   - arg database.GetAllEntriesByUsernameParams
+func (_e *MockQuerierer_Expecter) GetAllEntriesByUsername(ctx interface{}, arg interface{}) *MockQuerierer_GetAllEntriesByUsername_Call {
+	return &MockQuerierer_GetAllEntriesByUsername_Call{Call: _e.mock.On("GetAllEntriesByUsername", ctx, arg)}
+}
+
+func (_c *MockQuerierer_GetAllEntriesByUsername_Call) Run(run func(ctx context.Context, arg database.GetAllEntriesByUsernameParams)) *MockQuerierer_GetAllEntriesByUsername_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(database.GetAllEntriesByUsernameParams))
+	})
+	return _c
+}
+
+func (_c *MockQuerierer_GetAllEntriesByUsername_Call) Return(_a0 []database.LeaderboardEntry, _a1 error) *MockQuerierer_GetAllEntriesByUsername_Call {
+	_c.Call.Return(_a0, _a1)
+	return _c
+}
+
+func (_c *MockQuerierer_GetAllEntriesByUsername_Call) RunAndReturn(run func(context.Context, database.GetAllEntriesByUsernameParams) ([]database.LeaderboardEntry, error)) *MockQuerierer_GetAllEntriesByUsername_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // GetEntries provides a mock function with given fields: ctx, arg
 func (_m *MockQuerierer) GetEntries(ctx context.Context, arg database.GetEntriesParams) ([]database.LeaderboardEntry, error) {
 	ret := _m.Called(ctx, arg)

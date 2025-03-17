@@ -115,11 +115,7 @@ FROM leaderboards l
     INNER JOIN leaderboard_favourites f ON f.leaderboard_id = l.id
     LEFT JOIN leaderboard_entries le ON l.id = le.leaderboard_id
 WHERE f.user_id = $1 AND l.created_at < $2
-GROUP BY l.id,
-    l.name,
-    l.description,
-    l.cover_image_url,
-    l.created_at
+GROUP BY l.id
 ORDER BY l.created_at DESC
 LIMIT $3
 `
@@ -323,11 +319,7 @@ FROM leaderboards l
     LEFT JOIN users u ON u.id = l.creator
     LEFT JOIN leaderboard_entries le ON l.id = le.leaderboard_id
 WHERE u.username = $1 AND l.created_at < $2
-GROUP BY l.id,
-    l.name,
-    l.description,
-    l.cover_image_url,
-    l.created_at
+GROUP BY l.id
 ORDER BY l.created_at DESC
 LIMIT $3
 `
@@ -399,11 +391,7 @@ SELECT l.id,
 FROM leaderboards l
     LEFT JOIN leaderboard_entries le ON l.id = le.leaderboard_id
 WHERE l.created_at < $1
-GROUP BY l.id,
-    l.name,
-    l.description,
-    l.cover_image_url,
-    l.created_at
+GROUP BY l.id
 ORDER BY l.created_at DESC
 LIMIT $2
 `

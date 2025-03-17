@@ -31,6 +31,7 @@ type Querier interface {
 	DeleteUser(ctx context.Context, id int32) error
 	DeleteUserByUsername(ctx context.Context, username string) error
 	DeleteUserFavorite(ctx context.Context, userID int32) error
+	GetAllEntriesByUsername(ctx context.Context, arg GetAllEntriesByUsernameParams) ([]LeaderboardEntry, error)
 	GetFavoriteLeaderboards(ctx context.Context, arg GetFavoriteLeaderboardsParams) ([]GetFavoriteLeaderboardsRow, error)
 	GetFieldByLID(ctx context.Context, arg GetFieldByLIDParams) (LeaderboardField, error)
 	GetFieldOptions(ctx context.Context, arg GetFieldOptionsParams) ([]string, error)

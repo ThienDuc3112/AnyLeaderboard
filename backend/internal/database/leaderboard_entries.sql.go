@@ -105,6 +105,59 @@ func (q *Queries) DeleteFieldOnEntriesByLeaderboardId(ctx context.Context, arg D
 	return err
 }
 
+const getAllEntriesByUsername = `-- name: GetAllEntriesByUsername :many
+SELECT e.id, e.created_at, e.updated_at, e.user_id, e.username, e.leaderboard_id, e.sorted_field, e.custom_fields, e.verified, e.verified_at, e.verified_by
+FROM leaderboard_entries e
+INNER JOIN users u ON u.id = e.user_id
+WHERE e.leaderboard_id = $1 AND u.username = $2 AND sorted_field < $3
+ORDER BY sorted_field DESC
+LIMIT $4
+`
+
+type GetAllEntriesByUsernameParams struct {
+	LeaderboardID int32
+	Username      string
+	SortedField   float64
+	Limit         int32
+}
+
+func (q *Queries) GetAllEntriesByUsername(ctx context.Context, arg GetAllEntriesByUsernameParams) ([]LeaderboardEntry, error) {
+	rows, err := q.db.Query(ctx, getAllEntriesByUsername,
+		arg.LeaderboardID,
+		arg.Username,
+		arg.SortedField,
+		arg.Limit,
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []LeaderboardEntry
+	for rows.Next() {
+		var i LeaderboardEntry
+		if err := rows.Scan(
+			&i.ID,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+			&i.UserID,
+			&i.Username,
+			&i.LeaderboardID,
+			&i.SortedField,
+			&i.CustomFields,
+			&i.Verified,
+			&i.VerifiedAt,
+			&i.VerifiedBy,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getLeaderboardEntryById = `-- name: GetLeaderboardEntryById :one
 SELECT id, created_at, updated_at, user_id, username, leaderboard_id, sorted_field, custom_fields, verified, verified_at, verified_by
 FROM leaderboard_entries

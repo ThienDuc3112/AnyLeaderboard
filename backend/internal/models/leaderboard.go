@@ -58,14 +58,15 @@ type LeaderboardPreview struct {
 }
 
 type Entry struct {
-	Id         int             `json:"id"`
-	CreatedAt  time.Time       `json:"createdAt"`
-	UpdatedAt  time.Time       `json:"updatedAt"`
-	Username   string          `json:"username"`
-	Fields     json.RawMessage `json:"fields"`
-	Verified   bool            `json:"verified"`
-	VerifiedAt *time.Time      `json:"verifiedAt,omitempty"`
-	VerifiedBy string          `json:"verifiedBy,omitempty"`
+	Id          int             `json:"id"`
+	CreatedAt   time.Time       `json:"createdAt"`
+	UpdatedAt   time.Time       `json:"updatedAt"`
+	Username    string          `json:"username"`
+	Fields      json.RawMessage `json:"fields"`
+	Verified    bool            `json:"verified"`
+	VerifiedAt  *time.Time      `json:"verifiedAt,omitempty"`
+	VerifiedBy  string          `json:"verifiedBy,omitempty"`
+	SortedField float64         `json:"-"`
 }
 
 type ExternalLink struct {
