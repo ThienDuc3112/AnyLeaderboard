@@ -41,7 +41,8 @@ const Button: React.FC<ButtonProps> = ({
       {...props}
       className={`transition font-semibold rounded-full flex flex-col items-center justify-center ${getVariantClasses(
         variant
-      )} ${getSizeClasses(size)} ${props.className}`}
+      )} ${getSizeClasses(size)} ${props.className} disabled:text-gray-300 disabled:bg-white disabled:border-gray-300
+      `}
     >
       {props.children}
     </button>

@@ -1,33 +1,45 @@
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
-import { MockLeaderboardPreview } from "@/mocks/leaderboardPreviews";
 import { Clock, Search, TrendingUp, User } from "lucide-react";
 import React, { useMemo } from "react";
-import LeaderboardCard from "./LeaderboardCard";
+import LeaderboardGrid from "./LeaderboardGrid";
+import LoadMore from "./LoadMore";
+import { useLeaderboards } from "./state";
 
 interface FilterOption {
   icon: React.FC<{ className?: string }>;
   text: string;
   onClick: () => void;
+  disabled: boolean;
+  active: boolean;
 }
 
 const BrowseLeaderboardPage: React.FC = () => {
+  const { lbs, isLoading, error, fetchNextPage, hasNextPage, toggleFilter, filter } = useLeaderboards();
+
+
   const filterOptions = useMemo<FilterOption[]>(
     () => [
       {
         icon: Clock,
         text: "Recent",
-        onClick: () => {},
+        onClick: () => { toggleFilter("recent") },
+        disabled: false,
+        active: filter == "recent",
       },
       {
         icon: TrendingUp,
-        text: "Trending",
-        onClick: () => {},
+        text: "Favorite",
+        onClick: () => { },
+        disabled: true,
+        active: filter == "favorite",
       },
       {
         icon: User,
         text: "Made by you",
-        onClick: () => {},
+        onClick: () => { },
+        disabled: true,
+        active: filter == "byUsername",
       },
     ],
     []
@@ -55,7 +67,10 @@ const BrowseLeaderboardPage: React.FC = () => {
           </div>
           <div className="flex flex-wrap items-center gap-4">
             {filterOptions.map((option, i) => (
-              <Button key={i}>
+              <Button
+                variant={option.active ? "filled" : "outline"}
+                key={i} disabled={option.disabled}
+              >
                 <span className="flex flex-row align-middle items-center gap-2">
                   <option.icon className="h-4 w-4" />
                   <span>{option.text}</span>
@@ -66,11 +81,12 @@ const BrowseLeaderboardPage: React.FC = () => {
         </div>
 
         {/* Leaderboard Grid */}
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {MockLeaderboardPreview.map((board) => (
-            <LeaderboardCard key={board.id} board={board} />
-          ))}
-        </div>
+        {
+          isLoading ? <p>Loading...</p> : error ? <p>An error occured</p> : <LeaderboardGrid lbs={lbs} />
+        }
+
+        {!isLoading && <LoadMore hasMore={hasNextPage} fn={fetchNextPage} />}
+
       </main>
     </div>
   );
