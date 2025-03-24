@@ -49,7 +49,7 @@ func MakeRefreshTokenJWT(refreshToken database.RefreshToken, tokenSecret string,
 
 func ValidateAccessToken(tokenString string, tokenSecret string) (*AccessTokenClaims, error) {
 	// Parse the token with a key function
-	token, err := jwt.ParseWithClaims(tokenString, &AccessTokenClaims{}, func(token *jwt.Token) (interface{}, error) {
+	token, err := jwt.ParseWithClaims(tokenString, &AccessTokenClaims{}, func(token *jwt.Token) (any, error) {
 		// Ensure the signing method is as expected
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
@@ -70,7 +70,7 @@ func ValidateAccessToken(tokenString string, tokenSecret string) (*AccessTokenCl
 
 func ValidateRefreshToken(tokenString string, tokenSecret string) (*RefreshTokenClaims, error) {
 	// Parse the token with a key function
-	token, err := jwt.ParseWithClaims(tokenString, &RefreshTokenClaims{}, func(token *jwt.Token) (interface{}, error) {
+	token, err := jwt.ParseWithClaims(tokenString, &RefreshTokenClaims{}, func(token *jwt.Token) (any, error) {
 		// Ensure the signing method is as expected
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
