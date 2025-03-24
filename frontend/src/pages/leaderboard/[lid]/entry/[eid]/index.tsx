@@ -33,8 +33,6 @@ const EntryViewPage: React.FC = () => {
     }
   }, []);
 
-  //console.log(leaderboard.fields[0], entry, renderFieldValue(leaderboard.fields[0], entry.fields[leaderboard.fields[0].name]))
-
   return (
     <div className="w-full mt-12">
       <div className="max-w-5xl mx-auto bg-indigo-50 rounded-lg shadow-md overflow-hidden">

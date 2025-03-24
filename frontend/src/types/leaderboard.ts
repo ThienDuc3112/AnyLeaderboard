@@ -1,5 +1,5 @@
 export interface LeaderboardPreview {
-  id: string;
+  id: number;
   name: string;
   description?: string;
   coverImageUrl?: string;

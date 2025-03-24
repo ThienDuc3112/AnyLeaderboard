@@ -1,7 +1,7 @@
 import { LeaderboardFull } from "@/types/leaderboard";
 
 export const MockLeaderboardFull: LeaderboardFull = {
-  id: "dasflkjjlkadfs",
+  id: 10,
   name: "Bloon something the game",
   description: "Something something test game leaderboard",
   coverImageUrl:

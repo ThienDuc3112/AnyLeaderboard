@@ -15,7 +15,6 @@ const LeaderboardViewPage: React.FC = () => {
 
   if (isLoading) return <p>Loading...</p>;
   if (error || !data) return <p>An error occured</p>;
-  console.log(data)
   return (
     <div className="w-full mt-12">
       <div className="max-w-5xl mx-auto bg-indigo-50 rounded-lg shadow-md overflow-hidden">
