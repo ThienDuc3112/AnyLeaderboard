@@ -31,7 +31,7 @@ type LeaderboardFull struct {
 	UniqueSubmission     bool           `json:"uniqueSubmission"`
 	ExternalLink         []ExternalLink `json:"externalLinks"`
 	Fields               []Field        `json:"fields"`
-	Data                 []Entry        `json:"data,omitempty"`
+	Data                 []Entry        `json:"data"`
 }
 
 type SubmitLBStructure struct {

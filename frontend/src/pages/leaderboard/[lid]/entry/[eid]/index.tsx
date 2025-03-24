@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { MockLeaderboardFull as leaderboard } from "@/mocks/leaderboardFull";
 import { Field } from "@/types/leaderboard";
 import LeaderboardHeader from "../../LeaderboardHeader";
@@ -9,43 +9,31 @@ import { useNavigate } from "react-router";
 const EntryViewPage: React.FC = () => {
   const navigate = useNavigate();
   const entry = leaderboard.data[0];
-  const renderFieldValue = (field: Field, value: any) => {
+  const renderFieldValue = useCallback((field: Field, value: any) => {
     switch (field.type) {
       case "TEXT":
       case "SHORT_TEXT":
-      case "INTEGER":
-      case "REAL":
-        return <span className="text-gray-900">{value}</span>;
+      case "NUMBER":
+      case "OPTION":
+        return value;
       case "DURATION": {
         const ms = parseInt(value);
         const hours = Math.floor(ms / 3600000);
         const minutes = Math.floor((ms % 3600000) / 60000);
         const seconds = Math.floor((ms % 60000) / 1000);
         const milliseconds = ms % 1000;
-        return (
-          <span className="text-gray-900">
-            {`${hours.toString().padStart(2, "0")}:${minutes
-              .toString()
-              .padStart(2, "0")}:${seconds
-              .toString()
-              .padStart(2, "0")}.${milliseconds.toString().padStart(3, "0")}`}
-          </span>
-        );
+        return `${hours.toString().padStart(2, "0")}:${minutes
+          .toString()
+          .padStart(2, "0")}:${seconds
+            .toString()
+            .padStart(2, "0")}.${milliseconds.toString().padStart(3, "0")}`;
       }
-      case "OPTION":
-        return <span className="text-gray-900">{value}</span>;
-      case "USER":
-        return (
-          <span className="text-gray-900">
-            {value.username}
-            {value.userId ? ` (ID: ${value.userId})` : ""}
-            {!value.userId && " (Anonymous)"}
-          </span>
-        );
       default:
-        return <span className="text-gray-500">N/A</span>;
+        return "N/A";
     }
-  };
+  }, []);
+
+  //console.log(leaderboard.fields[0], entry, renderFieldValue(leaderboard.fields[0], entry.fields[leaderboard.fields[0].name]))
 
   return (
     <div className="w-full mt-12">
@@ -69,15 +57,12 @@ const EntryViewPage: React.FC = () => {
         <div className="p-6">
           <dl className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
             {leaderboard.fields.map((field) => (
-              <div key={field.fieldName} className="sm:col-span-1">
+              <div key={field.name} className="sm:col-span-1">
                 <dt className="text-sm font-medium text-gray-500">
                   {field.name}
                 </dt>
                 <dd className="mt-1 text-sm">
-                  {renderFieldValue(
-                    field,
-                    entry.fields[field.fieldName]?.value
-                  )}
+                  <span className="text-gray-900">{renderFieldValue(field, entry.fields[field.name])}</span>
                 </dd>
               </div>
             ))}

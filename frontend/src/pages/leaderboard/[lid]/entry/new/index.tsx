@@ -14,9 +14,9 @@ const NewEntryPage: React.FC = () => {
       <div className="p-6 bg-indigo-50">
         <form className="space-y-6">
           {leaderboard.fields.map((field) => (
-            <div key={field.fieldName} className="space-y-2">
+            <div key={field.name} className="space-y-2">
               <label
-                htmlFor={field.fieldName}
+                htmlFor={field.name}
                 className="block text-sm font-medium text-gray-700"
               >
                 {field.name}

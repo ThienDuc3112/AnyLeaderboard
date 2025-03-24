@@ -17,31 +17,20 @@ export const MockLeaderboardFull: LeaderboardFull = {
   entriesCount: 3,
   fields: [
     {
-      name: "Player",
-      fieldName: "player",
-      type: "USER",
-      allowAnonymous: true,
-      required: true,
-      fieldOrder: 1,
-    },
-    {
-      name: "Score",
-      fieldName: "score",
+      name: "score",
       type: "NUMBER",
       for_rank: true,
       required: true,
       fieldOrder: 2,
     },
     {
-      name: "IGT",
-      fieldName: "igt",
+      name: "igt",
       type: "DURATION",
       required: false,
       fieldOrder: 3,
     },
     {
-      name: "Version",
-      fieldName: "version",
+      name: "version",
       type: "OPTION",
       fieldOrder: 4,
       options: [
@@ -65,65 +54,36 @@ export const MockLeaderboardFull: LeaderboardFull = {
       id: "afdosiioafsdj",
       updatedAt: "11-02-2023",
       createdAt: "11-02-2024",
+      username: "Huyen",
+      verified: true,
       fields: {
-        player: {
-          value: {
-            username: "Huyen",
-            userId: "978241308792143",
-          },
-        },
-        score: {
-          value: 100_000_000,
-        },
-        igt: {
-          value: 131_634_934,
-        },
-        version: {
-          value: "1.1.2",
-        },
+        score: 100_000_000,
+        igt: 131_634_934,
+        version: "1.1.2",
       },
     },
     {
       id: "fdoiioasj",
       updatedAt: "11-02-2023",
       createdAt: "11-02-2024",
+      username: "Test",
+      verified: true,
       fields: {
-        player: {
-          value: {
-            username: "Isab",
-            userId: "835685283932598",
-          },
-        },
-        score: {
-          value: 99_098_124,
-        },
-        igt: {
-          value: 234_721_796,
-        },
-        version: {
-          value: "2.0.0",
-        },
+        score: 99_098_124,
+        igt: 234_721_796,
+        version: "2.0.0",
       },
     },
     {
       id: "oiis",
       updatedAt: "11-02-2023",
       createdAt: "11-02-2024",
+      username: "RandomAnon",
+      verified: true,
       fields: {
-        player: {
-          value: {
-            username: "RandomAnon",
-          },
-        },
-        score: {
-          value: 20_828_227,
-        },
-        igt: {
-          value: 357_816_126,
-        },
-        version: {
-          value: "1.2.1",
-        },
+        score: 20_828_227,
+        igt: 357_816_126,
+        version: "1.2.1",
       },
     },
   ],

@@ -18,7 +18,9 @@ export interface Entry {
   id: string;
   updatedAt: string | Date;
   createdAt: string | Date;
-  fields: Record<string, { value: any }>;
+  fields: Record<string, any>;
+  username: string;
+  verified: boolean;
 }
 
 export interface ExternalLinkType {
@@ -26,7 +28,7 @@ export interface ExternalLinkType {
   url: string;
 }
 
-export type Field = PrimitiveField | OptionField | UserField;
+export type Field = PrimitiveField | OptionField;
 export interface PrimitiveField extends CommonFieldAttributes {
   type: "TEXT" | "SHORT_TEXT" | "NUMBER" | "DURATION" | "TIMESTAMP";
   for_rank?: boolean;
@@ -37,14 +39,8 @@ export interface OptionField extends CommonFieldAttributes {
   options: string[];
 }
 
-export interface UserField extends CommonFieldAttributes {
-  type: "USER";
-  allowAnonymous: boolean;
-}
-
 interface CommonFieldAttributes {
   name: string;
-  fieldName: string;
   required?: boolean;
   hidden?: boolean;
   fieldOrder: number;
