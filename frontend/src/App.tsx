@@ -8,7 +8,6 @@ import BrowseLeaderboardPage from "@/pages/leaderboard";
 import NewLeaderboardPage from "@/pages/leaderboard/new";
 import NewEntryPage from "@/pages/leaderboard/[lid]/entry/new";
 import EntryViewPage from "@/pages/leaderboard/[lid]/entry/[eid]";
-import Test from "@/pages/test";
 import { useEffect } from "react";
 import { useSetAtom } from "jotai";
 import { sessionAtom } from "./globalState/user";
@@ -35,11 +34,11 @@ function App() {
         <Routes>
           {/** Page with navbar */}
           <Route path="/" element={<Layout />}>
-            <Route index element={<LandingPage />} />
+            <Route index element={<LandingPage />} /> {/* Completed */}
 
             {/** Auth routes */}
-            <Route path="/signin" element={<SignInPage />} />
-            <Route path="/signup" element={<SignupPage />} />
+            <Route path="/signin" element={<SignInPage />} /> {/* Completed */}
+            <Route path="/signup" element={<SignupPage />} /> {/* Completed */}
 
             {/** Profile page */}
             <Route path="/profile/me" />
@@ -47,7 +46,7 @@ function App() {
 
             {/** Leaderboard routes */}
             <Route path="/leaderboard" element={<BrowseLeaderboardPage />} />
-            <Route path="/leaderboard/:lid" element={<LeaderboardViewPage />} />
+            <Route path="/leaderboard/:lid" element={<LeaderboardViewPage />} /> {/* Completed, surprisingly */}
             <Route path="/leaderboard/new" element={<NewLeaderboardPage />} />
             <Route path="/leaderboard/:lid/update" />
 
@@ -60,12 +59,7 @@ function App() {
               path="/leaderboard/:id/entry/new"
               element={<NewEntryPage />}
             />
-
-            <Route path="/test" element={<Test />} />
           </Route>
-
-          {/** Page without navbar */}
-          <Route />
         </Routes>
       </div>
     </BrowserRouter>
