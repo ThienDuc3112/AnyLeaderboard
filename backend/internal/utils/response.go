@@ -13,7 +13,7 @@ import (
 func RespondWithError(w http.ResponseWriter, code int, msg string) {
 	w.Header().Add("Content-Type", "application/json")
 	w.WriteHeader(code)
-	w.Write([]byte(fmt.Sprintf("{\"error\":\"%v\"}", msg)))
+	w.Write(fmt.Appendf([]byte{}, "{\"error\":\"%v\"}", msg))
 }
 
 func RespondWithJSON(w http.ResponseWriter, code int, payload any) {
