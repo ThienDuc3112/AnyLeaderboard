@@ -39,8 +39,9 @@ func (h AuthHandler) Refresh(w http.ResponseWriter, r *http.Request) {
 
 	newCookie := utils.CreateCookie(cookieKeyRefreshToken, tokens.RefreshToken, r.URL.Host, tokens.RefreshTokenRaw.ExpiresAt)
 	http.SetCookie(w, newCookie)
-	utils.RespondWithJSON(w, 200, map[string]string{
+	utils.RespondWithJSON(w, 200, map[string]any{
 		"access_token": tokens.AccessToken,
+		"user":         tokens.User,
 	})
 }
 

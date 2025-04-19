@@ -13,35 +13,35 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
-func (s AuthService) Refresh(ctx context.Context, param RefreshParam) (TokensReturn, error) {
+func (s AuthService) Refresh(ctx context.Context, param RefreshParam) (LoginsReturn, error) {
 	claim, err := utils.ValidateRefreshToken(param.RefreshToken, os.Getenv(constants.EnvKeySecret))
 	if err != nil {
-		return TokensReturn{}, ErrInvalidToken
+		return LoginsReturn{}, ErrInvalidToken
 	}
 	rToken, err := s.repo.GetRefreshToken(ctx, claim.TokenID)
 	if err == pgx.ErrNoRows {
-		return TokensReturn{}, ErrNoTokenExist
+		return LoginsReturn{}, ErrNoTokenExist
 	} else if err != nil {
-		return TokensReturn{}, err
+		return LoginsReturn{}, err
 	}
 
 	if rToken.RotationCounter != claim.RotationCounter {
-		return TokensReturn{}, ErrMismatchRotationCounter
+		return LoginsReturn{}, ErrMismatchRotationCounter
 	}
 	if rToken.RevokedAt.Valid {
-		return TokensReturn{}, ErrTokenRevoked
+		return LoginsReturn{}, ErrTokenRevoked
 	}
 
 	user, err := s.repo.GetUserByID(ctx, rToken.UserID)
 	if err == pgx.ErrNoRows {
-		return TokensReturn{}, ErrNoUser
+		return LoginsReturn{}, ErrNoUser
 	} else if err != nil {
-		return TokensReturn{}, err
+		return LoginsReturn{}, err
 	}
 
 	accessTokenStr, err := utils.MakeAccessTokenJWT(user, os.Getenv(constants.EnvKeySecret), constants.AccessTokenDuration)
 	if err != nil {
-		return TokensReturn{}, err
+		return LoginsReturn{}, err
 	}
 	rToken.ExpiresAt = pgtype.Timestamptz{
 		Time:  time.Now().Add(constants.RefreshTokenDuration),
@@ -53,7 +53,7 @@ func (s AuthService) Refresh(ctx context.Context, param RefreshParam) (TokensRet
 	rToken.IpAddress = param.IpAddress
 	refreshTokenStr, err := utils.MakeRefreshTokenJWT(rToken, os.Getenv(constants.EnvKeySecret), rToken.ExpiresAt.Time)
 	if err != nil {
-		return TokensReturn{}, err
+		return LoginsReturn{}, err
 	}
 	rToken, err = s.repo.UpdateRefreshToken(ctx, database.UpdateRefreshTokenParams{
 		ExpiresAt:  rToken.ExpiresAt,
@@ -62,10 +62,10 @@ func (s AuthService) Refresh(ctx context.Context, param RefreshParam) (TokensRet
 		ID:         rToken.ID,
 	})
 	if err != nil {
-		return TokensReturn{}, err
+		return LoginsReturn{}, err
 	}
 	if rToken.RotationCounter != newRotationCounter {
-		return TokensReturn{}, ErrMismatchUpdatedRC
+		return LoginsReturn{}, ErrMismatchUpdatedRC
 	}
 
 	rt := models.RefreshToken{
@@ -79,9 +79,15 @@ func (s AuthService) Refresh(ctx context.Context, param RefreshParam) (TokensRet
 		RevokedAt:       nil,
 	}
 
-	return TokensReturn{
+	return LoginsReturn{
 		AccessToken:     accessTokenStr,
 		RefreshToken:    refreshTokenStr,
 		RefreshTokenRaw: rt,
+		User: models.UserPreview{
+			CreatedAt:   user.CreatedAt.Time,
+			Username:    user.Username,
+			DisplayName: user.DisplayName,
+			Description: user.Description,
+		},
 	}, nil
 }

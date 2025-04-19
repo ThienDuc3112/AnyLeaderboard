@@ -45,14 +45,15 @@ func (h AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 		utils.RespondWithError(w, 401, "Invalid credentials")
 		return
 	} else if err != nil {
-		utils.RespondWithError(w, 500, "Invalid credentials")
+		utils.RespondWithError(w, 500, "Internal server error")
 		return
 	}
 
 	cookie := utils.CreateCookie(cookieKeyRefreshToken, session.RefreshToken, r.URL.Host, session.RefreshTokenRaw.ExpiresAt)
 	http.SetCookie(w, cookie)
 
-	utils.RespondWithJSON(w, 200, map[string]string{
+	utils.RespondWithJSON(w, 200, map[string]any{
 		"access_token": session.AccessToken,
+		"user":         session.User,
 	})
 }

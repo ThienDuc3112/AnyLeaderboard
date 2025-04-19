@@ -19,10 +19,11 @@ type RefreshParam struct {
 	IpAddress    string
 }
 
-type TokensReturn struct {
+type LoginsReturn struct {
 	AccessToken     string
 	RefreshToken    string
 	RefreshTokenRaw models.RefreshToken
+	User            models.UserPreview
 }
 
 type SignUpParam struct {

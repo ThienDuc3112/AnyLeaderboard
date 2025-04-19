@@ -9,8 +9,26 @@ import NewLeaderboardPage from "@/pages/leaderboard/new";
 import NewEntryPage from "@/pages/leaderboard/[lid]/entry/new";
 import EntryViewPage from "@/pages/leaderboard/[lid]/entry/[eid]";
 import Test from "@/pages/test";
+import { useEffect } from "react";
+import { useSetAtom } from "jotai";
+import { sessionAtom } from "./globalState/user";
+import { api } from "./utils/api";
 
 function App() {
+  const setSession = useSetAtom(sessionAtom)
+  useEffect(() => {
+    api.post("/auth/refresh", undefined, {
+      withCredentials: true
+    }).then(res => {
+      setSession({
+        activeToken: res.data.activeToken,
+        user: {
+          ...res.data.user,
+          createdAt: new Date(res.data.user.createdAt),
+        },
+      })
+    }).catch(() => { })
+  }, [])
   return (
     <BrowserRouter>
       <div className="flex flex-col h-screen w-screen overflow-auto p-0 m-0">

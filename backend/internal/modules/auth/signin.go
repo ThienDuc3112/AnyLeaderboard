@@ -15,7 +15,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-func (s AuthService) Login(context context.Context, param LoginParam) (TokensReturn, error) {
+func (s AuthService) Login(context context.Context, param LoginParam) (LoginsReturn, error) {
 	loginWithEmail := false
 	if strings.Contains(param.Username, "@") {
 		loginWithEmail = true
@@ -30,19 +30,19 @@ func (s AuthService) Login(context context.Context, param LoginParam) (TokensRet
 	}
 
 	if err == pgx.ErrNoRows {
-		return TokensReturn{}, ErrNoUser
+		return LoginsReturn{}, ErrNoUser
 	} else if err != nil {
-		return TokensReturn{}, err
+		return LoginsReturn{}, err
 	}
 
 	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(param.Password))
 	if err != nil {
-		return TokensReturn{}, ErrIncorrectPassword
+		return LoginsReturn{}, ErrIncorrectPassword
 	}
 
 	accessToken, err := utils.MakeAccessTokenJWT(user, os.Getenv(constants.EnvKeySecret), constants.AccessTokenDuration)
 	if err != nil {
-		return TokensReturn{}, err
+		return LoginsReturn{}, err
 	}
 
 	refreshTokenParam := database.CreateNewRefreshTokenParams{
@@ -57,12 +57,12 @@ func (s AuthService) Login(context context.Context, param LoginParam) (TokensRet
 
 	rToken, err := s.repo.CreateNewRefreshToken(context, refreshTokenParam)
 	if err != nil {
-		return TokensReturn{}, err
+		return LoginsReturn{}, err
 	}
 
 	refreshTokenStr, err := utils.MakeRefreshTokenJWT(rToken, os.Getenv(constants.EnvKeySecret), rToken.ExpiresAt.Time)
 	if err != nil {
-		return TokensReturn{}, err
+		return LoginsReturn{}, err
 	}
 
 	rt := models.RefreshToken{
@@ -75,9 +75,15 @@ func (s AuthService) Login(context context.Context, param LoginParam) (TokensRet
 		IpAddress:       rToken.IpAddress,
 		RevokedAt:       nil,
 	}
-	return TokensReturn{
+	return LoginsReturn{
 		AccessToken:     accessToken,
 		RefreshToken:    refreshTokenStr,
 		RefreshTokenRaw: rt,
+		User: models.UserPreview{
+			CreatedAt:   user.CreatedAt.Time,
+			Username:    user.Username,
+			DisplayName: user.DisplayName,
+			Description: user.Description,
+		},
 	}, nil
 }
