@@ -18,7 +18,7 @@ const Input: React.FC<PropType> = (props) => {
   return (
     <div
       className={`px-3 bg-white rounded-full relative flex focus-within:ring-indigo-600 focus-within:outline-none focus-within:ring-1 items-center h-10 ${getVariantClasses(
-        props.variant
+        props.variant,
       )} ${props.className}`}
     >
       {props.icon && <span className="mr-3">{props.icon}</span>}

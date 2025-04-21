@@ -8,15 +8,8 @@ interface SwitchProps extends React.InputHTMLAttributes<HTMLInputElement> {
 const Switch: React.FC<SwitchProps> = ({
   label,
   checked = false,
-  onChange,
   ...props
 }) => {
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (onChange) {
-      onChange(e);
-    }
-  };
-
   return (
     <label className={`flex items-center cursor-pointer ${props.className}`}>
       <div className="relative">
@@ -24,7 +17,6 @@ const Switch: React.FC<SwitchProps> = ({
           {...props}
           type="checkbox"
           checked={checked}
-          onChange={handleChange}
           className="sr-only"
         />
         <div

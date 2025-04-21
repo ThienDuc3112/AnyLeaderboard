@@ -41,7 +41,7 @@ func TestCreateLeaderboardHandler_Success(t *testing.T) {
 	m.EXPECT().BeginTx(mock.Anything).Return(m, nil)
 	m.EXPECT().Rollback(mock.Anything).Return(nil)
 	m.EXPECT().Commit(mock.Anything).Return(nil)
-	m.EXPECT().CreateLeaderboard(mock.Anything, mock.Anything).Return(database.Leaderboard{ID: 1}, nil)
+	m.EXPECT().CreateLeaderboard(mock.Anything, mock.Anything).Return(database.CreateLeaderboardRow{ID: 1}, nil)
 	m.EXPECT().CreateLeaderboardExternalLink(mock.Anything, mock.Anything).Return(int64(len(mockBody.ExternalLinks)), nil)
 	m.EXPECT().CreateLeadeboardFields(mock.Anything, mock.Anything).Return(int64(len(mockBody.Fields)), nil)
 	m.EXPECT().CreateLeadeboardOptions(mock.Anything, mock.Anything).Return(int64(len(mockOptions)), nil)
@@ -58,7 +58,7 @@ func TestCreateLeaderboardHandler_Success(t *testing.T) {
 	defer res.Body.Close()
 
 	assert.Equal(t, http.StatusCreated, res.StatusCode)
-	resBody, err := utils.ExtractBody[map[string]interface{}](res.Body)
+	resBody, err := utils.ExtractBody[map[string]any](res.Body)
 
 	assert.NoError(t, err)
 	assert.NotEmpty(t, resBody["id"])
@@ -83,7 +83,7 @@ func TestCreateLeaderboardHandler_RequestBodyDecodeError(t *testing.T) {
 	defer res.Body.Close()
 
 	assert.Equal(t, http.StatusBadRequest, res.StatusCode)
-	resBody, err := utils.ExtractBody[map[string]interface{}](res.Body)
+	resBody, err := utils.ExtractBody[map[string]any](res.Body)
 
 	assert.NoError(t, err)
 	assert.NotEmpty(t, resBody["error"])
@@ -110,7 +110,7 @@ func TestCreateLeaderboardHandler_NoFields(t *testing.T) {
 	res := w.Result()
 	defer res.Body.Close()
 	assert.Equal(t, http.StatusBadRequest, res.StatusCode)
-	resBody, err := utils.ExtractBody[map[string]interface{}](res.Body)
+	resBody, err := utils.ExtractBody[map[string]any](res.Body)
 
 	assert.NoError(t, err)
 	assert.NotEmpty(t, resBody["fields"])
@@ -132,7 +132,7 @@ func TestCreateLeaderboardHandler_NoUserContext(t *testing.T) {
 	res := w.Result()
 	defer res.Body.Close()
 	assert.Equal(t, http.StatusInternalServerError, res.StatusCode)
-	resBody, err := utils.ExtractBody[map[string]interface{}](res.Body)
+	resBody, err := utils.ExtractBody[map[string]any](res.Body)
 
 	assert.NoError(t, err)
 	assert.NotEmpty(t, resBody["error"])
@@ -153,7 +153,7 @@ func TestCreateLeaderboardHandler_CreateLeaderboardError(t *testing.T) {
 				// Mock behaviors for this test case
 				m.EXPECT().BeginTx(mock.Anything).Return(m, nil)
 				m.EXPECT().Rollback(mock.Anything).Return(nil)
-				m.EXPECT().CreateLeaderboard(mock.Anything, mock.Anything).Return(database.Leaderboard{ID: 1}, nil)
+				m.EXPECT().CreateLeaderboard(mock.Anything, mock.Anything).Return(database.CreateLeaderboardRow{ID: 1}, nil)
 				m.EXPECT().CreateLeaderboardExternalLink(mock.Anything, mock.Anything).Return(int64(len(mockBody.ExternalLinks)), nil)
 				m.EXPECT().CreateLeadeboardFields(mock.Anything, mock.Anything).Return(int64(len(mockBody.Fields)), nil)
 				m.EXPECT().CreateLeadeboardOptions(mock.Anything, mock.Anything).Return(0, assert.AnError)
@@ -165,7 +165,7 @@ func TestCreateLeaderboardHandler_CreateLeaderboardError(t *testing.T) {
 				// Mock behaviors for this test case
 				m.EXPECT().BeginTx(mock.Anything).Return(m, nil)
 				m.EXPECT().Rollback(mock.Anything).Return(nil)
-				m.EXPECT().CreateLeaderboard(mock.Anything, mock.Anything).Return(database.Leaderboard{ID: 1}, nil)
+				m.EXPECT().CreateLeaderboard(mock.Anything, mock.Anything).Return(database.CreateLeaderboardRow{ID: 1}, nil)
 				m.EXPECT().CreateLeaderboardExternalLink(mock.Anything, mock.Anything).Return(int64(len(mockBody.ExternalLinks)), nil)
 				m.EXPECT().CreateLeadeboardFields(mock.Anything, mock.Anything).Return(0, assert.AnError)
 			},
@@ -176,7 +176,7 @@ func TestCreateLeaderboardHandler_CreateLeaderboardError(t *testing.T) {
 				// Mock behaviors for this test case
 				m.EXPECT().BeginTx(mock.Anything).Return(m, nil)
 				m.EXPECT().Rollback(mock.Anything).Return(nil)
-				m.EXPECT().CreateLeaderboard(mock.Anything, mock.Anything).Return(database.Leaderboard{ID: 1}, nil)
+				m.EXPECT().CreateLeaderboard(mock.Anything, mock.Anything).Return(database.CreateLeaderboardRow{ID: 1}, nil)
 				m.EXPECT().CreateLeaderboardExternalLink(mock.Anything, mock.Anything).Return(0, assert.AnError)
 			},
 		}, {
@@ -185,7 +185,7 @@ func TestCreateLeaderboardHandler_CreateLeaderboardError(t *testing.T) {
 				// Mock behaviors for this test case
 				m.EXPECT().BeginTx(mock.Anything).Return(m, nil)
 				m.EXPECT().Rollback(mock.Anything).Return(nil)
-				m.EXPECT().CreateLeaderboard(mock.Anything, mock.Anything).Return(database.Leaderboard{}, assert.AnError)
+				m.EXPECT().CreateLeaderboard(mock.Anything, mock.Anything).Return(database.CreateLeaderboardRow{}, assert.AnError)
 			},
 		},
 		// You can add more cases here with different setupMocks and expectedStatus.
@@ -213,7 +213,7 @@ func TestCreateLeaderboardHandler_CreateLeaderboardError(t *testing.T) {
 			defer res.Body.Close()
 
 			assert.Equal(t, http.StatusInternalServerError, res.StatusCode)
-			resBody, err := utils.ExtractBody[map[string]interface{}](res.Body)
+			resBody, err := utils.ExtractBody[map[string]any](res.Body)
 			assert.NoError(t, err)
 			assert.NotEmpty(t, resBody["error"])
 
@@ -308,7 +308,7 @@ func TestCreateLeaderboardHandler_Validation(t *testing.T) {
 			assert.Equal(t, tt.expectedStatus, res.StatusCode)
 
 			// Check if the response contains the expected error message
-			resBody, err := utils.ExtractBody[map[string]interface{}](res.Body)
+			resBody, err := utils.ExtractBody[map[string]any](res.Body)
 			assert.NoError(t, err)
 
 			assert.NotEmpty(t, resBody[tt.expectedErrorField])

@@ -10,8 +10,8 @@ const LeaderboardViewPage: React.FC = () => {
   const { lid } = useParams();
   const { data, isLoading, error } = useQuery<LeaderboardFull>({
     queryKey: ["leaderboard", lid],
-    queryFn: async () => (await api.get(`/leaderboards/${lid}`)).data
-  })
+    queryFn: async () => (await api.get(`/leaderboards/${lid}`)).data,
+  });
 
   if (isLoading) return <p>Loading...</p>;
   if (error || !data) return <p>An error occured</p>;
@@ -19,9 +19,7 @@ const LeaderboardViewPage: React.FC = () => {
     <div className="w-full mt-12">
       <div className="max-w-5xl mx-auto bg-indigo-50 rounded-lg shadow-md overflow-hidden">
         <LeaderboardHeader data={data} />
-        {
-          <LeaderboardContent data={data} />
-        }
+        {<LeaderboardContent data={data} />}
       </div>
     </div>
   );

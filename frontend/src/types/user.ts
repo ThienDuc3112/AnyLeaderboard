@@ -5,16 +5,16 @@ export type User = {
   email: string;
   createdAt: Date;
   updatedAt: string;
-}
+};
 
 export type UserPreview = {
   username: string;
   displayName: string;
   createdAt: Date;
   description: string;
-}
+};
 
 export type UserSession = {
   activeToken: string;
   user: UserPreview;
-}
+};

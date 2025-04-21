@@ -39,7 +39,7 @@ const SignOutOptions: NavbarOption[] = [
 ];
 
 const NavBar: React.FC = () => {
-  const session = useAtomValue(sessionAtom)
+  const session = useAtomValue(sessionAtom);
   return (
     <nav className="bg-white shadow-sm">
       <div className="container mx-auto px-4 py-4 flex justify-between items-center">

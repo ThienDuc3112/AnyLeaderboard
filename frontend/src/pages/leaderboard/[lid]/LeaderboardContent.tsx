@@ -13,14 +13,14 @@ const LeaderboardContent: React.FC<PropType> = ({ data }) => {
     <div className="px-6 pb-6">
       <div className="overflow-x-auto rounded-lg">
         <table className="w-full text-sm text-left">
-          <TableHeader fields={data.fields.filter(field => !field.hidden)} />
+          <TableHeader fields={data.fields.filter((field) => !field.hidden)} />
           <tbody>
             {data.data.map((row, index) => (
               <TableRow
                 key={index}
                 row={row}
                 index={index}
-                fields={data.fields.filter(field => !field.hidden)}
+                fields={data.fields.filter((field) => !field.hidden)}
               />
             ))}
           </tbody>
@@ -72,13 +72,10 @@ const TableRow: React.FC<TableRowPropType> = ({ index, row, fields }) => {
       <td className="px-6 py-4 text-center font-medium text-gray-900">
         {index + 1}
       </td>
-      <td className="px-6 py-4 font-medium text-gray-900">
-        {row.username}
-      </td>
-      {fields
-        .map((field, i) => (
-          <FieldToCol key={i} field={field} row={row} />
-        ))}
+      <td className="px-6 py-4 font-medium text-gray-900">{row.username}</td>
+      {fields.map((field, i) => (
+        <FieldToCol key={i} field={field} row={row} />
+      ))}
     </tr>
   );
 };

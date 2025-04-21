@@ -15,34 +15,43 @@ interface FilterOption {
 }
 
 const BrowseLeaderboardPage: React.FC = () => {
-  const { lbs, isLoading, error, fetchNextPage, hasNextPage, toggleFilter, filter } = useLeaderboards();
-
+  const {
+    lbs,
+    isLoading,
+    error,
+    fetchNextPage,
+    hasNextPage,
+    toggleFilter,
+    filter,
+  } = useLeaderboards();
 
   const filterOptions = useMemo<FilterOption[]>(
     () => [
       {
         icon: Clock,
         text: "Recent",
-        onClick: () => { toggleFilter("recent") },
+        onClick: () => {
+          toggleFilter("recent");
+        },
         disabled: false,
         active: filter == "recent",
       },
       {
         icon: TrendingUp,
         text: "Favorite",
-        onClick: () => { },
+        onClick: () => {},
         disabled: true,
         active: filter == "favorite",
       },
       {
         icon: User,
         text: "Made by you",
-        onClick: () => { },
+        onClick: () => {},
         disabled: true,
         active: filter == "byUsername",
       },
     ],
-    []
+    [],
   );
   return (
     <div className="w-full">
@@ -69,7 +78,8 @@ const BrowseLeaderboardPage: React.FC = () => {
             {filterOptions.map((option, i) => (
               <Button
                 variant={option.active ? "filled" : "outline"}
-                key={i} disabled={option.disabled}
+                key={i}
+                disabled={option.disabled}
               >
                 <span className="flex flex-row align-middle items-center gap-2">
                   <option.icon className="h-4 w-4" />
@@ -81,12 +91,15 @@ const BrowseLeaderboardPage: React.FC = () => {
         </div>
 
         {/* Leaderboard Grid */}
-        {
-          isLoading ? <p>Loading...</p> : error ? <p>An error occured</p> : <LeaderboardGrid lbs={lbs} />
-        }
+        {isLoading ? (
+          <p>Loading...</p>
+        ) : error ? (
+          <p>An error occured</p>
+        ) : (
+          <LeaderboardGrid lbs={lbs} />
+        )}
 
         {!isLoading && <LoadMore hasMore={hasNextPage} fn={fetchNextPage} />}
-
       </main>
     </div>
   );

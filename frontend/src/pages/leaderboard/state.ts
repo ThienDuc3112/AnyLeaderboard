@@ -21,23 +21,36 @@ export const useLeaderboards = () => {
     }
   };
 
-  const { data, isLoading, error, fetchNextPage, hasNextPage } = useInfiniteQuery({
-    queryKey: ["leaderboards", filter],
-    queryFn: async ({ pageParam }) => {
-      const url = pageParam || getInitialApiUrl();
-      const response = await axios.get(url, { withCredentials: true });
-      return response.data;
-    },
-    initialPageParam: "",
-    getNextPageParam: (lastPage) => lastPage.next ?? null,
-    maxPages: 100,
-  });
+  const { data, isLoading, error, fetchNextPage, hasNextPage } =
+    useInfiniteQuery({
+      queryKey: ["leaderboards", filter],
+      queryFn: async ({ pageParam }) => {
+        const url = pageParam || getInitialApiUrl();
+        const response = await axios.get(url, { withCredentials: true });
+        return response.data;
+      },
+      initialPageParam: "",
+      getNextPageParam: (lastPage) => lastPage.next ?? null,
+      maxPages: 100,
+    });
 
-  const lbs = useMemo<LeaderboardPreview[]>(() => data?.pages.flatMap(page => page.data) ?? [], [data]);
+  const lbs = useMemo<LeaderboardPreview[]>(
+    () => data?.pages.flatMap((page) => page.data) ?? [],
+    [data],
+  );
 
   const toggleFilter = (newFilter: "recent" | "byUsername" | "favorite") => {
     setFilter(newFilter);
   };
 
-  return { lbs, data, isLoading, error, fetchNextPage, hasNextPage, toggleFilter, filter };
+  return {
+    lbs,
+    data,
+    isLoading,
+    error,
+    fetchNextPage,
+    hasNextPage,
+    toggleFilter,
+    filter,
+  };
 };

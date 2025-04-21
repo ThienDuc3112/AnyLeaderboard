@@ -25,8 +25,8 @@ const EntryViewPage: React.FC = () => {
         return `${hours.toString().padStart(2, "0")}:${minutes
           .toString()
           .padStart(2, "0")}:${seconds
-            .toString()
-            .padStart(2, "0")}.${milliseconds.toString().padStart(3, "0")}`;
+          .toString()
+          .padStart(2, "0")}.${milliseconds.toString().padStart(3, "0")}`;
       }
       default:
         return "N/A";
@@ -60,7 +60,9 @@ const EntryViewPage: React.FC = () => {
                   {field.name}
                 </dt>
                 <dd className="mt-1 text-sm">
-                  <span className="text-gray-900">{renderFieldValue(field, entry.fields[field.name])}</span>
+                  <span className="text-gray-900">
+                    {renderFieldValue(field, entry.fields[field.name])}
+                  </span>
                 </dd>
               </div>
             ))}
