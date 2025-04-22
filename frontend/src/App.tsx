@@ -42,23 +42,20 @@ function App() {
         <Routes>
           {/** Page with navbar */}
           <Route path="/" element={<Layout />}>
-            <Route index element={<LandingPage />} /> {/* Completed */}
-            {/** Auth routes */}
-            <Route path="/signin" element={<SignInPage />} /> {/* Completed */}
-            <Route path="/signup" element={<SignupPage />} /> {/* Completed */}
-            {/** Profile page */}
+            {/** Completed routes */}
+            <Route index element={<LandingPage />} />
+            <Route path="/signin" element={<SignInPage />} />
+            <Route path="/signup" element={<SignupPage />} />
+
+            {/** Incomplete routes */}
             <Route path="/profile/me" />
             <Route path="/profile/:id" />
-            {/** Leaderboard routes */}
             <Route path="/leaderboard" element={<BrowseLeaderboardPage />} />
-            <Route
-              path="/leaderboard/:lid"
-              element={<LeaderboardViewPage />}
-            />{" "}
-            {/* Completed, surprisingly */}
+            {/** Missing owner view (allow edit option) */}
+            <Route path="/leaderboard/:lid" element={<LeaderboardViewPage />} />
+            {/** Haven't styled the warning when error */}
             <Route path="/leaderboard/new" element={<NewLeaderboardPage />} />
             <Route path="/leaderboard/:lid/update" />
-            {/** Entry routes */}
             <Route
               path="/leaderboard/:id/entry/:eid"
               element={<EntryViewPage />}
