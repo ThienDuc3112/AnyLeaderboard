@@ -81,5 +81,5 @@ type Field struct {
 	FieldOrder int      `json:"fieldOrder" validate:"required"`
 	Type       string   `json:"type" validate:"required,oneof=TEXT NUMBER DURATION TIMESTAMP OPTION"`
 	Options    []string `json:"options" validate:"required_if=Type OPTION,omitempty,unique,min=1,dive,min=1,max=32,isSafeName"`
-	ForRank    bool     `json:"forRank" validate:"excluded_if=Type OPTION"`
+	ForRank    bool     `json:"forRank" validate:"excluded_if=Type OPTION,excluded_if=Type TEXT"`
 }

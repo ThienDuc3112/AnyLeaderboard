@@ -8,13 +8,14 @@ import BrowseLeaderboardPage from "@/pages/leaderboard";
 import NewLeaderboardPage from "@/pages/leaderboard/new";
 import NewEntryPage from "@/pages/leaderboard/[lid]/entry/new";
 import EntryViewPage from "@/pages/leaderboard/[lid]/entry/[eid]";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSetAtom } from "jotai";
 import { sessionAtom } from "./globalState/user";
 import { api } from "./utils/api";
 
 function App() {
   const setSession = useSetAtom(sessionAtom);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     api
       .post("/auth/refresh", undefined, {
@@ -22,15 +23,19 @@ function App() {
       })
       .then((res) => {
         setSession({
-          activeToken: res.data.activeToken,
+          activeToken: res.data.access_token,
           user: {
             ...res.data.user,
             createdAt: new Date(res.data.user.createdAt),
           },
         });
       })
-      .catch(() => {});
+      .catch(() => {})
+      .finally(() => setLoading(false));
   }, []);
+
+  if (loading) return <p>Loading...</p>;
+
   return (
     <BrowserRouter>
       <div className="flex flex-col h-screen w-screen overflow-auto p-0 m-0">

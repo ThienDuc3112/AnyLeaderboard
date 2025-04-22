@@ -39,7 +39,7 @@ const SignInPage: React.FC = () => {
                   ...data.user,
                   createdAt: new Date(data.user.createdAt),
                 },
-                activeToken: data.activeToken,
+                activeToken: data.access_token,
               });
               navigate("/leaderboard");
             } catch (error) {
