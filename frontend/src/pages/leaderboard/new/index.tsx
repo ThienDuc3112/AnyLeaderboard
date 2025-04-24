@@ -85,7 +85,7 @@ const NewLeaderboardPage: React.FC = () => {
     onSubmit: handleSubmit,
   });
 
-  if (!session) navigate("/signin");
+  if (!session) navigate("/signin", { replace: true });
 
   return (
     <div className="w-full">

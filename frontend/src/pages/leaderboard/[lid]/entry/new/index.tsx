@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from "react";
 import Button from "@/components/ui/Button";
 import FieldInput from "./Field";
-import { useNavigate, useParams } from "react-router";
+import { Link, useNavigate, useParams } from "react-router";
 import { useLeaderboard } from "@/hooks/useLeaderboard";
 import { FormikHelpers, FormikProvider, useFormik } from "formik";
 import * as y from "yup";
@@ -114,8 +114,18 @@ const NewEntryPage: React.FC = () => {
   if (isLoading) return <p>Loading</p>;
   if (error || !leaderboard) return <p>Error</p>;
   if (!session && !leaderboard.allowAnonymous) {
-    navigate("/signin");
-    return <p></p>;
+    navigate("/signin", {
+      replace: true,
+    });
+    return (
+      <div>
+        <p>You are not signed in for this leaderboard, redirecting...</p>
+        <p>
+          If the page is not automatically redirecting, please click this link
+          to go to sign in: <Link to={"/signin"}>Sign in</Link>
+        </p>
+      </div>
+    );
   }
 
   return (
