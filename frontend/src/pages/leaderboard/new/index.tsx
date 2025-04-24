@@ -3,7 +3,7 @@ import Button from "@/components/ui/Button";
 import { FormikHelpers, FormikProvider, setIn, useFormik } from "formik";
 import { api } from "@/utils/api";
 import { useAtomValue } from "jotai";
-import { sessionAtom } from "@/globalState/user";
+import { sessionAtom } from "@/contexts/user";
 import { useNavigate } from "react-router";
 import { AxiosError } from "axios";
 import { SubmitSchema, SubmitType } from "./schema";

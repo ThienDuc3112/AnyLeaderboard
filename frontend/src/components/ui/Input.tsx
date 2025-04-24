@@ -17,7 +17,7 @@ const getVariantClasses = (variant: PropType["variant"] = "default") => {
 const Input: React.FC<PropType> = (props) => {
   return (
     <div
-      className={`px-3 bg-white rounded-full relative flex focus-within:ring-indigo-600 focus-within:outline-none focus-within:ring-1 items-center h-10 ${getVariantClasses(
+      className={`px-3 ${props.disabled ? "bg-gray-200" : "bg-white"} rounded-full relative flex focus-within:ring-indigo-600 focus-within:outline-none focus-within:ring-1 items-center h-10 ${getVariantClasses(
         props.variant,
       )} ${props.className}`}
     >

@@ -10,7 +10,7 @@ import NewEntryPage from "@/pages/leaderboard/[lid]/entry/new";
 import EntryViewPage from "@/pages/leaderboard/[lid]/entry/[eid]";
 import { useEffect, useState } from "react";
 import { useSetAtom } from "jotai";
-import { sessionAtom } from "./globalState/user";
+import { sessionAtom } from "./contexts/user";
 import { api } from "./utils/api";
 
 function App() {
@@ -47,22 +47,25 @@ function App() {
             <Route path="/signin" element={<SignInPage />} />
             <Route path="/signup" element={<SignupPage />} />
 
-            {/** Incomplete routes */}
-            <Route path="/profile/me" />
-            <Route path="/profile/:id" />
-            <Route path="/leaderboard" element={<BrowseLeaderboardPage />} />
+            {/** Semi-completed routes */}
             {/** Missing owner view (allow edit option) */}
             <Route path="/leaderboard/:lid" element={<LeaderboardViewPage />} />
             {/** Haven't styled the warning when error */}
+            <Route
+              path="/leaderboard/:lid/entry/new"
+              element={<NewEntryPage />}
+            />
             <Route path="/leaderboard/new" element={<NewLeaderboardPage />} />
+            {/** Search option when login */}
+            <Route path="/leaderboard" element={<BrowseLeaderboardPage />} />
+
+            {/** Incomplete routes */}
+            <Route path="/profile/me" />
+            <Route path="/profile/:id" />
             <Route path="/leaderboard/:lid/update" />
             <Route
-              path="/leaderboard/:id/entry/:eid"
+              path="/leaderboard/:lid/entry/:eid"
               element={<EntryViewPage />}
-            />
-            <Route
-              path="/leaderboard/:id/entry/new"
-              element={<NewEntryPage />}
             />
           </Route>
         </Routes>

@@ -30,7 +30,7 @@ export interface ExternalLinkType {
 
 export type Field = PrimitiveField | OptionField;
 export interface PrimitiveField extends CommonFieldAttributes {
-  type: "TEXT" | "SHORT_TEXT" | "NUMBER" | "DURATION" | "TIMESTAMP";
+  type: "TEXT" | "NUMBER" | "DURATION" | "TIMESTAMP";
   for_rank?: boolean;
 }
 

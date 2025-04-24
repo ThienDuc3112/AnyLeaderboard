@@ -2,7 +2,7 @@ import React from "react";
 import { Trophy } from "lucide-react";
 import { Link } from "react-router";
 import { useAtomValue } from "jotai";
-import { sessionAtom } from "@/globalState/user";
+import { sessionAtom } from "@/contexts/user";
 
 interface NavbarOption {
   to: string;

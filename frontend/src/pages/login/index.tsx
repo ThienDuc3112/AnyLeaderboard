@@ -1,6 +1,6 @@
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
-import { sessionAtom } from "@/globalState/user";
+import { sessionAtom } from "@/contexts/user";
 import { api } from "@/utils/api";
 import { AxiosError } from "axios";
 import { Formik } from "formik";
