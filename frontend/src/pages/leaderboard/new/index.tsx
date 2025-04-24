@@ -108,7 +108,12 @@ const NewLeaderboardPage: React.FC = () => {
                 <div>{JSON.stringify(p.errors)}</div>
                 <div>Status: {p.status}</div>
                 <div className="flex justify-end">
-                  <Button variant="filled" size="medium" type="submit">
+                  <Button
+                    variant="filled"
+                    size="medium"
+                    type="submit"
+                    disabled={p.isSubmitting}
+                  >
                     Create Leaderboard
                   </Button>
                 </div>

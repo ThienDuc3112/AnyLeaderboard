@@ -67,7 +67,17 @@ const NewEntryPage: React.FC = () => {
       });
 
       try {
-        const res = await api.post(`/leaderboards/${lid}/entries`, payload);
+        const res = await api.post(
+          `/leaderboards/${lid}/entries`,
+          payload,
+          session
+            ? {
+                headers: {
+                  Authorization: `Bearer ${session.activeToken}`,
+                },
+              }
+            : {},
+        );
         const { id } = res.data;
         if (!id)
           setStatus(
@@ -104,7 +114,7 @@ const NewEntryPage: React.FC = () => {
   if (isLoading) return <p>Loading</p>;
   if (error || !leaderboard) return <p>Error</p>;
   if (!session && !leaderboard.allowAnonymous) {
-    navigate("/login");
+    navigate("/signin");
     return <p></p>;
   }
 
@@ -153,7 +163,9 @@ const NewEntryPage: React.FC = () => {
               />
             </div>
 
-            <Button type="submit">Submit Entry</Button>
+            <Button type="submit" disabled={p.isSubmitting}>
+              Submit Entry
+            </Button>
           </form>
         </FormikProvider>
         <div>{JSON.stringify(p.errors)}</div>
