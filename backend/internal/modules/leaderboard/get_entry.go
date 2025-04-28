@@ -45,6 +45,7 @@ func (s LeaderboardService) GetEntry(ctx context.Context, param GetEntryParam) (
 		UpdatedAt:  entry.UpdatedAt.Time,
 		Fields:     entry.CustomFields,
 		Verified:   entry.Verified,
+		Username:   entry.Username,
 		VerifiedAt: nil,
 		VerifiedBy: "",
 	}

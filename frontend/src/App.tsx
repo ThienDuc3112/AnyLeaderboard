@@ -40,14 +40,14 @@ function App() {
     <BrowserRouter>
       <div className="flex flex-col h-screen w-screen overflow-auto p-0 m-0">
         <Routes>
-          {/** Page with navbar */}
+          {/** ========== Page with navbar ========== */}
           <Route path="/" element={<Layout />}>
-            {/** Completed routes */}
+            {/** Completed routes ========== */}
             <Route index element={<LandingPage />} />
             <Route path="/signin" element={<SignInPage />} />
             <Route path="/signup" element={<SignupPage />} />
 
-            {/** Semi-completed routes */}
+            {/** ========== Semi-completed routes ========== */}
             {/** Missing owner view (allow edit option) */}
             <Route path="/leaderboard/:lid" element={<LeaderboardViewPage />} />
             {/** Haven't styled the warning when error */}
@@ -59,7 +59,7 @@ function App() {
             {/** Search option when login */}
             <Route path="/leaderboard" element={<BrowseLeaderboardPage />} />
 
-            {/** Incomplete routes */}
+            {/** ========== Incomplete routes ========== */}
             <Route path="/profile/me" />
             <Route path="/profile/:id" />
             <Route path="/leaderboard/:lid/update" />
