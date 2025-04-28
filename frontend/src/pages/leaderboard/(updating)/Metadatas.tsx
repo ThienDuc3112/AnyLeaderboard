@@ -93,6 +93,22 @@ const Metadatas: React.FC = () => {
           />
         </div>
 
+        <div className="flex items-center justify-between p-4 bg-white rounded-2xl border border-indigo-400">
+          <div>
+            <h3 className="text-sm font-medium text-gray-900">
+              Unique submission
+            </h3>
+            <p className="text-sm text-gray-500">
+              Only 1 submission per user will show up
+            </p>
+          </div>
+          <Switch
+            name="uniqueSubmission"
+            checked={p.values.uniqueSubmission}
+            onChange={p.handleChange}
+          />
+        </div>
+
         <FieldArray name="externalLinks">
           {({ push, remove }) => (
             <>

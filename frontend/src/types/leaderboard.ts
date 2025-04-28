@@ -11,6 +11,7 @@ export interface LeaderboardFull extends LeaderboardPreview {
   data: Entry[];
   allowAnonymous?: boolean;
   externalLinks?: ExternalLinkType[];
+  uniqueSubmission?: boolean;
   creatorId: number;
   requiredVerification?: boolean;
 }
@@ -29,10 +30,13 @@ export interface ExternalLinkType {
   url: string;
 }
 
-export type Field = PrimitiveField | OptionField;
+export type Field = PrimitiveField | OptionField | TextField;
 export interface PrimitiveField extends CommonFieldAttributes {
-  type: "TEXT" | "NUMBER" | "DURATION" | "TIMESTAMP";
+  type: "NUMBER" | "DURATION" | "TIMESTAMP";
   for_rank?: boolean;
+}
+export interface TextField extends CommonFieldAttributes {
+  type: "TEXT";
 }
 
 export interface OptionField extends CommonFieldAttributes {

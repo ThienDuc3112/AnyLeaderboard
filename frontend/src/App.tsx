@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import { useSetAtom } from "jotai";
 import { sessionAtom } from "./contexts/user";
 import { api } from "./utils/api";
+import UpdateLeaderboardPage from "./pages/leaderboard/(updating)/update";
 
 function App() {
   const setSession = useSetAtom(sessionAtom);
@@ -66,7 +67,10 @@ function App() {
             {/** ========== Incomplete routes ========== */}
             <Route path="/profile/me" />
             <Route path="/profile/:id" />
-            <Route path="/leaderboard/:lid/update" />
+            <Route
+              path="/leaderboard/:lid/update"
+              element={<UpdateLeaderboardPage />}
+            />
           </Route>
         </Routes>
       </div>

@@ -1,6 +1,6 @@
 import * as y from "yup";
 
-export const SubmitSchema = y.object().shape({
+const LbMetadataSchema = y.object({
   name: y.string().required("Name is required"),
   description: y.string().max(256, "Cannot exceed 256 characters"),
   coverImageUrl: y.string().url("Must be an image url"),
@@ -24,6 +24,9 @@ export const SubmitSchema = y.object().shape({
     otherwise: (s) => s,
   }),
   requiredVerification: y.boolean(),
+});
+
+export const SubmitSchema = LbMetadataSchema.shape({
   fields: y
     .array(
       y.object().shape({
