@@ -66,6 +66,7 @@ func (s LeaderboardService) GetLeaderboard(ctx context.Context, id int32) (model
 		CreatedAt:            lb.CreatedAt.Time,
 		ExternalLink:         make([]models.ExternalLink, 0),
 		Fields:               make([]models.Field, 0),
+		CreatorId:            int(lb.Creator),
 	}
 
 	fieldSet := make(map[string]bool)

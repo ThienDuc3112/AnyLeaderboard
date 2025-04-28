@@ -11,6 +11,7 @@ export interface LeaderboardFull extends LeaderboardPreview {
   data: Entry[];
   allowAnonymous?: boolean;
   externalLinks?: ExternalLinkType[];
+  creatorId: number;
   requiredVerification?: boolean;
 }
 

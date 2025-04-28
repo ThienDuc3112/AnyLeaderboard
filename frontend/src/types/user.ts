@@ -12,6 +12,7 @@ export type UserPreview = {
   displayName: string;
   createdAt: Date;
   description: string;
+  id: number;
 };
 
 export type UserSession = {

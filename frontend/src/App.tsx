@@ -5,7 +5,7 @@ import Layout from "@/Layout";
 import SignupPage from "@/pages/signup";
 import LeaderboardViewPage from "@/pages/leaderboard/[lid]";
 import BrowseLeaderboardPage from "@/pages/leaderboard";
-import NewLeaderboardPage from "@/pages/leaderboard/new";
+import NewLeaderboardPage from "@/pages/leaderboard/(updating)/new";
 import NewEntryPage from "@/pages/leaderboard/[lid]/entry/new";
 import EntryViewPage from "@/pages/leaderboard/[lid]/entry/[eid]";
 import { useEffect, useState } from "react";
@@ -40,12 +40,16 @@ function App() {
     <BrowserRouter>
       <div className="flex flex-col h-screen w-screen overflow-auto p-0 m-0">
         <Routes>
-          {/** ========== Page with navbar ========== */}
+          {/** Page with navbar */}
           <Route path="/" element={<Layout />}>
-            {/** Completed routes ========== */}
+            {/** ========== Completed routes ========== */}
             <Route index element={<LandingPage />} />
             <Route path="/signin" element={<SignInPage />} />
             <Route path="/signup" element={<SignupPage />} />
+            <Route
+              path="/leaderboard/:lid/entry/:eid"
+              element={<EntryViewPage />}
+            />
 
             {/** ========== Semi-completed routes ========== */}
             {/** Missing owner view (allow edit option) */}
@@ -63,10 +67,6 @@ function App() {
             <Route path="/profile/me" />
             <Route path="/profile/:id" />
             <Route path="/leaderboard/:lid/update" />
-            <Route
-              path="/leaderboard/:lid/entry/:eid"
-              element={<EntryViewPage />}
-            />
           </Route>
         </Routes>
       </div>

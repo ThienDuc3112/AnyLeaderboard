@@ -23,6 +23,7 @@ type LeaderboardFull struct {
 	Name                 string         `json:"name"`
 	Description          string         `json:"description"`
 	Creator              string         `json:"creator"`
+	CreatorId            int            `json:"creatorId"`
 	CoverImageUrl        string         `json:"coverImageUrl,omitempty"`
 	CreatedAt            time.Time      `json:"createdAt"`
 	EntriesCount         int            `json:"entriesCount"`

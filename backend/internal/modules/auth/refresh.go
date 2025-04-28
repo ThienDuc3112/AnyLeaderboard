@@ -84,6 +84,7 @@ func (s AuthService) Refresh(ctx context.Context, param RefreshParam) (LoginsRet
 		RefreshToken:    refreshTokenStr,
 		RefreshTokenRaw: rt,
 		User: models.UserPreview{
+			Id:          int(user.ID),
 			CreatedAt:   user.CreatedAt.Time,
 			Username:    user.Username,
 			DisplayName: user.DisplayName,
