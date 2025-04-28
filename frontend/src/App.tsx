@@ -47,14 +47,13 @@ function App() {
             <Route index element={<LandingPage />} />
             <Route path="/signin" element={<SignInPage />} />
             <Route path="/signup" element={<SignupPage />} />
+            <Route path="/leaderboard/:lid" element={<LeaderboardViewPage />} />
             <Route
               path="/leaderboard/:lid/entry/:eid"
               element={<EntryViewPage />}
             />
 
             {/** ========== Semi-completed routes ========== */}
-            {/** Missing owner view (allow edit option) */}
-            <Route path="/leaderboard/:lid" element={<LeaderboardViewPage />} />
             {/** Haven't styled the warning when error */}
             <Route
               path="/leaderboard/:lid/entry/new"
@@ -63,14 +62,15 @@ function App() {
             <Route path="/leaderboard/new" element={<NewLeaderboardPage />} />
             {/** Search option when login */}
             <Route path="/leaderboard" element={<BrowseLeaderboardPage />} />
-
-            {/** ========== Incomplete routes ========== */}
-            <Route path="/profile/me" />
-            <Route path="/profile/:id" />
+            {/** Frontend technically complete but backend need a rewrite */}
             <Route
               path="/leaderboard/:lid/update"
               element={<UpdateLeaderboardPage />}
             />
+
+            {/** ========== Incomplete routes ========== */}
+            <Route path="/profile/me" />
+            <Route path="/profile/:id" />
           </Route>
         </Routes>
       </div>
