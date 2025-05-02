@@ -5,14 +5,14 @@ import Layout from "@/Layout";
 import SignupPage from "@/pages/signup";
 import LeaderboardViewPage from "@/pages/leaderboard/[lid]";
 import BrowseLeaderboardPage from "@/pages/leaderboard";
-import NewLeaderboardPage from "@/pages/leaderboard/(updating)/new";
+import NewLeaderboardPage from "@/pages/leaderboard/new";
 import NewEntryPage from "@/pages/leaderboard/[lid]/entry/new";
 import EntryViewPage from "@/pages/leaderboard/[lid]/entry/[eid]";
 import { useEffect, useState } from "react";
 import { useSetAtom } from "jotai";
 import { sessionAtom } from "./contexts/user";
 import { api } from "./utils/api";
-import UpdateLeaderboardPage from "./pages/leaderboard/(updating)/update";
+import UpdateLeaderboardPage from "./pages/leaderboard/[lid]/update";
 
 function App() {
   const setSession = useSetAtom(sessionAtom);
@@ -31,7 +31,7 @@ function App() {
           },
         });
       })
-      .catch(() => {})
+      .catch(() => { })
       .finally(() => setLoading(false));
   }, []);
 

@@ -26,6 +26,7 @@ export interface Entry {
 }
 
 export interface ExternalLinkType {
+  id: number;
   displayValue: string;
   url: string;
 }

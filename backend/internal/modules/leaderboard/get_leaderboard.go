@@ -115,6 +115,7 @@ func (s LeaderboardService) GetLeaderboard(ctx context.Context, id int32) (model
 		if row.LinkID.Valid && !linkSet[int(row.LinkID.Int32)] {
 			linkSet[int(row.LinkID.Int32)] = true
 			res.ExternalLink = append(res.ExternalLink, models.ExternalLink{
+				Id:           int(row.LinkID.Int32),
 				DisplayValue: row.LinkDisplayValue.String,
 				URL:          row.LinkUrl.String,
 			})

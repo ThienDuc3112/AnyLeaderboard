@@ -71,6 +71,7 @@ type Entry struct {
 }
 
 type ExternalLink struct {
+	Id           int    `json:"id"`
 	DisplayValue string `json:"displayValue" validate:"required,max=32"`
 	URL          string `json:"url" validate:"required,http_url"`
 }
