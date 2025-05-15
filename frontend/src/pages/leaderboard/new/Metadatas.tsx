@@ -95,6 +95,21 @@ const Metadatas: React.FC = () => {
 
         <div className="flex items-center justify-between p-4 bg-white rounded-2xl border border-indigo-400">
           <div>
+            <h3 className="text-sm font-medium text-gray-900">Descending</h3>
+            <p className="text-sm text-gray-500">
+              Larger value place higher (duration for rank field should turn
+              this off)
+            </p>
+          </div>
+          <Switch
+            name="descending"
+            checked={p.values.descending}
+            onChange={p.handleChange}
+          />
+        </div>
+
+        <div className="flex items-center justify-between p-4 bg-white rounded-2xl border border-indigo-400">
+          <div>
             <h3 className="text-sm font-medium text-gray-900">
               Unique submission
             </h3>

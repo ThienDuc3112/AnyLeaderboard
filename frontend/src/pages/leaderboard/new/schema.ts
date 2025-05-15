@@ -4,6 +4,7 @@ const LbMetadataSchema = y.object({
   name: y.string().required("Name is required"),
   description: y.string().max(256, "Cannot exceed 256 characters"),
   coverImageUrl: y.string().url("Must be an image url"),
+  descending: y.boolean().required().default(false),
   externalLinks: y
     .array(
       y.object().shape({

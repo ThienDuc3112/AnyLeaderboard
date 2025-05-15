@@ -77,6 +77,7 @@ const NewLeaderboardPage: React.FC = () => {
       allowAnonymous: false,
       uniqueSubmission: false,
       requiredVerification: false,
+      descending: false,
 
       fields: [],
       externalLinks: [],
