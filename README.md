@@ -5,7 +5,7 @@
 ## Tech Stack
 
 - **Frontend:** Vite, React, TypeScript
-- **Backend:** Go
+- **Backend:** Go, Postgresql
 
 ## Features
 
@@ -17,15 +17,21 @@
 
 ### Prerequisites
 
-- [Node.js](https://nodejs.org/) (v18 or later)
-- [Go](https://golang.org/) (v1.22 or later)
 - [Git](https://git-scm.com/)
+- [Docker](https://www.docker.com/)
+- [Node.js](https://nodejs.org/) (v18 or later, only for ide support)
+- [Go](https://golang.org/) (v1.22 or later, only for ide support)
 
-### Installation
+### Develop
 
 1. Clone the repository:
    ```bash
    git clone https://github.com/ThienDuc3112/AnyLeaderboard.git
+   ```
+2. Run:
+   ```bash
+   docker compose -f development.docker-compose.yml up -d --build
+   ```
 
 ## Note
 This is not a serious project, just a repo to help me getting started with golang
