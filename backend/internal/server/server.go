@@ -12,19 +12,13 @@ import (
 
 	"github.com/jackc/pgx/v5/pgxpool"
 	_ "github.com/jackc/pgx/v5/stdlib"
-	"github.com/joho/godotenv"
 )
 
 type Server struct {
-	// db *sql.DB
 	db *pgxpool.Pool
 }
 
 func NewServer() *http.Server {
-	isProduction := os.Getenv(constants.EnvKeyEnvironment) == "PRODUCTION"
-	if !isProduction {
-		godotenv.Load(".env.local")
-	}
 
 	port, _ := strconv.Atoi(os.Getenv(constants.EnvKeyPort))
 	db, err := pgxpool.New(context.Background(), os.Getenv(constants.EnvKeyDbUrl))

@@ -1,0 +1,53 @@
+version: "0.1"
+name: anyleaderboard
+
+services: 
+  api:
+    container_name: anylb-backend
+    build:
+      context: ./backend
+      dockerfile: dev.dockerfile
+    volumes:
+      - ./backend:/app
+      - /app/tmp
+    ports: 
+      - "9999:9999"
+    environment:
+      DB_URL: "postgres://postgres:password@db:5432/anylb?sslmode=disable"
+      PORT: "9999"
+      SECRET: "79ce9bba6d033123ed8e8dd32952bd5cd5d5eba1e77e79125ba1d16fe95acac93cee7a2dd64e4a4cef0a37caf7b4ddf4ad144706036a2735bd110eda0a3cc4a2"
+      FRONTEND_URL: "localhost:6969"
+      ENVIRONMENT: "DEVELOPMENT"
+      AIR_ENV: "dev"
+    restart: unless-stopped
+    depends_on:
+      - db 
+
+  db:
+    container_name: anylb-db
+    image: postgres:17
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "password"
+      POSTGRES_DB: "anylb"
+    volumes:
+      - anylb-db-data:/var/lib/postgresql/data
+    ports:
+      - "5555:5432"
+
+  frontend:
+    container_name: anylb-frontend
+    build:
+      context: ./frontend
+      dockerfile: dev.dockerfile
+    ports:
+      - "6969:6969"
+    volumes:
+      - ./frontend:/app
+    command: sh -c "cp -r /cache_modules/node_modules /app/node_modules && npm run dev"
+    environment:
+      VITE_API_URL: "https://localhost:9999"
+    restart: on-failure
+
+volumes:
+  anylb-db-data:
