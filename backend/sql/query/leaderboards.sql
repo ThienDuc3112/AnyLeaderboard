@@ -8,9 +8,10 @@ INSERT INTO leaderboards(
         allow_anonymous,
         require_verification,
         unique_submission,
-        creator
+        creator,
+        descending
     )
-VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
 RETURNING id, 
   name,
   description,
@@ -20,10 +21,11 @@ RETURNING id,
   allow_anonymous,
   require_verification,
   unique_submission,
-  creator;
+  creator,
+  descending;
 
 -- name: GetLeaderboardById :one
-SELECT id, name, description, created_at, updated_at, cover_image_url, allow_anonymous, require_verification, unique_submission, creator
+SELECT id, name, description, created_at, updated_at, cover_image_url, allow_anonymous, require_verification, unique_submission, creator, descending
 FROM leaderboards
 WHERE id = $1;
 
@@ -38,6 +40,7 @@ SELECT l.id,
     l.require_verification,
     l.unique_submission,
     l.creator,
+    l.descending,
     COUNT(le.*) AS entries_count
 FROM leaderboards l 
     LEFT JOIN users u ON u.id = l.creator
@@ -58,6 +61,7 @@ SELECT l.id,
     l.require_verification,
     l.unique_submission,
     l.creator,
+    l.descending,
     COUNT(le.*) AS entries_count
 FROM leaderboards l
     LEFT JOIN leaderboard_entries le ON l.id = le.leaderboard_id
@@ -77,6 +81,7 @@ SELECT l.id,
     l.require_verification,
     l.unique_submission,
     l.creator,
+    l.descending,
     lf.lid AS field_lid,
     lf.field_name,
     lf.field_value,
@@ -108,6 +113,7 @@ SELECT l.id,
     l.require_verification,
     l.unique_submission,
     l.creator,
+    l.descending,
     COUNT(le.*) AS entries_count
 FROM leaderboards l
     INNER JOIN leaderboard_favourites f ON f.leaderboard_id = l.id
@@ -128,6 +134,7 @@ SELECT l.id,
     l.require_verification,
     l.unique_submission,
     l.creator,
+    l.descending,
     COUNT(le.*) AS entries_count,
     ts_rank_cd(l.search_tsv, websearch_to_tsquery((@language::text)::regconfig, @query)) AS rank
 FROM leaderboards l
@@ -150,6 +157,7 @@ SELECT l.id,
     l.require_verification,
     l.unique_submission,
     l.creator,
+    l.descending,
     COUNT(le.*) AS entries_count,
     ts_rank_cd(l.search_tsv, websearch_to_tsquery((@language::text)::regconfig, @query)) AS rank
 FROM leaderboards l

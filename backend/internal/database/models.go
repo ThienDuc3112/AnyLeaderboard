@@ -72,6 +72,7 @@ type Leaderboard struct {
 	NameTsv             interface{}
 	DescriptionTsv      interface{}
 	SearchTsv           interface{}
+	Descending          bool
 }
 
 type LeaderboardEntry struct {

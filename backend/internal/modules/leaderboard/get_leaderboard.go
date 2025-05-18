@@ -64,6 +64,7 @@ func (s LeaderboardService) GetLeaderboard(ctx context.Context, id int32) (model
 		RequiredVerification: lb.RequireVerification,
 		UniqueSubmission:     lb.UniqueSubmission,
 		CreatedAt:            lb.CreatedAt.Time,
+		Descending:           lb.Descending,
 		ExternalLink:         make([]models.ExternalLink, 0),
 		Fields:               make([]models.Field, 0),
 		CreatorId:            int(lb.Creator),

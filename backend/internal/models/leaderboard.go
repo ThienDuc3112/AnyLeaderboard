@@ -30,6 +30,7 @@ type LeaderboardFull struct {
 	AllowAnonymous       bool           `json:"allowAnonymous"`
 	RequiredVerification bool           `json:"requiredVerification"`
 	UniqueSubmission     bool           `json:"uniqueSubmission"`
+	Descending           bool           `json:"descending"`
 	ExternalLink         []ExternalLink `json:"externalLinks"`
 	Fields               []Field        `json:"fields"`
 	Data                 []Entry        `json:"data"`
@@ -43,6 +44,7 @@ type SubmitLBStructure struct {
 	AllowAnonymous       bool           `json:"allowAnonymous" validate:"excluded_if=UniqueSubmission true"`
 	RequiredVerification bool           `json:"requiredVerification"`
 	UniqueSubmission     bool           `json:"uniqueSubmission"`
+	Descending           bool           `json:"descending"`
 	Fields               []Field        `json:"fields" validate:"required,min=1,max=10,unique=Name,unique=FieldOrder,dive"`
 }
 

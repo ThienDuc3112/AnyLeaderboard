@@ -26,6 +26,7 @@ func (s LeaderboardService) CreateLeaderboard(ctx context.Context, param CreateL
 		AllowAnonymous:      param.AllowAnonymous,
 		RequireVerification: param.RequiredVerification,
 		UniqueSubmission:    param.UniqueSubmission,
+		Descending:          param.Descending,
 		NameLanguage:        utils.DetectLanguage(param.Name),
 		DescriptionLanguage: utils.DetectLanguage(param.Description),
 	}

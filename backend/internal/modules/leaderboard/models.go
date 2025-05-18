@@ -52,6 +52,7 @@ type GetEntriesParam struct {
 	UniqueSubmission     bool
 	VerifyState          bool
 	ForcedPending        bool
+	Desc                 bool
 	Offset               int32
 	PageSize             int32
 }

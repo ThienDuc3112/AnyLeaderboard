@@ -19,6 +19,7 @@ func (s LeaderboardService) GetLeaderboardWithEntry(ctx context.Context, param G
 		UniqueSubmission:     res.UniqueSubmission,
 		VerifyState:          true,
 		ForcedPending:        param.ForcedPending,
+		Desc:                 res.Descending,
 	}
 
 	// Overwrite options

@@ -8,8 +8,10 @@ const getEntriesSelect = `SELECT id, created_at, updated_at, user_id, username, 
 const getEntriesSelectDistinct = `SELECT DISTINCT ON (user_id) id, created_at, updated_at, user_id, username, leaderboard_id, sorted_field, custom_fields, verified, verified_at, verified_by `
 const getEntriesFrom = `FROM leaderboard_entries `
 const getEntriesWhere = `WHERE leaderboard_id = $1 `
-const getEntriesOrder = `ORDER BY sorted_field DESC OFFSET $2 LIMIT $3`
-const getEntriesOrderDistinct = `ORDER BY user_id, sorted_field DESC`
+const getEntriesOrderDesc = `ORDER BY sorted_field DESC OFFSET $2 LIMIT $3`
+const getEntriesOrderDistinctDesc = `ORDER BY user_id, sorted_field DESC`
+const getEntriesOrderAsc = `ORDER BY sorted_field ASC OFFSET $2 LIMIT $3`
+const getEntriesOrderDistinctAsc = `ORDER BY user_id, sorted_field ASC`
 
 type GetEntriesParams struct {
 	LeaderboardID int32
@@ -18,6 +20,7 @@ type GetEntriesParams struct {
 	HasBeenCheck  *bool // true == only verified, false == only not verified, nil == get both
 	VerifyState   *bool // Same idea as above
 	Distinct      bool
+	Desc          bool
 }
 
 func (q *Queries) GetEntries(ctx context.Context, arg GetEntriesParams) ([]LeaderboardEntry, error) {
@@ -43,10 +46,18 @@ func (q *Queries) GetEntries(ctx context.Context, arg GetEntriesParams) ([]Leade
 	}
 
 	if arg.Distinct {
-		query += getEntriesOrderDistinct + ") "
+		if arg.Desc {
+			query += getEntriesOrderDistinctDesc + ") "
+		} else {
+			query += getEntriesOrderDistinctAsc + ") "
+		}
 	}
 
-	query += getEntriesOrder
+	if arg.Desc {
+		query += getEntriesOrderDesc
+	} else {
+		query += getEntriesOrderAsc
+	}
 
 	rows, err := q.db.Query(ctx, query, arg.LeaderboardID, arg.Offset, arg.Limit)
 	if err != nil {
@@ -103,7 +114,7 @@ func (q *Queries) GetEntriesCount(ctx context.Context, arg GetEntriesParams) (in
 	}
 
 	if arg.Distinct {
-		query += getEntriesOrderDistinct + ") "
+		query += getEntriesOrderDistinctDesc + ") "
 	}
 
 	row := q.db.QueryRow(ctx, query, arg.LeaderboardID)

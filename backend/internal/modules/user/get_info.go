@@ -17,6 +17,7 @@ func (s UserService) InfoByName(ctx context.Context, Username string) (models.Us
 	}
 
 	return models.UserPreview{
+		Id:          int(user.ID),
 		CreatedAt:   user.CreatedAt.Time,
 		Username:    user.Username,
 		Description: user.Description,
