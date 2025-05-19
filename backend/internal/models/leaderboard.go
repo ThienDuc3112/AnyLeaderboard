@@ -79,6 +79,7 @@ type ExternalLink struct {
 }
 
 type Field struct {
+	Id         int      `json:"id"`
 	Name       string   `json:"name" validate:"required,max=32,isSafeName"`
 	Required   bool     `json:"required"`
 	Hidden     bool     `json:"hidden"`

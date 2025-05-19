@@ -21,6 +21,25 @@ INSERT INTO leaderboard_fields (
         hidden
     )
 VALUES ($1, $2, $3, $4, $5, $6, $7);
+-- name: BulkInsertFields :many
+INSERT INTO leaderboard_fields (
+        lid,
+        field_name,
+        field_value,
+        field_order,
+        for_rank,
+        required,
+        hidden
+    )
+SELECT 
+        unnest(@lids::int[]), 
+        unnest(@field_names::text[]),
+        unnest(@field_values::text[])::field_type,  -- cast text→enum here
+        unnest(@field_orders::int[]),
+        unnest(@for_ranks::boolean[]), 
+        unnest(@required::boolean[]),
+        unnest(@hidden::boolean[])
+RETURNING id;
 -- name: GetFieldByLID :one
 SELECT *
 FROM leaderboard_fields
@@ -40,3 +59,6 @@ UPDATE leaderboard_fields SET field_name = @new_field_name WHERE id = $1;
 -- name: DeleteField :exec
 DELETE FROM leaderboard_fields
   WHERE lid = $1 AND field_name = $2;
+-- name: DeleteFieldByID :exec
+DELETE FROM leaderboard_fields
+  WHERE id = $1;

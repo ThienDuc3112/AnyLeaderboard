@@ -8,9 +8,9 @@ import (
 )
 
 type DeleteFieldParam struct {
-	Lid          int32
-	OldFieldName string
-	IsOption     bool
+	Fid      int32
+	Lid      int32
+	IsOption bool
 }
 
 func (s LeaderboardService) DeleteField(ctx context.Context, param DeleteFieldParam) error {
@@ -21,26 +21,20 @@ func (s LeaderboardService) DeleteField(ctx context.Context, param DeleteFieldPa
 	defer tx.Rollback(ctx)
 
 	if param.IsOption {
-		err = tx.DeleteLeadeboardOptions(ctx, database.DeleteLeadeboardOptionsParams{
-			Lid:       param.Lid,
-			FieldName: param.OldFieldName,
-		})
+		err = tx.DeleteLeadeboardOptions(ctx, param.Fid)
 		if err != nil {
 			return err
 		}
 	}
 
-	err = tx.DeleteField(ctx, database.DeleteFieldParams{
-		Lid:       param.Lid,
-		FieldName: param.OldFieldName,
-	})
+	err = tx.DeleteFieldByID(ctx, param.Fid)
 	if err != nil {
 		return err
 	}
 
 	err = tx.DeleteFieldOnEntriesByLeaderboardId(ctx, database.DeleteFieldOnEntriesByLeaderboardIdParams{
 		LeaderboardID: param.Lid,
-		FieldName:     []byte(param.OldFieldName),
+		FieldName:     []byte(fmt.Sprintf("%d", param.Fid)),
 	})
 	if err != nil {
 		return err

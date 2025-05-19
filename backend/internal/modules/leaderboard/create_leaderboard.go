@@ -70,8 +70,15 @@ func (s LeaderboardService) CreateLeaderboard(ctx context.Context, param CreateL
 		lid       int32
 		option    []string
 	}
-	fields := make([]database.CreateLeadeboardFieldsParams, 0)
-	opts := make([]optionsToInsert, 0)
+	fields := database.BulkInsertFieldsParams{
+		Lids:        make([]int32, 0),
+		FieldNames:  make([]string, 0),
+		FieldValues: make([]string, 0),
+		FieldOrders: make([]int32, 0),
+		ForRanks:    make([]bool, 0),
+		Required:    make([]bool, 0),
+		Hidden:      make([]bool, 0),
+	}
 	forRankExist := false
 	nonHiddenFieldExist := false
 
@@ -84,26 +91,13 @@ func (s LeaderboardService) CreateLeaderboard(ctx context.Context, param CreateL
 		}
 		forRankExist = forRankExist || field.ForRank
 		nonHiddenFieldExist = nonHiddenFieldExist || !field.Hidden
-		fields = append(fields, database.CreateLeadeboardFieldsParams{
-			Lid:        lb.ID,
-			FieldName:  field.Name,
-			FieldValue: database.FieldType(field.Type),
-			FieldOrder: int32(field.FieldOrder),
-			ForRank:    field.ForRank,
-			Required:   field.Required,
-			Hidden:     field.Hidden,
-		})
-
-		if field.Type == string(database.FieldTypeOPTION) {
-			if len(field.Options) == 0 {
-				return models.Leaderboard{}, ErrNoOptions
-			}
-			opts = append(opts, optionsToInsert{
-				fieldName: field.Name,
-				lid:       lb.ID,
-				option:    field.Options,
-			})
-		}
+		fields.Lids = append(fields.Lids, lb.ID)
+		fields.FieldNames = append(fields.FieldNames, field.Name)
+		fields.FieldValues = append(fields.FieldValues, field.Type)
+		fields.FieldOrders = append(fields.FieldOrders, int32(field.FieldOrder))
+		fields.ForRanks = append(fields.ForRanks, field.ForRank)
+		fields.Required = append(fields.Required, field.Required)
+		fields.Hidden = append(fields.Hidden, field.Hidden)
 	}
 
 	if !forRankExist {
@@ -114,27 +108,32 @@ func (s LeaderboardService) CreateLeaderboard(ctx context.Context, param CreateL
 	}
 
 	// ================== Inserting leaderboard fields ==================
-	n, err := tx.CreateLeadeboardFields(ctx, fields)
+	fieldIds, err := tx.BulkInsertFields(ctx, fields)
 	if err != nil {
 		return models.Leaderboard{}, err
 	}
-	if n != int64(len(fields)) {
+	if len(fieldIds) != len(param.Fields) {
 		return models.Leaderboard{}, ErrUnableToInsertAllFields
 	}
 
-	for _, opt := range opts {
+	for i, field := range param.Fields {
 		// ================== Processing leaderboard options ==================
+		if field.Type != string(database.FieldTypeOPTION) {
+			continue
+		}
+		if len(field.Options) == 0 {
+			return models.Leaderboard{}, ErrNoOptions
+		}
 		optParam := make([]database.CreateLeadeboardOptionsParams, 0)
-		for _, o := range opt.option {
+		for _, o := range field.Options {
 			optParam = append(optParam, database.CreateLeadeboardOptionsParams{
-				Lid:       lb.ID,
-				FieldName: opt.fieldName,
-				Option:    o,
+				Fid:    fieldIds[i],
+				Option: o,
 			})
 		}
 
 		// ================== Inserting leaderboard options ==================
-		n, err = tx.CreateLeadeboardOptions(ctx, optParam)
+		n, err := tx.CreateLeadeboardOptions(ctx, optParam)
 		if err != nil {
 			return models.Leaderboard{}, err
 		}

@@ -31,10 +31,7 @@ func (s LeaderboardService) GetLeaderboard(ctx context.Context, id int32) (model
 				}
 
 				// Get options
-				options, err := s.repo.GetFieldOptions(ctx, database.GetFieldOptionsParams{
-					Lid:       id,
-					FieldName: field.Name,
-				})
+				options, err := s.repo.GetFieldOptions(ctx, int32(field.Id))
 				if err != nil {
 					return models.LeaderboardFull{}, err
 				}
@@ -70,13 +67,14 @@ func (s LeaderboardService) GetLeaderboard(ctx context.Context, id int32) (model
 		CreatorId:            int(lb.Creator),
 	}
 
-	fieldSet := make(map[string]bool)
+	fieldSet := make(map[int32]bool)
 	linkSet := make(map[int]bool)
 
 	for _, row := range rows {
-		if row.FieldName.Valid && !fieldSet[row.FieldName.String] {
-			fieldSet[row.FieldName.String] = true
+		if row.FieldName.Valid && !fieldSet[row.ID] {
+			fieldSet[row.ID] = true
 			field := models.Field{
+				Id:         int(row.ID),
 				Name:       row.FieldName.String,
 				Type:       string(row.FieldValue.FieldType),
 				Required:   row.FieldRequired.Bool,
@@ -98,10 +96,7 @@ func (s LeaderboardService) GetLeaderboard(ctx context.Context, id int32) (model
 				}
 
 				if !cached {
-					options, err := s.repo.GetFieldOptions(ctx, database.GetFieldOptionsParams{
-						Lid:       lb.ID,
-						FieldName: field.Name,
-					})
+					options, err := s.repo.GetFieldOptions(ctx, int32(field.Id))
 					if err != nil {
 						return models.LeaderboardFull{}, err
 					}

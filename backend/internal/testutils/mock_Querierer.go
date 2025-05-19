@@ -268,6 +268,65 @@ func (_c *MockQuerierer_BeginTx_Call) RunAndReturn(run func(context.Context) (da
 	return _c
 }
 
+// BulkInsertFields provides a mock function with given fields: ctx, arg
+func (_m *MockQuerierer) BulkInsertFields(ctx context.Context, arg database.BulkInsertFieldsParams) ([]int32, error) {
+	ret := _m.Called(ctx, arg)
+
+	if len(ret) == 0 {
+		panic("no return value specified for BulkInsertFields")
+	}
+
+	var r0 []int32
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context, database.BulkInsertFieldsParams) ([]int32, error)); ok {
+		return rf(ctx, arg)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, database.BulkInsertFieldsParams) []int32); ok {
+		r0 = rf(ctx, arg)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]int32)
+		}
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, database.BulkInsertFieldsParams) error); ok {
+		r1 = rf(ctx, arg)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// MockQuerierer_BulkInsertFields_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'BulkInsertFields'
+type MockQuerierer_BulkInsertFields_Call struct {
+	*mock.Call
+}
+
+// BulkInsertFields is a helper method to define mock.On call
+//   - ctx context.Context
+//   - arg database.BulkInsertFieldsParams
+func (_e *MockQuerierer_Expecter) BulkInsertFields(ctx interface{}, arg interface{}) *MockQuerierer_BulkInsertFields_Call {
+	return &MockQuerierer_BulkInsertFields_Call{Call: _e.mock.On("BulkInsertFields", ctx, arg)}
+}
+
+func (_c *MockQuerierer_BulkInsertFields_Call) Run(run func(ctx context.Context, arg database.BulkInsertFieldsParams)) *MockQuerierer_BulkInsertFields_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(database.BulkInsertFieldsParams))
+	})
+	return _c
+}
+
+func (_c *MockQuerierer_BulkInsertFields_Call) Return(_a0 []int32, _a1 error) *MockQuerierer_BulkInsertFields_Call {
+	_c.Call.Return(_a0, _a1)
+	return _c
+}
+
+func (_c *MockQuerierer_BulkInsertFields_Call) RunAndReturn(run func(context.Context, database.BulkInsertFieldsParams) ([]int32, error)) *MockQuerierer_BulkInsertFields_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // Commit provides a mock function with given fields: ctx
 func (_m *MockQuerierer) Commit(ctx context.Context) error {
 	ret := _m.Called(ctx)
@@ -897,6 +956,53 @@ func (_c *MockQuerierer_DeleteField_Call) Return(_a0 error) *MockQuerierer_Delet
 }
 
 func (_c *MockQuerierer_DeleteField_Call) RunAndReturn(run func(context.Context, database.DeleteFieldParams) error) *MockQuerierer_DeleteField_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// DeleteFieldByID provides a mock function with given fields: ctx, id
+func (_m *MockQuerierer) DeleteFieldByID(ctx context.Context, id int32) error {
+	ret := _m.Called(ctx, id)
+
+	if len(ret) == 0 {
+		panic("no return value specified for DeleteFieldByID")
+	}
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(context.Context, int32) error); ok {
+		r0 = rf(ctx, id)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
+// MockQuerierer_DeleteFieldByID_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'DeleteFieldByID'
+type MockQuerierer_DeleteFieldByID_Call struct {
+	*mock.Call
+}
+
+// DeleteFieldByID is a helper method to define mock.On call
+//   - ctx context.Context
+//   - id int32
+func (_e *MockQuerierer_Expecter) DeleteFieldByID(ctx interface{}, id interface{}) *MockQuerierer_DeleteFieldByID_Call {
+	return &MockQuerierer_DeleteFieldByID_Call{Call: _e.mock.On("DeleteFieldByID", ctx, id)}
+}
+
+func (_c *MockQuerierer_DeleteFieldByID_Call) Run(run func(ctx context.Context, id int32)) *MockQuerierer_DeleteFieldByID_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(int32))
+	})
+	return _c
+}
+
+func (_c *MockQuerierer_DeleteFieldByID_Call) Return(_a0 error) *MockQuerierer_DeleteFieldByID_Call {
+	_c.Call.Return(_a0)
+	return _c
+}
+
+func (_c *MockQuerierer_DeleteFieldByID_Call) RunAndReturn(run func(context.Context, int32) error) *MockQuerierer_DeleteFieldByID_Call {
 	_c.Call.Return(run)
 	return _c
 }

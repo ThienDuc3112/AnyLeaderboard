@@ -13,6 +13,7 @@ type Querier interface {
 	AddFieldToEntriesByLeaderboardId(ctx context.Context, arg AddFieldToEntriesByLeaderboardIdParams) error
 	AddLeaderboardOption(ctx context.Context, arg AddLeaderboardOptionParams) error
 	AddVerifier(ctx context.Context, arg AddVerifierParams) error
+	BulkInsertFields(ctx context.Context, arg BulkInsertFieldsParams) ([]int32, error)
 	CreateLeadeboardEntry(ctx context.Context, arg CreateLeadeboardEntryParams) (LeaderboardEntry, error)
 	CreateLeadeboardField(ctx context.Context, arg CreateLeadeboardFieldParams) (int32, error)
 	CreateLeadeboardFields(ctx context.Context, arg []CreateLeadeboardFieldsParams) (int64, error)
@@ -24,6 +25,7 @@ type Querier interface {
 	DeleteEntry(ctx context.Context, id int32) error
 	DeleteFavorite(ctx context.Context, arg DeleteFavoriteParams) error
 	DeleteField(ctx context.Context, arg DeleteFieldParams) error
+	DeleteFieldByID(ctx context.Context, id int32) error
 	DeleteFieldOnEntriesByLeaderboardId(ctx context.Context, arg DeleteFieldOnEntriesByLeaderboardIdParams) error
 	DeleteLeadeboardOption(ctx context.Context, arg DeleteLeadeboardOptionParams) error
 	DeleteLeadeboardOptions(ctx context.Context, fid int32) error

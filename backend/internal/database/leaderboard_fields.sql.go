@@ -9,6 +9,65 @@ import (
 	"context"
 )
 
+const bulkInsertFields = `-- name: BulkInsertFields :many
+INSERT INTO leaderboard_fields (
+        lid,
+        field_name,
+        field_value,
+        field_order,
+        for_rank,
+        required,
+        hidden
+    )
+SELECT 
+        unnest($1::int[]), 
+        unnest($2::text[]),
+        unnest($3::text[])::field_type,  -- cast text→enum here
+        unnest($4::int[]),
+        unnest($5::boolean[]), 
+        unnest($6::boolean[]),
+        unnest($7::boolean[])
+RETURNING id
+`
+
+type BulkInsertFieldsParams struct {
+	Lids        []int32
+	FieldNames  []string
+	FieldValues []string
+	FieldOrders []int32
+	ForRanks    []bool
+	Required    []bool
+	Hidden      []bool
+}
+
+func (q *Queries) BulkInsertFields(ctx context.Context, arg BulkInsertFieldsParams) ([]int32, error) {
+	rows, err := q.db.Query(ctx, bulkInsertFields,
+		arg.Lids,
+		arg.FieldNames,
+		arg.FieldValues,
+		arg.FieldOrders,
+		arg.ForRanks,
+		arg.Required,
+		arg.Hidden,
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var id int32
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const createLeadeboardField = `-- name: CreateLeadeboardField :one
 INSERT INTO leaderboard_fields (
         lid,
@@ -70,6 +129,16 @@ type DeleteFieldParams struct {
 
 func (q *Queries) DeleteField(ctx context.Context, arg DeleteFieldParams) error {
 	_, err := q.db.Exec(ctx, deleteField, arg.Lid, arg.FieldName)
+	return err
+}
+
+const deleteFieldByID = `-- name: DeleteFieldByID :exec
+DELETE FROM leaderboard_fields
+  WHERE id = $1
+`
+
+func (q *Queries) DeleteFieldByID(ctx context.Context, id int32) error {
+	_, err := q.db.Exec(ctx, deleteFieldByID, id)
 	return err
 }
 

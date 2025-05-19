@@ -6,15 +6,13 @@ import (
 )
 
 type DeleteOptionParam struct {
-	Lid       int32
-	FieldName string
-	Option    string
+	Fid    int32
+	Option string
 }
 
 func (s LeaderboardService) DeleteOption(ctx context.Context, param DeleteOptionParam) error {
 	return s.repo.DeleteLeadeboardOption(ctx, database.DeleteLeadeboardOptionParams{
-		Lid:       param.Lid,
-		FieldName: param.FieldName,
-		Option:    param.Option,
+		Fid:    param.Fid,
+		Option: param.Option,
 	})
 }

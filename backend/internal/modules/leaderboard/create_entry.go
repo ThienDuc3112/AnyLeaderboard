@@ -57,7 +57,7 @@ func (s LeaderboardService) CreateEntry(ctx context.Context, param CreateEntryPa
 				}
 				return database.LeaderboardEntry{}, field.Name, ErrRequiredFieldNotExist
 			}
-			entryData[field.Name] = val
+			entryData[fmt.Sprintf("%d", field.Id)] = val
 
 			if foundForRankField && field.ForRank {
 				return database.LeaderboardEntry{}, field.Name, ErrConflictForRankField
@@ -76,7 +76,7 @@ func (s LeaderboardService) CreateEntry(ctx context.Context, param CreateEntryPa
 				}
 				return database.LeaderboardEntry{}, field.Name, ErrRequiredFieldNotExist
 			}
-			entryData[field.Name] = val.UnixMilli()
+			entryData[fmt.Sprintf("%d", field.Id)] = val.UnixMilli()
 
 			if foundForRankField && field.ForRank {
 				return database.LeaderboardEntry{}, field.Name, ErrConflictForRankField
@@ -106,7 +106,7 @@ func (s LeaderboardService) CreateEntry(ctx context.Context, param CreateEntryPa
 					return database.LeaderboardEntry{}, field.Name, ErrNotAnOption
 				}
 			}
-			entryData[field.Name] = val
+			entryData[fmt.Sprintf("%d", field.Id)] = val
 
 			if field.ForRank {
 				return database.LeaderboardEntry{}, field.Name, ErrUnrankableFieldType
