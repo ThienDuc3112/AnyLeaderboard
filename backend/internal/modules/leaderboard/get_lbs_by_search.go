@@ -3,7 +3,6 @@ package leaderboard
 import (
 	"anylbapi/internal/database"
 	"anylbapi/internal/models"
-	"anylbapi/internal/utils"
 	"context"
 )
 
@@ -24,7 +23,7 @@ func (s LeaderboardService) Search(ctx context.Context, param SearchParam) (Sear
 		rows, err := s.repo.SearchFavoriteLeaderboards(ctx, database.SearchFavoriteLeaderboardsParams{
 			UserID:     param.UserId,
 			Limit:      param.PageSize,
-			Language:   utils.DetectLanguage(param.Term),
+			Language:   "english",
 			Query:      param.Term,
 			RankCursor: param.SearchCursor,
 		})
@@ -64,7 +63,7 @@ func (s LeaderboardService) Search(ctx context.Context, param SearchParam) (Sear
 	} else {
 		rows, err := s.repo.SearchLeaderboards(ctx, database.SearchLeaderboardsParams{
 			Limit:      param.PageSize,
-			Language:   utils.DetectLanguage(param.Term),
+			Language:   "english",
 			Query:      param.Term,
 			RankCursor: param.SearchCursor,
 		})

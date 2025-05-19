@@ -4,7 +4,6 @@ import (
 	c "anylbapi/internal/constants"
 	"anylbapi/internal/database"
 	"anylbapi/internal/models"
-	"anylbapi/internal/utils"
 	"context"
 	"fmt"
 
@@ -27,8 +26,8 @@ func (s LeaderboardService) CreateLeaderboard(ctx context.Context, param CreateL
 		RequireVerification: param.RequiredVerification,
 		UniqueSubmission:    param.UniqueSubmission,
 		Descending:          param.Descending,
-		NameLanguage:        utils.DetectLanguage(param.Name),
-		DescriptionLanguage: utils.DetectLanguage(param.Description),
+		NameLanguage:        "english",
+		DescriptionLanguage: "english",
 	}
 	if param.CoverImageURL != "" {
 		lbParam.CoverImageUrl = pgtype.Text{
