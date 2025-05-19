@@ -78,7 +78,8 @@ func (s LeaderboardService) AddField(ctx context.Context, param AddFieldParam) e
 		}
 	}
 
-	err = tx.CreateLeadeboardField(ctx, field)
+	fid, err := tx.CreateLeadeboardField(ctx, field)
+
 	if err != nil {
 		return err
 	}
@@ -87,9 +88,8 @@ func (s LeaderboardService) AddField(ctx context.Context, param AddFieldParam) e
 		options := make([]database.CreateLeadeboardOptionsParams, 0)
 		for _, option := range param.NewField.Options {
 			options = append(options, database.CreateLeadeboardOptionsParams{
-				Lid:       field.Lid,
-				FieldName: field.FieldName,
-				Option:    option,
+				Fid:    fid,
+				Option: option,
 			})
 		}
 

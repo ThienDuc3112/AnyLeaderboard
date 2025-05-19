@@ -14,7 +14,7 @@ type Querier interface {
 	AddLeaderboardOption(ctx context.Context, arg AddLeaderboardOptionParams) error
 	AddVerifier(ctx context.Context, arg AddVerifierParams) error
 	CreateLeadeboardEntry(ctx context.Context, arg CreateLeadeboardEntryParams) (LeaderboardEntry, error)
-	CreateLeadeboardField(ctx context.Context, arg CreateLeadeboardFieldParams) error
+	CreateLeadeboardField(ctx context.Context, arg CreateLeadeboardFieldParams) (int32, error)
 	CreateLeadeboardFields(ctx context.Context, arg []CreateLeadeboardFieldsParams) (int64, error)
 	CreateLeadeboardOptions(ctx context.Context, arg []CreateLeadeboardOptionsParams) (int64, error)
 	CreateLeaderboard(ctx context.Context, arg CreateLeaderboardParams) (CreateLeaderboardRow, error)
@@ -26,15 +26,16 @@ type Querier interface {
 	DeleteField(ctx context.Context, arg DeleteFieldParams) error
 	DeleteFieldOnEntriesByLeaderboardId(ctx context.Context, arg DeleteFieldOnEntriesByLeaderboardIdParams) error
 	DeleteLeadeboardOption(ctx context.Context, arg DeleteLeadeboardOptionParams) error
-	DeleteLeadeboardOptions(ctx context.Context, arg DeleteLeadeboardOptionsParams) error
+	DeleteLeadeboardOptions(ctx context.Context, fid int32) error
 	DeleteLeaderboard(ctx context.Context, id int32) error
 	DeleteUser(ctx context.Context, id int32) error
 	DeleteUserByUsername(ctx context.Context, username string) error
 	DeleteUserFavorite(ctx context.Context, userID int32) error
 	GetAllEntriesByUsername(ctx context.Context, arg GetAllEntriesByUsernameParams) ([]LeaderboardEntry, error)
 	GetFavoriteLeaderboards(ctx context.Context, arg GetFavoriteLeaderboardsParams) ([]GetFavoriteLeaderboardsRow, error)
+	GetFieldByID(ctx context.Context, id int32) (LeaderboardField, error)
 	GetFieldByLID(ctx context.Context, arg GetFieldByLIDParams) (LeaderboardField, error)
-	GetFieldOptions(ctx context.Context, arg GetFieldOptionsParams) ([]string, error)
+	GetFieldOptions(ctx context.Context, fid int32) ([]string, error)
 	GetLeaderboardById(ctx context.Context, id int32) (GetLeaderboardByIdRow, error)
 	GetLeaderboardEntryById(ctx context.Context, id int32) (LeaderboardEntry, error)
 	GetLeaderboardFieldsByLID(ctx context.Context, lid int32) ([]LeaderboardField, error)
@@ -56,6 +57,7 @@ type Querier interface {
 	SearchFavoriteLeaderboards(ctx context.Context, arg SearchFavoriteLeaderboardsParams) ([]SearchFavoriteLeaderboardsRow, error)
 	SearchLeaderboards(ctx context.Context, arg SearchLeaderboardsParams) ([]SearchLeaderboardsRow, error)
 	UpdateFieldsName(ctx context.Context, arg UpdateFieldsNameParams) error
+	UpdateFieldsNameByID(ctx context.Context, arg UpdateFieldsNameByIDParams) error
 	UpdateRefreshToken(ctx context.Context, arg UpdateRefreshTokenParams) (RefreshToken, error)
 	UpdateUser(ctx context.Context, arg UpdateUserParams) (User, error)
 	UpdateUserPassword(ctx context.Context, arg UpdateUserPasswordParams) error

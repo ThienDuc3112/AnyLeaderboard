@@ -372,21 +372,31 @@ func (_c *MockQuerierer_CreateLeadeboardEntry_Call) RunAndReturn(run func(contex
 }
 
 // CreateLeadeboardField provides a mock function with given fields: ctx, arg
-func (_m *MockQuerierer) CreateLeadeboardField(ctx context.Context, arg database.CreateLeadeboardFieldParams) error {
+func (_m *MockQuerierer) CreateLeadeboardField(ctx context.Context, arg database.CreateLeadeboardFieldParams) (int32, error) {
 	ret := _m.Called(ctx, arg)
 
 	if len(ret) == 0 {
 		panic("no return value specified for CreateLeadeboardField")
 	}
 
-	var r0 error
-	if rf, ok := ret.Get(0).(func(context.Context, database.CreateLeadeboardFieldParams) error); ok {
+	var r0 int32
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context, database.CreateLeadeboardFieldParams) (int32, error)); ok {
+		return rf(ctx, arg)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, database.CreateLeadeboardFieldParams) int32); ok {
 		r0 = rf(ctx, arg)
 	} else {
-		r0 = ret.Error(0)
+		r0 = ret.Get(0).(int32)
 	}
 
-	return r0
+	if rf, ok := ret.Get(1).(func(context.Context, database.CreateLeadeboardFieldParams) error); ok {
+		r1 = rf(ctx, arg)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
 }
 
 // MockQuerierer_CreateLeadeboardField_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'CreateLeadeboardField'
@@ -408,12 +418,12 @@ func (_c *MockQuerierer_CreateLeadeboardField_Call) Run(run func(ctx context.Con
 	return _c
 }
 
-func (_c *MockQuerierer_CreateLeadeboardField_Call) Return(_a0 error) *MockQuerierer_CreateLeadeboardField_Call {
-	_c.Call.Return(_a0)
+func (_c *MockQuerierer_CreateLeadeboardField_Call) Return(_a0 int32, _a1 error) *MockQuerierer_CreateLeadeboardField_Call {
+	_c.Call.Return(_a0, _a1)
 	return _c
 }
 
-func (_c *MockQuerierer_CreateLeadeboardField_Call) RunAndReturn(run func(context.Context, database.CreateLeadeboardFieldParams) error) *MockQuerierer_CreateLeadeboardField_Call {
+func (_c *MockQuerierer_CreateLeadeboardField_Call) RunAndReturn(run func(context.Context, database.CreateLeadeboardFieldParams) (int32, error)) *MockQuerierer_CreateLeadeboardField_Call {
 	_c.Call.Return(run)
 	return _c
 }
@@ -985,17 +995,17 @@ func (_c *MockQuerierer_DeleteLeadeboardOption_Call) RunAndReturn(run func(conte
 	return _c
 }
 
-// DeleteLeadeboardOptions provides a mock function with given fields: ctx, arg
-func (_m *MockQuerierer) DeleteLeadeboardOptions(ctx context.Context, arg database.DeleteLeadeboardOptionsParams) error {
-	ret := _m.Called(ctx, arg)
+// DeleteLeadeboardOptions provides a mock function with given fields: ctx, fid
+func (_m *MockQuerierer) DeleteLeadeboardOptions(ctx context.Context, fid int32) error {
+	ret := _m.Called(ctx, fid)
 
 	if len(ret) == 0 {
 		panic("no return value specified for DeleteLeadeboardOptions")
 	}
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(context.Context, database.DeleteLeadeboardOptionsParams) error); ok {
-		r0 = rf(ctx, arg)
+	if rf, ok := ret.Get(0).(func(context.Context, int32) error); ok {
+		r0 = rf(ctx, fid)
 	} else {
 		r0 = ret.Error(0)
 	}
@@ -1010,14 +1020,14 @@ type MockQuerierer_DeleteLeadeboardOptions_Call struct {
 
 // DeleteLeadeboardOptions is a helper method to define mock.On call
 //   - ctx context.Context
-//   - arg database.DeleteLeadeboardOptionsParams
-func (_e *MockQuerierer_Expecter) DeleteLeadeboardOptions(ctx interface{}, arg interface{}) *MockQuerierer_DeleteLeadeboardOptions_Call {
-	return &MockQuerierer_DeleteLeadeboardOptions_Call{Call: _e.mock.On("DeleteLeadeboardOptions", ctx, arg)}
+//   - fid int32
+func (_e *MockQuerierer_Expecter) DeleteLeadeboardOptions(ctx interface{}, fid interface{}) *MockQuerierer_DeleteLeadeboardOptions_Call {
+	return &MockQuerierer_DeleteLeadeboardOptions_Call{Call: _e.mock.On("DeleteLeadeboardOptions", ctx, fid)}
 }
 
-func (_c *MockQuerierer_DeleteLeadeboardOptions_Call) Run(run func(ctx context.Context, arg database.DeleteLeadeboardOptionsParams)) *MockQuerierer_DeleteLeadeboardOptions_Call {
+func (_c *MockQuerierer_DeleteLeadeboardOptions_Call) Run(run func(ctx context.Context, fid int32)) *MockQuerierer_DeleteLeadeboardOptions_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(context.Context), args[1].(database.DeleteLeadeboardOptionsParams))
+		run(args[0].(context.Context), args[1].(int32))
 	})
 	return _c
 }
@@ -1027,7 +1037,7 @@ func (_c *MockQuerierer_DeleteLeadeboardOptions_Call) Return(_a0 error) *MockQue
 	return _c
 }
 
-func (_c *MockQuerierer_DeleteLeadeboardOptions_Call) RunAndReturn(run func(context.Context, database.DeleteLeadeboardOptionsParams) error) *MockQuerierer_DeleteLeadeboardOptions_Call {
+func (_c *MockQuerierer_DeleteLeadeboardOptions_Call) RunAndReturn(run func(context.Context, int32) error) *MockQuerierer_DeleteLeadeboardOptions_Call {
 	_c.Call.Return(run)
 	return _c
 }
@@ -1454,6 +1464,63 @@ func (_c *MockQuerierer_GetFavoriteLeaderboards_Call) RunAndReturn(run func(cont
 	return _c
 }
 
+// GetFieldByID provides a mock function with given fields: ctx, id
+func (_m *MockQuerierer) GetFieldByID(ctx context.Context, id int32) (database.LeaderboardField, error) {
+	ret := _m.Called(ctx, id)
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetFieldByID")
+	}
+
+	var r0 database.LeaderboardField
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context, int32) (database.LeaderboardField, error)); ok {
+		return rf(ctx, id)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, int32) database.LeaderboardField); ok {
+		r0 = rf(ctx, id)
+	} else {
+		r0 = ret.Get(0).(database.LeaderboardField)
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, int32) error); ok {
+		r1 = rf(ctx, id)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// MockQuerierer_GetFieldByID_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetFieldByID'
+type MockQuerierer_GetFieldByID_Call struct {
+	*mock.Call
+}
+
+// GetFieldByID is a helper method to define mock.On call
+//   - ctx context.Context
+//   - id int32
+func (_e *MockQuerierer_Expecter) GetFieldByID(ctx interface{}, id interface{}) *MockQuerierer_GetFieldByID_Call {
+	return &MockQuerierer_GetFieldByID_Call{Call: _e.mock.On("GetFieldByID", ctx, id)}
+}
+
+func (_c *MockQuerierer_GetFieldByID_Call) Run(run func(ctx context.Context, id int32)) *MockQuerierer_GetFieldByID_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(int32))
+	})
+	return _c
+}
+
+func (_c *MockQuerierer_GetFieldByID_Call) Return(_a0 database.LeaderboardField, _a1 error) *MockQuerierer_GetFieldByID_Call {
+	_c.Call.Return(_a0, _a1)
+	return _c
+}
+
+func (_c *MockQuerierer_GetFieldByID_Call) RunAndReturn(run func(context.Context, int32) (database.LeaderboardField, error)) *MockQuerierer_GetFieldByID_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // GetFieldByLID provides a mock function with given fields: ctx, arg
 func (_m *MockQuerierer) GetFieldByLID(ctx context.Context, arg database.GetFieldByLIDParams) (database.LeaderboardField, error) {
 	ret := _m.Called(ctx, arg)
@@ -1511,9 +1578,9 @@ func (_c *MockQuerierer_GetFieldByLID_Call) RunAndReturn(run func(context.Contex
 	return _c
 }
 
-// GetFieldOptions provides a mock function with given fields: ctx, arg
-func (_m *MockQuerierer) GetFieldOptions(ctx context.Context, arg database.GetFieldOptionsParams) ([]string, error) {
-	ret := _m.Called(ctx, arg)
+// GetFieldOptions provides a mock function with given fields: ctx, fid
+func (_m *MockQuerierer) GetFieldOptions(ctx context.Context, fid int32) ([]string, error) {
+	ret := _m.Called(ctx, fid)
 
 	if len(ret) == 0 {
 		panic("no return value specified for GetFieldOptions")
@@ -1521,19 +1588,19 @@ func (_m *MockQuerierer) GetFieldOptions(ctx context.Context, arg database.GetFi
 
 	var r0 []string
 	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, database.GetFieldOptionsParams) ([]string, error)); ok {
-		return rf(ctx, arg)
+	if rf, ok := ret.Get(0).(func(context.Context, int32) ([]string, error)); ok {
+		return rf(ctx, fid)
 	}
-	if rf, ok := ret.Get(0).(func(context.Context, database.GetFieldOptionsParams) []string); ok {
-		r0 = rf(ctx, arg)
+	if rf, ok := ret.Get(0).(func(context.Context, int32) []string); ok {
+		r0 = rf(ctx, fid)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).([]string)
 		}
 	}
 
-	if rf, ok := ret.Get(1).(func(context.Context, database.GetFieldOptionsParams) error); ok {
-		r1 = rf(ctx, arg)
+	if rf, ok := ret.Get(1).(func(context.Context, int32) error); ok {
+		r1 = rf(ctx, fid)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -1548,14 +1615,14 @@ type MockQuerierer_GetFieldOptions_Call struct {
 
 // GetFieldOptions is a helper method to define mock.On call
 //   - ctx context.Context
-//   - arg database.GetFieldOptionsParams
-func (_e *MockQuerierer_Expecter) GetFieldOptions(ctx interface{}, arg interface{}) *MockQuerierer_GetFieldOptions_Call {
-	return &MockQuerierer_GetFieldOptions_Call{Call: _e.mock.On("GetFieldOptions", ctx, arg)}
+//   - fid int32
+func (_e *MockQuerierer_Expecter) GetFieldOptions(ctx interface{}, fid interface{}) *MockQuerierer_GetFieldOptions_Call {
+	return &MockQuerierer_GetFieldOptions_Call{Call: _e.mock.On("GetFieldOptions", ctx, fid)}
 }
 
-func (_c *MockQuerierer_GetFieldOptions_Call) Run(run func(ctx context.Context, arg database.GetFieldOptionsParams)) *MockQuerierer_GetFieldOptions_Call {
+func (_c *MockQuerierer_GetFieldOptions_Call) Run(run func(ctx context.Context, fid int32)) *MockQuerierer_GetFieldOptions_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(context.Context), args[1].(database.GetFieldOptionsParams))
+		run(args[0].(context.Context), args[1].(int32))
 	})
 	return _c
 }
@@ -1565,7 +1632,7 @@ func (_c *MockQuerierer_GetFieldOptions_Call) Return(_a0 []string, _a1 error) *M
 	return _c
 }
 
-func (_c *MockQuerierer_GetFieldOptions_Call) RunAndReturn(run func(context.Context, database.GetFieldOptionsParams) ([]string, error)) *MockQuerierer_GetFieldOptions_Call {
+func (_c *MockQuerierer_GetFieldOptions_Call) RunAndReturn(run func(context.Context, int32) ([]string, error)) *MockQuerierer_GetFieldOptions_Call {
 	_c.Call.Return(run)
 	return _c
 }
@@ -2765,6 +2832,53 @@ func (_c *MockQuerierer_UpdateFieldsName_Call) Return(_a0 error) *MockQuerierer_
 }
 
 func (_c *MockQuerierer_UpdateFieldsName_Call) RunAndReturn(run func(context.Context, database.UpdateFieldsNameParams) error) *MockQuerierer_UpdateFieldsName_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// UpdateFieldsNameByID provides a mock function with given fields: ctx, arg
+func (_m *MockQuerierer) UpdateFieldsNameByID(ctx context.Context, arg database.UpdateFieldsNameByIDParams) error {
+	ret := _m.Called(ctx, arg)
+
+	if len(ret) == 0 {
+		panic("no return value specified for UpdateFieldsNameByID")
+	}
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(context.Context, database.UpdateFieldsNameByIDParams) error); ok {
+		r0 = rf(ctx, arg)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
+// MockQuerierer_UpdateFieldsNameByID_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'UpdateFieldsNameByID'
+type MockQuerierer_UpdateFieldsNameByID_Call struct {
+	*mock.Call
+}
+
+// UpdateFieldsNameByID is a helper method to define mock.On call
+//   - ctx context.Context
+//   - arg database.UpdateFieldsNameByIDParams
+func (_e *MockQuerierer_Expecter) UpdateFieldsNameByID(ctx interface{}, arg interface{}) *MockQuerierer_UpdateFieldsNameByID_Call {
+	return &MockQuerierer_UpdateFieldsNameByID_Call{Call: _e.mock.On("UpdateFieldsNameByID", ctx, arg)}
+}
+
+func (_c *MockQuerierer_UpdateFieldsNameByID_Call) Run(run func(ctx context.Context, arg database.UpdateFieldsNameByIDParams)) *MockQuerierer_UpdateFieldsNameByID_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(database.UpdateFieldsNameByIDParams))
+	})
+	return _c
+}
+
+func (_c *MockQuerierer_UpdateFieldsNameByID_Call) Return(_a0 error) *MockQuerierer_UpdateFieldsNameByID_Call {
+	_c.Call.Return(_a0)
+	return _c
+}
+
+func (_c *MockQuerierer_UpdateFieldsNameByID_Call) RunAndReturn(run func(context.Context, database.UpdateFieldsNameByIDParams) error) *MockQuerierer_UpdateFieldsNameByID_Call {
 	_c.Call.Return(run)
 	return _c
 }

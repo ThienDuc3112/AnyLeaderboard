@@ -9,7 +9,7 @@ import (
 	"context"
 )
 
-const createLeadeboardField = `-- name: CreateLeadeboardField :exec
+const createLeadeboardField = `-- name: CreateLeadeboardField :one
 INSERT INTO leaderboard_fields (
         lid,
         field_name,
@@ -20,6 +20,7 @@ INSERT INTO leaderboard_fields (
         hidden
     )
 VALUES ($1, $2, $3, $4, $5, $6, $7)
+RETURNING id
 `
 
 type CreateLeadeboardFieldParams struct {
@@ -32,8 +33,8 @@ type CreateLeadeboardFieldParams struct {
 	Hidden     bool
 }
 
-func (q *Queries) CreateLeadeboardField(ctx context.Context, arg CreateLeadeboardFieldParams) error {
-	_, err := q.db.Exec(ctx, createLeadeboardField,
+func (q *Queries) CreateLeadeboardField(ctx context.Context, arg CreateLeadeboardFieldParams) (int32, error) {
+	row := q.db.QueryRow(ctx, createLeadeboardField,
 		arg.Lid,
 		arg.FieldName,
 		arg.FieldValue,
@@ -42,7 +43,9 @@ func (q *Queries) CreateLeadeboardField(ctx context.Context, arg CreateLeadeboar
 		arg.Required,
 		arg.Hidden,
 	)
-	return err
+	var id int32
+	err := row.Scan(&id)
+	return id, err
 }
 
 type CreateLeadeboardFieldsParams struct {
@@ -70,8 +73,30 @@ func (q *Queries) DeleteField(ctx context.Context, arg DeleteFieldParams) error 
 	return err
 }
 
+const getFieldByID = `-- name: GetFieldByID :one
+SELECT lid, field_name, field_value, field_order, for_rank, hidden, required, id
+FROM leaderboard_fields
+WHERE id = $1
+`
+
+func (q *Queries) GetFieldByID(ctx context.Context, id int32) (LeaderboardField, error) {
+	row := q.db.QueryRow(ctx, getFieldByID, id)
+	var i LeaderboardField
+	err := row.Scan(
+		&i.Lid,
+		&i.FieldName,
+		&i.FieldValue,
+		&i.FieldOrder,
+		&i.ForRank,
+		&i.Hidden,
+		&i.Required,
+		&i.ID,
+	)
+	return i, err
+}
+
 const getFieldByLID = `-- name: GetFieldByLID :one
-SELECT lid, field_name, field_value, field_order, for_rank, hidden, required
+SELECT lid, field_name, field_value, field_order, for_rank, hidden, required, id
 FROM leaderboard_fields
 WHERE lid = $1 AND field_name = $2
 `
@@ -92,12 +117,13 @@ func (q *Queries) GetFieldByLID(ctx context.Context, arg GetFieldByLIDParams) (L
 		&i.ForRank,
 		&i.Hidden,
 		&i.Required,
+		&i.ID,
 	)
 	return i, err
 }
 
 const getLeaderboardFieldsByLID = `-- name: GetLeaderboardFieldsByLID :many
-SELECT lid, field_name, field_value, field_order, for_rank, hidden, required
+SELECT lid, field_name, field_value, field_order, for_rank, hidden, required, id
 FROM leaderboard_fields
 WHERE lid = $1
 `
@@ -119,6 +145,7 @@ func (q *Queries) GetLeaderboardFieldsByLID(ctx context.Context, lid int32) ([]L
 			&i.ForRank,
 			&i.Hidden,
 			&i.Required,
+			&i.ID,
 		); err != nil {
 			return nil, err
 		}
@@ -142,5 +169,19 @@ type UpdateFieldsNameParams struct {
 
 func (q *Queries) UpdateFieldsName(ctx context.Context, arg UpdateFieldsNameParams) error {
 	_, err := q.db.Exec(ctx, updateFieldsName, arg.Lid, arg.FieldName, arg.NewFieldName)
+	return err
+}
+
+const updateFieldsNameByID = `-- name: UpdateFieldsNameByID :exec
+UPDATE leaderboard_fields SET field_name = $2 WHERE id = $1
+`
+
+type UpdateFieldsNameByIDParams struct {
+	ID           int32
+	NewFieldName string
+}
+
+func (q *Queries) UpdateFieldsNameByID(ctx context.Context, arg UpdateFieldsNameByIDParams) error {
+	_, err := q.db.Exec(ctx, updateFieldsNameByID, arg.ID, arg.NewFieldName)
 	return err
 }

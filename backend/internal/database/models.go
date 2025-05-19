@@ -109,12 +109,12 @@ type LeaderboardField struct {
 	ForRank    bool
 	Hidden     bool
 	Required   bool
+	ID         int32
 }
 
 type LeaderboardOption struct {
-	Lid       int32
-	FieldName string
-	Option    string
+	Option string
+	Fid    int32
 }
 
 type LeaderboardVerifier struct {

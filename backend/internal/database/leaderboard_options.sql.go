@@ -11,75 +11,60 @@ import (
 
 const addLeaderboardOption = `-- name: AddLeaderboardOption :exec
 INSERT INTO leaderboard_options (
-        lid,
-        field_name,
+        fid,
         option
     )
-VALUES ($1, $2, $3)
+VALUES ($1, $2)
 `
 
 type AddLeaderboardOptionParams struct {
-	Lid       int32
-	FieldName string
-	Option    string
+	Fid    int32
+	Option string
 }
 
 func (q *Queries) AddLeaderboardOption(ctx context.Context, arg AddLeaderboardOptionParams) error {
-	_, err := q.db.Exec(ctx, addLeaderboardOption, arg.Lid, arg.FieldName, arg.Option)
+	_, err := q.db.Exec(ctx, addLeaderboardOption, arg.Fid, arg.Option)
 	return err
 }
 
 type CreateLeadeboardOptionsParams struct {
-	Lid       int32
-	FieldName string
-	Option    string
+	Fid    int32
+	Option string
 }
 
 const deleteLeadeboardOption = `-- name: DeleteLeadeboardOption :exec
 DELETE FROM leaderboard_options
-  WHERE lid = $1 AND field_name = $2 AND option = $3
+  WHERE fid = $1 AND option = $2
 `
 
 type DeleteLeadeboardOptionParams struct {
-	Lid       int32
-	FieldName string
-	Option    string
+	Fid    int32
+	Option string
 }
 
 func (q *Queries) DeleteLeadeboardOption(ctx context.Context, arg DeleteLeadeboardOptionParams) error {
-	_, err := q.db.Exec(ctx, deleteLeadeboardOption, arg.Lid, arg.FieldName, arg.Option)
+	_, err := q.db.Exec(ctx, deleteLeadeboardOption, arg.Fid, arg.Option)
 	return err
 }
 
 const deleteLeadeboardOptions = `-- name: DeleteLeadeboardOptions :exec
 DELETE FROM leaderboard_options
-  WHERE lid = $1 AND field_name = $2
+  WHERE fid = $1
 `
 
-type DeleteLeadeboardOptionsParams struct {
-	Lid       int32
-	FieldName string
-}
-
-func (q *Queries) DeleteLeadeboardOptions(ctx context.Context, arg DeleteLeadeboardOptionsParams) error {
-	_, err := q.db.Exec(ctx, deleteLeadeboardOptions, arg.Lid, arg.FieldName)
+func (q *Queries) DeleteLeadeboardOptions(ctx context.Context, fid int32) error {
+	_, err := q.db.Exec(ctx, deleteLeadeboardOptions, fid)
 	return err
 }
 
 const getFieldOptions = `-- name: GetFieldOptions :many
 SELECT option
 FROM leaderboard_options
-WHERE lid = $1
-    AND field_name = $2
+WHERE fid = $1
 `
 
-type GetFieldOptionsParams struct {
-	Lid       int32
-	FieldName string
-}
-
-func (q *Queries) GetFieldOptions(ctx context.Context, arg GetFieldOptionsParams) ([]string, error) {
-	rows, err := q.db.Query(ctx, getFieldOptions, arg.Lid, arg.FieldName)
+func (q *Queries) GetFieldOptions(ctx context.Context, fid int32) ([]string, error) {
+	rows, err := q.db.Query(ctx, getFieldOptions, fid)
 	if err != nil {
 		return nil, err
 	}
@@ -100,23 +85,17 @@ func (q *Queries) GetFieldOptions(ctx context.Context, arg GetFieldOptionsParams
 
 const renameLeadeboardOption = `-- name: RenameLeadeboardOption :exec
 UPDATE leaderboard_options
-  SET option = $4
-  WHERE lid = $1 AND field_name = $2 AND option = $3
+  SET option = $3
+  WHERE fid = $1 AND option = $2
 `
 
 type RenameLeadeboardOptionParams struct {
-	Lid       int32
-	FieldName string
+	Fid       int32
 	Option    string
 	NewOption string
 }
 
 func (q *Queries) RenameLeadeboardOption(ctx context.Context, arg RenameLeadeboardOptionParams) error {
-	_, err := q.db.Exec(ctx, renameLeadeboardOption,
-		arg.Lid,
-		arg.FieldName,
-		arg.Option,
-		arg.NewOption,
-	)
+	_, err := q.db.Exec(ctx, renameLeadeboardOption, arg.Fid, arg.Option, arg.NewOption)
 	return err
 }
