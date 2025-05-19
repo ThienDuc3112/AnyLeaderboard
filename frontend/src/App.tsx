@@ -31,7 +31,7 @@ function App() {
           },
         });
       })
-      .catch(() => { })
+      .catch(() => {})
       .finally(() => setLoading(false));
   }, []);
 
@@ -62,15 +62,14 @@ function App() {
             <Route path="/leaderboard/new" element={<NewLeaderboardPage />} />
             {/** Search option when login */}
             <Route path="/leaderboard" element={<BrowseLeaderboardPage />} />
-            {/** Frontend technically complete but backend need a rewrite */}
-            <Route
-              path="/leaderboard/:lid/update"
-              element={<UpdateLeaderboardPage />}
-            />
 
             {/** ========== Incomplete routes ========== */}
             <Route path="/profile/me" />
             <Route path="/profile/:id" />
+            <Route
+              path="/leaderboard/:lid/update"
+              element={<UpdateLeaderboardPage />}
+            />
           </Route>
         </Routes>
       </div>

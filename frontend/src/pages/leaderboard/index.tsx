@@ -1,10 +1,17 @@
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import { Clock, Search, TrendingUp, User } from "lucide-react";
-import React, { useMemo } from "react";
+import React, {
+  FormEventHandler,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import LeaderboardGrid from "./LeaderboardGrid";
 import LoadMore from "./LoadMore";
 import { useLeaderboards } from "./state";
+import { useSearchParams } from "react-router";
 
 interface FilterOption {
   icon: React.FC<{ className?: string }>;
@@ -15,6 +22,8 @@ interface FilterOption {
 }
 
 const BrowseLeaderboardPage: React.FC = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchTerm, setSearchTerm] = useState("");
   const {
     lbs,
     isLoading,
@@ -23,7 +32,20 @@ const BrowseLeaderboardPage: React.FC = () => {
     hasNextPage,
     toggleFilter,
     filter,
+    searchLeaderboards,
   } = useLeaderboards();
+
+  useEffect(() => {
+    const q = searchParams.get("q");
+    if (q !== null) {
+      searchLeaderboards(q);
+      setSearchTerm(q);
+    }
+
+    return () => {
+      searchLeaderboards("");
+    };
+  }, [searchParams]);
 
   const filterOptions = useMemo<FilterOption[]>(
     () => [
@@ -53,6 +75,15 @@ const BrowseLeaderboardPage: React.FC = () => {
     ],
     [],
   );
+
+  const search = useCallback<FormEventHandler<HTMLFormElement>>(
+    (e) => {
+      e.preventDefault();
+      setSearchParams({ q: searchTerm });
+    },
+    [searchTerm],
+  );
+
   return (
     <div className="w-full">
       <main className="container mx-auto px-4 py-8">
@@ -66,14 +97,21 @@ const BrowseLeaderboardPage: React.FC = () => {
 
         {/* Search and Filters */}
         <div className="mb-8 bg-indigo-50 p-4 rounded-xl">
-          <div className="mb-4 flex flex-wrap items-center gap-4 align-middle flex-row">
+          <form
+            onSubmit={search}
+            className="mb-4 flex flex-wrap items-center gap-4 align-middle flex-row"
+          >
             <Input
               icon={<Search className="h-4 w-4" />}
               placeholder="Search leaderboards..."
               className="flex-1 my-0"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
             />
-            <Button className="w-fit">Search</Button>
-          </div>
+            <Button type="submit" className="w-fit">
+              Search
+            </Button>
+          </form>
           <div className="flex flex-wrap items-center gap-4">
             {filterOptions.map((option, i) => (
               <Button

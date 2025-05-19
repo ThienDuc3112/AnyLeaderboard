@@ -19,7 +19,7 @@ services:
       FRONTEND_URL: "localhost:6969"
       ENVIRONMENT: "DEVELOPMENT"
       AIR_ENV: "dev"
-    restart: unless-stopped
+    restart: on-failure
     depends_on:
       - db 
 
