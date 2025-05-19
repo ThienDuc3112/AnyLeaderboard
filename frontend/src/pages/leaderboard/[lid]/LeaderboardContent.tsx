@@ -81,7 +81,7 @@ const TableRow: React.FC<TableRowPropType> = ({ index, row, fields }) => {
 };
 
 const FieldToCol = ({ field, row }: { field: Field; row: Entry }) => {
-  const value = row.fields[field.name];
+  const value = row.fields[field.id.toString()];
   if (!value) return <td className="px-6 py-4" />;
 
   if (isDigitField(field))

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useNavigate } from "react-router";
 import { useAtomValue } from "jotai";
 import { MoreVertical, Pencil, Plus } from "lucide-react";
@@ -16,13 +16,6 @@ interface PropType {
 const LeaderboardHeader: React.FC<PropType> = ({ data }) => {
   const navigate = useNavigate();
   const userSession = useAtomValue(sessionAtom);
-  useEffect(() => {
-    console.log(
-      userSession,
-      data.creatorId,
-      userSession && userSession.user.id === data.creatorId,
-    );
-  }, [userSession, data]);
   return (
     <div className="p-6 space-y-4">
       <div className="flex gap-4">

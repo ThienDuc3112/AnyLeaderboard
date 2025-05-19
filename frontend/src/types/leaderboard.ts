@@ -46,6 +46,7 @@ export interface OptionField extends CommonFieldAttributes {
 }
 
 interface CommonFieldAttributes {
+  id: number;
   name: string;
   required?: boolean;
   hidden?: boolean;

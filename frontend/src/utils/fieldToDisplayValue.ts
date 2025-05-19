@@ -2,11 +2,12 @@ import { Entry, Field } from "@/types/leaderboard";
 import { formatDuration } from "./formatDuration";
 
 export const fieldToDisplayValue = (row: Entry, field: Field): string => {
-  if (!row.fields[field.name]) return "";
-  const value = row.fields[field.name];
+  if (!row.fields[field.id.toString()]) {
+    return "";
+  }
+  const value = row.fields[field.id.toString()];
   switch (field.type) {
     case "TEXT":
-    case "SHORT_TEXT":
       return shortenStr(value);
     case "NUMBER":
       return shortenNum(value);

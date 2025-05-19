@@ -68,7 +68,10 @@ const EntryViewPage: React.FC = () => {
                 </dt>
                 <dd className="mt-1 text-sm">
                   <span className="text-gray-900">
-                    {renderFieldValue(field, data.entry.fields[field.name])}
+                    {renderFieldValue(
+                      field,
+                      data.entry.fields[field.id.toString()],
+                    )}
                   </span>
                 </dd>
               </div>
