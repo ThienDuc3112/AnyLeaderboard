@@ -82,7 +82,7 @@ type Field struct {
 	Id         int      `json:"id"`
 	Name       string   `json:"name" validate:"required,max=32,isSafeName"`
 	Required   bool     `json:"required"`
-	Hidden     bool     `json:"hidden"`
+	Hidden     bool     `json:"hidden" validate:"excluded_if=ForRank true"`
 	FieldOrder int      `json:"fieldOrder" validate:"required"`
 	Type       string   `json:"type" validate:"required,oneof=TEXT NUMBER DURATION TIMESTAMP OPTION"`
 	Options    []string `json:"options" validate:"required_if=Type OPTION,omitempty,unique,min=1,dive,min=1,max=32,isSafeName"`

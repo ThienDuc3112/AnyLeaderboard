@@ -638,3 +638,42 @@ func (q *Queries) SearchLeaderboards(ctx context.Context, arg SearchLeaderboards
 	}
 	return items, nil
 }
+
+const updateLeaderboard = `-- name: UpdateLeaderboard :exec
+UPDATE leaderboards 
+SET 
+  name = $1,
+  description = $2,
+  updated_at = NOW(),
+  cover_image_url = $3,
+  allow_anonymous = $4,
+  require_verification = $5,
+  unique_submission = $6,
+  descending = $7
+WHERE id = $8
+`
+
+type UpdateLeaderboardParams struct {
+	Name                string
+	Description         string
+	CoverImageUrl       pgtype.Text
+	AllowAnonymous      bool
+	RequireVerification bool
+	UniqueSubmission    bool
+	Descending          bool
+	ID                  int32
+}
+
+func (q *Queries) UpdateLeaderboard(ctx context.Context, arg UpdateLeaderboardParams) error {
+	_, err := q.db.Exec(ctx, updateLeaderboard,
+		arg.Name,
+		arg.Description,
+		arg.CoverImageUrl,
+		arg.AllowAnonymous,
+		arg.RequireVerification,
+		arg.UniqueSubmission,
+		arg.Descending,
+		arg.ID,
+	)
+	return err
+}

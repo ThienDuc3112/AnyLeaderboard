@@ -14,6 +14,7 @@ type Querier interface {
 	AddLeaderboardOption(ctx context.Context, arg AddLeaderboardOptionParams) error
 	AddVerifier(ctx context.Context, arg AddVerifierParams) error
 	BulkInsertFields(ctx context.Context, arg BulkInsertFieldsParams) ([]int32, error)
+	BulkUpdateFields(ctx context.Context, dollar_1 []byte) error
 	CreateLeadeboardEntry(ctx context.Context, arg CreateLeadeboardEntryParams) (LeaderboardEntry, error)
 	CreateLeadeboardField(ctx context.Context, arg CreateLeadeboardFieldParams) (int32, error)
 	CreateLeadeboardFields(ctx context.Context, arg []CreateLeadeboardFieldsParams) (int64, error)
@@ -60,6 +61,7 @@ type Querier interface {
 	SearchLeaderboards(ctx context.Context, arg SearchLeaderboardsParams) ([]SearchLeaderboardsRow, error)
 	UpdateFieldsName(ctx context.Context, arg UpdateFieldsNameParams) error
 	UpdateFieldsNameByID(ctx context.Context, arg UpdateFieldsNameByIDParams) error
+	UpdateLeaderboard(ctx context.Context, arg UpdateLeaderboardParams) error
 	UpdateRefreshToken(ctx context.Context, arg UpdateRefreshTokenParams) (RefreshToken, error)
 	UpdateUser(ctx context.Context, arg UpdateUserParams) (User, error)
 	UpdateUserPassword(ctx context.Context, arg UpdateUserPasswordParams) error

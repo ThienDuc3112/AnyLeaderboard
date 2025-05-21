@@ -166,3 +166,16 @@ GROUP BY l.id
 HAVING ts_rank_cd(l.search_tsv, websearch_to_tsquery((@language::text)::regconfig, @query)) < @rank_cursor::float4
 ORDER BY rank DESC
 LIMIT $1;
+
+-- name: UpdateLeaderboard :exec
+UPDATE leaderboards 
+SET 
+  name = $1,
+  description = $2,
+  updated_at = NOW(),
+  cover_image_url = $3,
+  allow_anonymous = $4,
+  require_verification = $5,
+  unique_submission = $6,
+  descending = $7
+WHERE id = $8;

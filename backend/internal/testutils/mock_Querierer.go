@@ -327,6 +327,53 @@ func (_c *MockQuerierer_BulkInsertFields_Call) RunAndReturn(run func(context.Con
 	return _c
 }
 
+// BulkUpdateFields provides a mock function with given fields: ctx, dollar_1
+func (_m *MockQuerierer) BulkUpdateFields(ctx context.Context, dollar_1 []byte) error {
+	ret := _m.Called(ctx, dollar_1)
+
+	if len(ret) == 0 {
+		panic("no return value specified for BulkUpdateFields")
+	}
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(context.Context, []byte) error); ok {
+		r0 = rf(ctx, dollar_1)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
+// MockQuerierer_BulkUpdateFields_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'BulkUpdateFields'
+type MockQuerierer_BulkUpdateFields_Call struct {
+	*mock.Call
+}
+
+// BulkUpdateFields is a helper method to define mock.On call
+//   - ctx context.Context
+//   - dollar_1 []byte
+func (_e *MockQuerierer_Expecter) BulkUpdateFields(ctx interface{}, dollar_1 interface{}) *MockQuerierer_BulkUpdateFields_Call {
+	return &MockQuerierer_BulkUpdateFields_Call{Call: _e.mock.On("BulkUpdateFields", ctx, dollar_1)}
+}
+
+func (_c *MockQuerierer_BulkUpdateFields_Call) Run(run func(ctx context.Context, dollar_1 []byte)) *MockQuerierer_BulkUpdateFields_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].([]byte))
+	})
+	return _c
+}
+
+func (_c *MockQuerierer_BulkUpdateFields_Call) Return(_a0 error) *MockQuerierer_BulkUpdateFields_Call {
+	_c.Call.Return(_a0)
+	return _c
+}
+
+func (_c *MockQuerierer_BulkUpdateFields_Call) RunAndReturn(run func(context.Context, []byte) error) *MockQuerierer_BulkUpdateFields_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // Commit provides a mock function with given fields: ctx
 func (_m *MockQuerierer) Commit(ctx context.Context) error {
 	ret := _m.Called(ctx)
@@ -2985,6 +3032,53 @@ func (_c *MockQuerierer_UpdateFieldsNameByID_Call) Return(_a0 error) *MockQuerie
 }
 
 func (_c *MockQuerierer_UpdateFieldsNameByID_Call) RunAndReturn(run func(context.Context, database.UpdateFieldsNameByIDParams) error) *MockQuerierer_UpdateFieldsNameByID_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// UpdateLeaderboard provides a mock function with given fields: ctx, arg
+func (_m *MockQuerierer) UpdateLeaderboard(ctx context.Context, arg database.UpdateLeaderboardParams) error {
+	ret := _m.Called(ctx, arg)
+
+	if len(ret) == 0 {
+		panic("no return value specified for UpdateLeaderboard")
+	}
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(context.Context, database.UpdateLeaderboardParams) error); ok {
+		r0 = rf(ctx, arg)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
+// MockQuerierer_UpdateLeaderboard_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'UpdateLeaderboard'
+type MockQuerierer_UpdateLeaderboard_Call struct {
+	*mock.Call
+}
+
+// UpdateLeaderboard is a helper method to define mock.On call
+//   - ctx context.Context
+//   - arg database.UpdateLeaderboardParams
+func (_e *MockQuerierer_Expecter) UpdateLeaderboard(ctx interface{}, arg interface{}) *MockQuerierer_UpdateLeaderboard_Call {
+	return &MockQuerierer_UpdateLeaderboard_Call{Call: _e.mock.On("UpdateLeaderboard", ctx, arg)}
+}
+
+func (_c *MockQuerierer_UpdateLeaderboard_Call) Run(run func(ctx context.Context, arg database.UpdateLeaderboardParams)) *MockQuerierer_UpdateLeaderboard_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(database.UpdateLeaderboardParams))
+	})
+	return _c
+}
+
+func (_c *MockQuerierer_UpdateLeaderboard_Call) Return(_a0 error) *MockQuerierer_UpdateLeaderboard_Call {
+	_c.Call.Return(_a0)
+	return _c
+}
+
+func (_c *MockQuerierer_UpdateLeaderboard_Call) RunAndReturn(run func(context.Context, database.UpdateLeaderboardParams) error) *MockQuerierer_UpdateLeaderboard_Call {
 	_c.Call.Return(run)
 	return _c
 }

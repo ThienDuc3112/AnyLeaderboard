@@ -68,6 +68,29 @@ func (q *Queries) BulkInsertFields(ctx context.Context, arg BulkInsertFieldsPara
 	return items, nil
 }
 
+const bulkUpdateFields = `-- name: BulkUpdateFields :exec
+UPDATE leaderboard_fields lf
+SET 
+  field_name = data.field_name,
+  field_order = data.field_order,
+  required = data.required,
+  hidden = data.hidden
+FROM jsonb_to_recordset($1::jsonb)
+  AS data(
+    id INT,
+    field_name VARCHAR(32),
+    field_order INTEGER,
+    hidden BOOLEAN,
+    required BOOLEAN
+  )
+WHERE lf.id = data.id
+`
+
+func (q *Queries) BulkUpdateFields(ctx context.Context, dollar_1 []byte) error {
+	_, err := q.db.Exec(ctx, bulkUpdateFields, dollar_1)
+	return err
+}
+
 const createLeadeboardField = `-- name: CreateLeadeboardField :one
 INSERT INTO leaderboard_fields (
         lid,
