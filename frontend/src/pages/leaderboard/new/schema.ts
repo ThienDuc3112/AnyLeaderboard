@@ -40,7 +40,10 @@ export const SubmitSchema = LbMetadataSchema.shape({
           is: true,
           then: (s) => s.isTrue("For rank field cannot be empty"),
         }),
-        hidden: y.boolean(),
+        hidden: y.boolean().when("forRank", {
+          is: true,
+          then: (s) => s.isFalse("For rank field must not be hidden"),
+        }),
         type: y
           .string()
           .required("Field type must be specified")
