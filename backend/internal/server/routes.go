@@ -98,7 +98,7 @@ func (s Server) RegisterRoutes() http.Handler {
 	mux.Handle(
 		fmt.Sprintf("DELETE /leaderboards/{%s}", c.PathValueLeaderboardId),
 		m.AuthAccessToken(
-			http.HandlerFunc(dummyFunction),
+			http.HandlerFunc(lbHandler.DeleteLeaderboard),
 		),
 	)
 
