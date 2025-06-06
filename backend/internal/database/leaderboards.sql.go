@@ -239,6 +239,7 @@ SELECT l.id,
     lf.for_rank AS field_for_rank,
     lf.hidden AS field_hidden,
     lf.required AS field_required,
+    lf.id AS field_id,
     lel.id AS link_id,
     lel.leaderboard_id AS link_lid,
     lel.display_value AS link_display_value,
@@ -268,6 +269,7 @@ type GetLeaderboardFullRow struct {
 	FieldForRank        pgtype.Bool
 	FieldHidden         pgtype.Bool
 	FieldRequired       pgtype.Bool
+	FieldID             pgtype.Int4
 	LinkID              pgtype.Int4
 	LinkLid             pgtype.Int4
 	LinkDisplayValue    pgtype.Text
@@ -302,6 +304,7 @@ func (q *Queries) GetLeaderboardFull(ctx context.Context, id int32) ([]GetLeader
 			&i.FieldForRank,
 			&i.FieldHidden,
 			&i.FieldRequired,
+			&i.FieldID,
 			&i.LinkID,
 			&i.LinkLid,
 			&i.LinkDisplayValue,

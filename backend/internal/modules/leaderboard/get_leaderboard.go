@@ -71,10 +71,10 @@ func (s LeaderboardService) GetLeaderboard(ctx context.Context, id int32) (model
 	linkSet := make(map[int]bool)
 
 	for _, row := range rows {
-		if row.FieldName.Valid && !fieldSet[row.ID] {
+		if row.FieldName.Valid && !fieldSet[row.FieldID.Int32] {
 			fieldSet[row.ID] = true
 			field := models.Field{
-				Id:         int(row.ID),
+				Id:         int(row.FieldID.Int32),
 				Name:       row.FieldName.String,
 				Type:       string(row.FieldValue.FieldType),
 				Required:   row.FieldRequired.Bool,

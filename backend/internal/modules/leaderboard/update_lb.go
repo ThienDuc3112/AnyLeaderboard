@@ -1,6 +1,7 @@
 package leaderboard
 
 import (
+	c "anylbapi/internal/constants"
 	"anylbapi/internal/database"
 	"anylbapi/internal/models"
 	"context"
@@ -13,20 +14,26 @@ import (
 
 type UpdateLeaderboardParam struct {
 	models.LeaderboardFull
+	UserId int
 }
 
 var (
-	ErrUnknownEditField = fmt.Errorf("try to edit a non-existent field")
-	ErrChangeFieldType  = fmt.Errorf("changing field type is forbidden")
-	ErrChangeForRank    = fmt.Errorf("changing for rank field is forbidden")
-	ErrHiddenForRank    = fmt.Errorf("hidden for rank field is forbidden")
-	ErrNoDefault        = fmt.Errorf("no default for new required were set")
+	ErrUnknownEditField  = fmt.Errorf("try to edit a non-existent field")
+	ErrChangeFieldType   = fmt.Errorf("changing field type is forbidden")
+	ErrChangeForRank     = fmt.Errorf("changing for rank field is forbidden")
+	ErrHiddenForRank     = fmt.Errorf("hidden for rank field is forbidden")
+	ErrNoDefault         = fmt.Errorf("no default for new required were set")
+	ErrNotOwnLeaderboard = fmt.Errorf("cannot delete other's leaderboard")
 )
 
 func (s LeaderboardService) UpdateLeaderboard(ctx context.Context, param UpdateLeaderboardParam) error {
 	oldLb, err := s.GetLeaderboard(ctx, int32(param.ID))
 	if err != nil {
 		return err
+	}
+
+	if param.UserId != oldLb.CreatorId {
+		return ErrNotOwnLeaderboard
 	}
 
 	tx, err := s.repo.BeginTx(ctx)
@@ -170,7 +177,14 @@ func (s LeaderboardService) UpdateLeaderboard(ctx context.Context, param UpdateL
 		}
 	}
 
-	// TODO: edit lb_field for default value or edit entries itself
+	err = tx.Commit(ctx)
+	if err != nil {
+		return err
+	}
 
-	return fmt.Errorf("Unimplemented")
+	cacheKeyLBFull := fmt.Sprintf("%s-%d", c.CachePrefixLeaderboardFull, param.ID)
+	s.cache.Delete(cacheKeyLBFull)
+
+	// TODO: edit lb_field for default value or edit entries itself
+	return nil
 }
