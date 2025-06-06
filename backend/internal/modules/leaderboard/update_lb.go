@@ -20,6 +20,7 @@ var (
 	ErrChangeFieldType  = fmt.Errorf("changing field type is forbidden")
 	ErrChangeForRank    = fmt.Errorf("changing for rank field is forbidden")
 	ErrHiddenForRank    = fmt.Errorf("hidden for rank field is forbidden")
+	ErrNoDefault        = fmt.Errorf("no default for new required were set")
 )
 
 func (s LeaderboardService) UpdateLeaderboard(ctx context.Context, param UpdateLeaderboardParam) error {
@@ -78,6 +79,10 @@ func (s LeaderboardService) UpdateLeaderboard(ctx context.Context, param UpdateL
 				return ErrHiddenForRank
 			}
 
+			if !oldField.Required && field.Required && len(field.Default) == 0 {
+				return ErrNoDefault
+			}
+
 			if oldField.Name != field.Name ||
 				oldField.Hidden != field.Hidden ||
 				oldField.Required != field.Required ||
@@ -94,19 +99,19 @@ func (s LeaderboardService) UpdateLeaderboard(ctx context.Context, param UpdateL
 				})
 
 				if len(diff) > 0 {
-					err = tx.DeleteLeadeboardOptions(ctx, int32(field.Id))
+					err = tx.DeleteLeaderboardOptions(ctx, int32(field.Id))
 					if err != nil {
 						return err
 					}
 					param := arrutil.Map(field.Options,
-						func(option string) (database.CreateLeadeboardOptionsParams, bool) {
-							return database.CreateLeadeboardOptionsParams{
+						func(option string) (database.CreateLeaderboardOptionsParams, bool) {
+							return database.CreateLeaderboardOptionsParams{
 								Fid:    int32(field.Id),
 								Option: option,
 							}, true
 						})
 					var n int64
-					n, err = tx.CreateLeadeboardOptions(ctx, param)
+					n, err = tx.CreateLeaderboardOptions(ctx, param)
 					if n != int64(len(field.Options)) {
 						return ErrUnableToInsertAllOptions
 					}
@@ -121,8 +126,8 @@ func (s LeaderboardService) UpdateLeaderboard(ctx context.Context, param UpdateL
 
 	if len(fieldsToAdd) > 0 {
 		var n int64
-		n, err = tx.CreateLeadeboardFields(ctx, arrutil.Map(fieldsToAdd, func(field models.Field) (database.CreateLeadeboardFieldsParams, bool) {
-			return database.CreateLeadeboardFieldsParams{
+		n, err = tx.CreateLeaderboardFields(ctx, arrutil.Map(fieldsToAdd, func(field models.Field) (database.CreateLeaderboardFieldsParams, bool) {
+			return database.CreateLeaderboardFieldsParams{
 				Lid:        int32(param.ID),
 				FieldName:  field.Name,
 				FieldValue: database.FieldType(field.Type),

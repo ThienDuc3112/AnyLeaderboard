@@ -23,7 +23,7 @@ func (s LeaderboardService) AddField(ctx context.Context, param AddFieldParam) e
 	}
 	defer tx.Rollback(ctx)
 
-	field := database.CreateLeadeboardFieldParams{
+	field := database.CreateLeaderboardFieldParams{
 		Lid:        param.Lid,
 		FieldName:  param.NewField.Name,
 		FieldValue: database.FieldType(param.NewField.Type),
@@ -78,22 +78,22 @@ func (s LeaderboardService) AddField(ctx context.Context, param AddFieldParam) e
 		}
 	}
 
-	fid, err := tx.CreateLeadeboardField(ctx, field)
+	fid, err := tx.CreateLeaderboardField(ctx, field)
 
 	if err != nil {
 		return err
 	}
 
 	if field.FieldValue == database.FieldTypeOPTION {
-		options := make([]database.CreateLeadeboardOptionsParams, 0)
+		options := make([]database.CreateLeaderboardOptionsParams, 0)
 		for _, option := range param.NewField.Options {
-			options = append(options, database.CreateLeadeboardOptionsParams{
+			options = append(options, database.CreateLeaderboardOptionsParams{
 				Fid:    fid,
 				Option: option,
 			})
 		}
 
-		n, err := tx.CreateLeadeboardOptions(ctx, options)
+		n, err := tx.CreateLeaderboardOptions(ctx, options)
 		if err != nil {
 			return err
 		}

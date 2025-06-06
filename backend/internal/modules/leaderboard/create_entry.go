@@ -132,7 +132,7 @@ func (s LeaderboardService) CreateEntry(ctx context.Context, param CreateEntryPa
 		userId.Valid = true
 	}
 
-	entryParam := database.CreateLeadeboardEntryParams{
+	entryParam := database.CreateLeaderboardEntryParams{
 		CustomFields:  entryJson,
 		UserID:        userId,
 		Username:      param.DisplayName,
@@ -140,7 +140,7 @@ func (s LeaderboardService) CreateEntry(ctx context.Context, param CreateEntryPa
 		SortedField:   sortedValue,
 	}
 
-	e, err := s.repo.CreateLeadeboardEntry(ctx, entryParam)
+	e, err := s.repo.CreateLeaderboardEntry(ctx, entryParam)
 	if err != nil {
 		return database.LeaderboardEntry{}, "", err
 	}

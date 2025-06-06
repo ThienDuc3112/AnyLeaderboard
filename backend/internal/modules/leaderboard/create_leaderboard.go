@@ -123,16 +123,16 @@ func (s LeaderboardService) CreateLeaderboard(ctx context.Context, param CreateL
 		if len(field.Options) == 0 {
 			return models.Leaderboard{}, ErrNoOptions
 		}
-		optParam := make([]database.CreateLeadeboardOptionsParams, 0)
+		optParam := make([]database.CreateLeaderboardOptionsParams, 0)
 		for _, o := range field.Options {
-			optParam = append(optParam, database.CreateLeadeboardOptionsParams{
+			optParam = append(optParam, database.CreateLeaderboardOptionsParams{
 				Fid:    fieldIds[i],
 				Option: o,
 			})
 		}
 
 		// ================== Inserting leaderboard options ==================
-		n, err := tx.CreateLeadeboardOptions(ctx, optParam)
+		n, err := tx.CreateLeaderboardOptions(ctx, optParam)
 		if err != nil {
 			return models.Leaderboard{}, err
 		}

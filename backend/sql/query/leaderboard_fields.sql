@@ -1,4 +1,4 @@
--- name: CreateLeadeboardField :one
+-- name: CreateLeaderboardField :one
 INSERT INTO leaderboard_fields (
         lid,
         field_name,
@@ -11,7 +11,7 @@ INSERT INTO leaderboard_fields (
 VALUES ($1, $2, $3, $4, $5, $6, $7)
 RETURNING id;
 
--- name: CreateLeadeboardFields :copyfrom
+-- name: CreateLeaderboardFields :copyfrom
 INSERT INTO leaderboard_fields (
         lid,
         field_name,
@@ -78,13 +78,15 @@ SET
   field_name = data.field_name,
   field_order = data.field_order,
   required = data.required,
-  hidden = data.hidden
+  hidden = data.hidden,
+  default_value = data.default_value
 FROM jsonb_to_recordset($1::jsonb)
   AS data(
     id INT,
     field_name VARCHAR(32),
     field_order INTEGER,
     hidden BOOLEAN,
-    required BOOLEAN
+    required BOOLEAN,
+    default_value TEXT
   )
 WHERE lf.id = data.id;

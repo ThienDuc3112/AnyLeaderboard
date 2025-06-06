@@ -11,7 +11,7 @@ type DeleteOptionParam struct {
 }
 
 func (s LeaderboardService) DeleteOption(ctx context.Context, param DeleteOptionParam) error {
-	return s.repo.DeleteLeadeboardOption(ctx, database.DeleteLeadeboardOptionParams{
+	return s.repo.DeleteLeaderboardOption(ctx, database.DeleteLeaderboardOptionParams{
 		Fid:    param.Fid,
 		Option: param.Option,
 	})

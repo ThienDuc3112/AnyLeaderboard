@@ -1,4 +1,4 @@
--- name: CreateLeadeboardEntry :one
+-- name: CreateLeaderboardEntry :one
 INSERT INTO leaderboard_entries (
         user_id,
         username,

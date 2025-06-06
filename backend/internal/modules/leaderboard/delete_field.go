@@ -21,7 +21,7 @@ func (s LeaderboardService) DeleteField(ctx context.Context, param DeleteFieldPa
 	defer tx.Rollback(ctx)
 
 	if param.IsOption {
-		err = tx.DeleteLeadeboardOptions(ctx, param.Fid)
+		err = tx.DeleteLeaderboardOptions(ctx, param.Fid)
 		if err != nil {
 			return err
 		}
