@@ -17,6 +17,7 @@ const (
 	PathValueLeaderboardId = "lid"
 	PathValueEntryId       = "eid"
 	PathValueUsername      = "username"
+	PathValueUserId        = "userid"
 )
 
 const (

@@ -225,10 +225,10 @@ func (s Server) RegisterRoutes() http.Handler {
 		),
 	)
 
-	return middleware.Cors(mux)
-}
+	mux.Handle(
+		fmt.Sprintf("DELETE /users/{%s}", c.PathValueUserId),
+		http.HandlerFunc(userHandler.DeleteUser),
+	)
 
-func dummyFunction(w http.ResponseWriter, r *http.Request) {
-	w.WriteHeader(501)
-	w.Write([]byte("Route not implemented yet"))
+	return middleware.Cors(mux)
 }
