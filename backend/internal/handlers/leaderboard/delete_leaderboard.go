@@ -39,7 +39,7 @@ func (h LeaderboardHandler) DeleteLeaderboard(w http.ResponseWriter, r *http.Req
 			utils.RespondWithError(w, http.StatusForbidden, "Not own leaderboard")
 			err = nil
 		case leaderboard.ErrNoLeaderboard:
-			utils.RespondWithError(w, http.StatusForbidden, "Not own leaderboard")
+			utils.RespondWithError(w, http.StatusForbidden, "Leaderboard don't exist")
 			err = nil
 		default:
 			utils.RespondWithError(w, http.StatusInternalServerError, "Internal server error")

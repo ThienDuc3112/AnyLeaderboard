@@ -1,13 +1,16 @@
-import React from "react";
+import React, { useCallback, useState } from "react";
 import { useNavigate } from "react-router";
 import { useAtomValue } from "jotai";
-import { MoreVertical, Pencil, Plus } from "lucide-react";
+import { MoreVertical, Pencil, Plus, Trash } from "lucide-react";
 
 import ExternalLink from "@/pages/leaderboard/[lid]/ExternalLink";
 import Button from "@/components/ui/Button";
 import ActionsDropdown from "@/components/ui/ActionDropdown";
 import { sessionAtom } from "@/contexts/user";
 import { LeaderboardFull } from "@/types/leaderboard";
+import Popup from "@/components/ui/Popup";
+import { api } from "@/utils/api";
+import { AxiosError } from "axios";
 
 interface PropType {
   data: LeaderboardFull;
@@ -16,6 +19,39 @@ interface PropType {
 const LeaderboardHeader: React.FC<PropType> = ({ data }) => {
   const navigate = useNavigate();
   const userSession = useAtomValue(sessionAtom);
+  const [deletePopup, setDeletePopup] = useState(false);
+
+  const deleteLeaderboard = useCallback(async () => {
+    try {
+      await api.delete(`/leaderboards/${data.id}`, {
+        headers: {
+          Authorization: `Bearer ${userSession?.activeToken}`,
+        },
+      });
+      alert("Leaderboard deleted");
+      navigate("/leaderboard");
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (error.status && error.status < 500) {
+          const errorMsg: string = error.response?.data?.error;
+          if (errorMsg) {
+            alert(errorMsg);
+            return;
+          } else {
+            console.error(error);
+            alert("An error occurred");
+          }
+        }
+      } else {
+        console.error(error);
+        alert(
+          "Unknown error occur, check if your leaderboard have been deleted or not",
+        );
+        navigate("/leaderboard");
+      }
+    }
+  }, [userSession, data]);
+
   return (
     <div className="p-6 space-y-4">
       <div className="flex gap-4">
@@ -49,6 +85,13 @@ const LeaderboardHeader: React.FC<PropType> = ({ data }) => {
                       navigate(`/leaderboard/${data.id}/update`);
                     },
                   },
+                  {
+                    Icon: Trash,
+                    text: "Delete",
+                    onClick() {
+                      setDeletePopup(true);
+                    },
+                  },
                 ]}
               />
             ) : (
@@ -76,6 +119,17 @@ const LeaderboardHeader: React.FC<PropType> = ({ data }) => {
               <ExternalLink key={i} link={link} />
             ))}
           </div>
+          <Popup isOpen={deletePopup} onClose={() => setDeletePopup(false)}>
+            <p>Are you sure?</p>
+            <div className="m-4 flex justify-between">
+              <Button variant="filled" onClick={deleteLeaderboard}>
+                Pretty sure
+              </Button>
+              <Button variant="outline" onClick={() => setDeletePopup(false)}>
+                Nah
+              </Button>
+            </div>
+          </Popup>
         </div>
       </div>
     </div>

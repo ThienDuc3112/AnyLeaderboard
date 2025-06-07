@@ -14,6 +14,7 @@ import (
 )
 
 func (s LeaderboardService) CreateEntry(ctx context.Context, param CreateEntryParam) (database.LeaderboardEntry, string, error) {
+	// TODO: Fix timestamp
 	entryData := make(map[string]any)
 
 	if !param.Leaderboard.AllowAnonymous && param.User == nil {
