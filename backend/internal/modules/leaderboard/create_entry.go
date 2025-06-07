@@ -9,7 +9,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"slices"
-	"time"
 
 	"github.com/jackc/pgx/v5/pgtype"
 )
@@ -41,15 +40,19 @@ func (s LeaderboardService) CreateEntry(ctx context.Context, param CreateEntryPa
 		lb.Data = make([]models.Entry, 0)
 	}
 
+	fmt.Printf("Leaderboard: %+v\n", lb)
+
 	foundForRankField := false
 	var sortedValue float64
 
 	// Processing fields
+	fmt.Println()
 	for _, field := range lb.Fields {
 		var input any = param.Entry[field.Name]
 
+		fmt.Printf("body: %+v\tfield name: %+v\tinput: %+v\n", param.Entry, field.Name, input)
 		switch database.FieldType(field.Type) {
-		case database.FieldTypeDURATION, database.FieldTypeNUMBER:
+		case database.FieldTypeDURATION, database.FieldTypeNUMBER, database.FieldTypeTIMESTAMP:
 			val, ok := input.(float64)
 			if !ok {
 				if !field.Required {
@@ -64,25 +67,6 @@ func (s LeaderboardService) CreateEntry(ctx context.Context, param CreateEntryPa
 			}
 			if field.ForRank {
 				sortedValue = val
-				foundForRankField = true
-			}
-
-		case database.FieldTypeTIMESTAMP:
-			timeStr, ok := input.(string)
-			val, err := time.Parse(time.RFC3339, timeStr)
-			if !ok || err != nil {
-				if !field.Required {
-					continue
-				}
-				return database.LeaderboardEntry{}, field.Name, ErrRequiredFieldNotExist
-			}
-			entryData[fmt.Sprintf("%d", field.Id)] = val.UnixMilli()
-
-			if foundForRankField && field.ForRank {
-				return database.LeaderboardEntry{}, field.Name, ErrConflictForRankField
-			}
-			if field.ForRank {
-				sortedValue = float64(val.UnixMilli())
 				foundForRankField = true
 			}
 
