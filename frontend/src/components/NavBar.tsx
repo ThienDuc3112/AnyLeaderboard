@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Trophy } from "lucide-react";
 import { Link } from "react-router";
 import { useAtomValue } from "jotai";
@@ -8,38 +8,45 @@ interface NavbarOption {
   to: string;
   text: string;
 }
-const SignInOptions: NavbarOption[] = [
-  {
-    text: "Browse leaderboards",
-    to: "/leaderboard",
-  },
-  {
-    text: "Create new leaderboard",
-    to: "/leaderboard/new",
-  },
-  {
-    text: "Profile",
-    to: "/profile/me",
-  },
-];
-
-const SignOutOptions: NavbarOption[] = [
-  {
-    text: "Browse leaderboards",
-    to: "/leaderboard",
-  },
-  {
-    text: "Sign in",
-    to: "/signin",
-  },
-  {
-    text: "Sign up",
-    to: "/signup",
-  },
-];
 
 const NavBar: React.FC = () => {
   const session = useAtomValue(sessionAtom);
+
+  const SignInOptions: NavbarOption[] = useMemo(
+    () => [
+      {
+        text: "Browse leaderboards",
+        to: "/leaderboard",
+      },
+      {
+        text: "Create new leaderboard",
+        to: "/leaderboard/new",
+      },
+      {
+        text: "Profile",
+        to: `/profile/${session?.user.id}`,
+      },
+    ],
+    [session],
+  );
+
+  const SignOutOptions: NavbarOption[] = useMemo(
+    () => [
+      {
+        text: "Browse leaderboards",
+        to: "/leaderboard",
+      },
+      {
+        text: "Sign in",
+        to: "/signin",
+      },
+      {
+        text: "Sign up",
+        to: "/signup",
+      },
+    ],
+    [],
+  );
   return (
     <nav className="bg-white shadow-sm">
       <div className="container mx-auto px-4 py-4 flex justify-between items-center">

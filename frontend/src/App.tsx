@@ -13,6 +13,7 @@ import { useSetAtom } from "jotai";
 import { sessionAtom } from "./contexts/user";
 import { api } from "./utils/api";
 import UpdateLeaderboardPage from "./pages/leaderboard/[lid]/update";
+import ProfilePage from "./pages/profile";
 
 function App() {
   const setSession = useSetAtom(sessionAtom);
@@ -64,8 +65,7 @@ function App() {
             <Route path="/leaderboard" element={<BrowseLeaderboardPage />} />
 
             {/** ========== Incomplete routes ========== */}
-            <Route path="/profile/me" />
-            <Route path="/profile/:id" />
+            <Route path="/profile/:id" element={<ProfilePage />} />
             <Route
               path="/leaderboard/:lid/update"
               element={<UpdateLeaderboardPage />}

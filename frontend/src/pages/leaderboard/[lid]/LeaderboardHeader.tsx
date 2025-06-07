@@ -41,6 +41,9 @@ const LeaderboardHeader: React.FC<PropType> = ({ data }) => {
             console.error(error);
             alert("An error occurred");
           }
+        } else {
+          console.error(error);
+          alert("Internal server error");
         }
       } else {
         console.error(error);
