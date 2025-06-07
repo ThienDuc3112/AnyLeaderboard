@@ -226,7 +226,7 @@ func (s Server) RegisterRoutes() http.Handler {
 	)
 
 	mux.Handle(
-		fmt.Sprintf("DELETE /users/{%s}", c.PathValueUserId),
+		"DELETE /users",
 		http.HandlerFunc(userHandler.DeleteUser),
 	)
 

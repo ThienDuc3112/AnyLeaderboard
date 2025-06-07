@@ -185,6 +185,5 @@ func (s LeaderboardService) UpdateLeaderboard(ctx context.Context, param UpdateL
 	cacheKeyLBFull := fmt.Sprintf("%s-%d", c.CachePrefixLeaderboardFull, param.ID)
 	s.cache.Delete(cacheKeyLBFull)
 
-	// TODO: edit lb_field for default value or edit entries itself
 	return nil
 }

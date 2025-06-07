@@ -9,6 +9,8 @@ import (
 	"net/http"
 	"os"
 	"strings"
+
+	"github.com/jackc/pgx/v5"
 )
 
 func (m Middleware) AuthAccessToken(next http.Handler) http.Handler {
@@ -30,26 +32,15 @@ func (m Middleware) AuthAccessToken(next http.Handler) http.Handler {
 			return
 		}
 
-		// Check cache
-		cacheKey := fmt.Sprintf("%s-%s", c.CachePrefixUser, claim.Username)
-		cached, exist := m.cache.Get(cacheKey)
-		if exist {
-			if user, ok := cached.(database.User); ok {
-				newCtx := context.WithValue(r.Context(), c.MidKeyUser, user)
-				next.ServeHTTP(w, r.WithContext(newCtx))
-				return
-			} else {
-				m.cache.Delete(cacheKey)
-			}
-		}
-
 		user, err := m.db.GetUserByUsername(r.Context(), claim.Username)
-		if err != nil {
+		if err == pgx.ErrNoRows {
+			utils.RespondWithError(w, 401, "User don't exist or deleted")
+			return
+		} else if err != nil {
 			utils.RespondWithError(w, 500, "Internal server error")
 			return
 		}
 
-		m.cache.SetDefault(cacheKey, user)
 		newCtx := context.WithValue(r.Context(), c.MidKeyUser, user)
 		next.ServeHTTP(w, r.WithContext(newCtx))
 	})
